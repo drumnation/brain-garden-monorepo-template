@@ -1,0 +1,46 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "lint": {
+      "cache": true
+    },
+    "typecheck": {
+      "cache": true
+    },
+    "format": {
+      "cache": true
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "cache": true
+    },
+    "test:watch": {
+      "cache": false,
+      "persistent": true
+    },
+    "test:unit": {
+      "cache": true
+    },
+    "test:integration": {
+      "cache": true
+    },
+    "test:e2e": {
+      "cache": true
+    },
+    "validate": {
+      "dependsOn": ["lint", "typecheck", "test"],
+      "cache": true
+    },
+    "clean": {
+      "cache": false
+    }
+  }
+}

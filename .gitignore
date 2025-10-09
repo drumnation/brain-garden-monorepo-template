@@ -1,3 +1,30 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+.next/
+.turbo/
+
+# Environment files
+.env
+.env.local
+
+# Brain Monitor outputs
+_errors/*.md
+!_errors/.gitkeep
+_logs/*.log
+!_logs/.gitkeep
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
 
 # Git worktrees (Crystal)
 /worktrees/
