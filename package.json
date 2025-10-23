@@ -1,6 +1,7 @@
 {
-  "name": "scheduling-station",
+  "name": "brain-garden-monorepo-template",
   "version": "1.0.0",
+  "description": "Production-ready monorepo template with generator-first approach for Express API, React apps, and complete Brain Garden tooling",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@9.0.0",

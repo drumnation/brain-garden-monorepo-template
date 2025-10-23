@@ -1,6 +1,6 @@
-# Monorepo Mega Starter Template
+# Brain Garden Monorepo Template
 
-A production-ready monorepo mega starter template with showcase applications for web, mobile, desktop, and backend, complete testing infrastructure, automated validation, and comprehensive tooling.
+A production-ready monorepo template with generator-first approach for web, mobile, desktop, and backend applications. Features Brain Garden AI tooling, complete testing infrastructure, automated validation, and comprehensive development tools.
 
 ## 🚀 What's Included
 
@@ -19,8 +19,8 @@ This mega template provides everything you need to start building modern full-st
 ## 🎯 Quick Start
 
 ```bash
-# Clone the template
-git clone https://github.com/your-org/monorepo-mega-template.git my-project
+# Use this template on GitHub or clone it
+git clone https://github.com/your-org/brain-garden-monorepo-template.git my-project
 cd my-project
 
 # Install dependencies
@@ -51,7 +51,7 @@ The following apps run **after you generate them** using the generators above:
 ## 📦 Template Structure
 
 ```
-monorepo-mega-template/
+brain-garden-monorepo-template/
 ├── apps/                      # Executable applications
 │   ├── web/                  # React web app (Vite + Mantine UI)
 │   ├── mobile/               # React Native app (Expo)
