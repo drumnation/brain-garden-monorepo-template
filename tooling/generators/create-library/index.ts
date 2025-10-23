@@ -421,3 +421,6 @@ Examples:
 if (import.meta.url === `file://${process.argv[1]}`) {
   main().catch(console.error);
 }
+
+// EXPORT for programmatic usage (createPackage is already exported above)
+export type { PackageConfig };

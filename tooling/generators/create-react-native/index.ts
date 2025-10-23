@@ -237,7 +237,7 @@ export default App;
     // Expo Router structure
     if (config.template === 'expo-router') {
       await fs.mkdir(path.join(appDir, 'app'), { recursive: true });
-      
+
       const layoutTsx = `import { Stack } from 'expo-router';
 
 export default function RootLayout() {
@@ -359,7 +359,7 @@ coverage
   console.log(`\n🚀 Next steps:`);
   console.log(`   cd ${appDir}`);
   console.log(`   pnpm start\n`);
-  
+
   if (config.template.startsWith('expo')) {
     console.log(`📱 Scan the QR code with Expo Go app to preview on your device\n`);
   }
@@ -449,7 +449,9 @@ async function main() {
   });
 }
 
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
   main().catch(console.error);
 }
 
+// EXPORT for programmatic usage
+export { createReactNativeApp, type AppConfig };

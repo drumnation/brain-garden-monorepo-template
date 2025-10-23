@@ -17,6 +17,7 @@ Content Manager Express is a modern digital signage content management system bu
 
 | Section | Description | Path |
 |---------|-------------|------|
+| **Mega Setup Guide** | Complete guide to using the mega setup system | [/docs/guides/mega-setup-guide.md](/docs/guides/mega-setup-guide.md) |
 | **Architecture** | System design, PRDs, and technical architecture | [/docs/architecture/](/docs/architecture/) |
 | **Features** | Feature-specific documentation organized by domain | [/docs/features/](/docs/features/) |
 | **Guides** | How-to guides, tutorials, and operational procedures | [/docs/guides/](/docs/guides/) |

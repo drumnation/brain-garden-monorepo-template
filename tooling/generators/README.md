@@ -20,7 +20,35 @@ These generators help you quickly scaffold production-ready projects with:
 - **No-build libraries** (direct TypeScript exports)
 - **Modern frameworks** (React, React Native, Electron, Express)
 
+## 🚀 Mega Setup (Recommended)
+
+The **mega setup system** provides a guided, all-in-one setup experience:
+
+```bash
+pnpm setup:mega
+```
+
+**What it does:**
+- Conducts interactive discovery session (BMAD-style questions)
+- Generates complete PRD from your answers
+- Runs appropriate generators automatically
+- Updates all documentation (README, CHANGELOG, system-overview)
+- Recommends and activates rules based on project type
+- Validates setup using brain-monitor
+- Provides setup summary with next steps
+
+**When to use:**
+- Starting a new project from scratch
+- Want a complete, validated setup quickly
+- Prefer guided experience over manual configuration
+
+**See:** [Mega Setup Guide](../../docs/guides/mega-setup-guide.md) for detailed documentation.
+
+---
+
 ## Available Generators
+
+For more control, you can use individual generators:
 
 ### 1. Monorepo Initializer
 

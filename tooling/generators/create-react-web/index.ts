@@ -1,6 +1,7 @@
 import prompts from 'prompts';
 import fs from 'fs/promises';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import { pascalCase } from '../utils.js';
 
 interface AppConfig {
@@ -132,10 +133,13 @@ async function createReactWebApp(config: AppConfig) {
     JSON.stringify(tsconfigNode, null, 2) + '\n',
   );
 
-  // Create vite.config.ts
+  // Create vite.config.ts (fixed __dirname for ESM)
   const viteConfig = `import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   plugins: [react()],
@@ -227,7 +231,7 @@ body {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  
+
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
@@ -414,7 +418,9 @@ async function main() {
   });
 }
 
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
   main().catch(console.error);
 }
 
+// EXPORT for programmatic usage
+export { createReactWebApp, type AppConfig };
