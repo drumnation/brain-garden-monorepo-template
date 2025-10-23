@@ -37,6 +37,7 @@
     "ci:init": "brain-monitor ci:init",
     "generate:all-apps": "pnpm gen:react-web && pnpm gen:react-native && pnpm gen:electron && pnpm gen:express-api && pnpm gen:library && pnpm setup:mega-template",
     "setup:mega-template": "tsx scripts/post-generate-setup.ts",
+    "setup:mega": "tsx tooling/generators/mega-setup/index.ts",
     "validate:template": "tsx scripts/validate-template.ts",
     "rules:build": "tsx .cursor/sync/build-consolidated-rules.ts",
     "rules:build:strict": "tsx .cursor/sync/build-consolidated-rules.ts --strict",

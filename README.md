@@ -18,6 +18,10 @@ This mega template provides everything you need to start building modern full-st
 
 ## 🎯 Quick Start
 
+### 🚀 Mega Setup (Recommended)
+
+The fastest way to get started is using our mega setup system:
+
 ```bash
 # Use this template on GitHub or clone it
 git clone https://github.com/your-org/brain-garden-monorepo-template.git my-project
@@ -26,6 +30,25 @@ cd my-project
 # Install dependencies
 pnpm install
 
+# Run mega setup - interactive wizard
+pnpm setup:mega
+```
+
+This interactive wizard will:
+- Ask questions about your project
+- Generate a complete PRD (Product Requirements Document)
+- Create apps and packages based on your needs
+- Set up all documentation automatically
+- Recommend appropriate coding rules
+- Validate everything with brain-monitor
+
+See the [Mega Setup Guide](./docs/guides/mega-setup-guide.md) for detailed instructions.
+
+### Manual Setup
+
+If you prefer manual control, you can use individual generators:
+
+```bash
 # Generate your apps (choose what you need)
 pnpm gen:express-api     # Generate Express API server → apps/api
 pnpm gen:react-web       # Generate React web app → apps/web (if available)
