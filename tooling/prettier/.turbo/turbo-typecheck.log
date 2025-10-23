@@ -1,0 +1,4 @@
+
+> @kit/prettier-config@0.1.0 typecheck /Users/dmieloch/Dev/singularityApps/core/brain-garden-studio/tooling/prettier
+> tsc --noEmit
+

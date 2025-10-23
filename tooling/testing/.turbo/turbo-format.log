@@ -1,0 +1,6 @@
+
+> @kit/testing@2.0.0 format /Users/dmieloch/Dev/singularityApps/core/brain-garden-studio/tooling/testing
+> prettier --check "**/*.{ts,tsx}" "--check"
+
+Checking formatting...
+All matched files use Prettier code style!

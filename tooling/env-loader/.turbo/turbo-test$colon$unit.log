@@ -1,0 +1,29 @@
+
+
+> @kit/env-loader@1.0.0 test:unit /Users/dmieloch/Dev/experiments/claudecodeui/tooling/env-loader
+> vitest run --config @kit/testing/unit
+
+[?25l[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "/Users/dmieloch/Dev/experiments/claudecodeui/tooling/env-loader/@kit/testing/unit"[0m
+
+[31mfailed to load config from /Users/dmieloch/Dev/experiments/claudecodeui/tooling/env-loader/@kit/testing/unit[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Startup Error [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[39m
+Error: Build failed with 1 error:
+error: Could not resolve "/Users/dmieloch/Dev/experiments/claudecodeui/tooling/env-loader/@kit/testing/unit"
+    at failureErrorWithLog (/Users/dmieloch/Dev/experiments/claudecodeui/node_modules/[4m.pnpm[24m/esbuild@0.21.5/node_modules/[4mesbuild[24m/lib/main.js:1472:15)
+    at /Users/dmieloch/Dev/experiments/claudecodeui/node_modules/[4m.pnpm[24m/esbuild@0.21.5/node_modules/[4mesbuild[24m/lib/main.js:945:25
+    at runOnEndCallbacks (/Users/dmieloch/Dev/experiments/claudecodeui/node_modules/[4m.pnpm[24m/esbuild@0.21.5/node_modules/[4mesbuild[24m/lib/main.js:1315:45)
+    at buildResponseToResult (/Users/dmieloch/Dev/experiments/claudecodeui/node_modules/[4m.pnpm[24m/esbuild@0.21.5/node_modules/[4mesbuild[24m/lib/main.js:943:7)
+    at /Users/dmieloch/Dev/experiments/claudecodeui/node_modules/[4m.pnpm[24m/esbuild@0.21.5/node_modules/[4mesbuild[24m/lib/main.js:970:16
+    at responseCallbacks.<computed> (/Users/dmieloch/Dev/experiments/claudecodeui/node_modules/[4m.pnpm[24m/esbuild@0.21.5/node_modules/[4mesbuild[24m/lib/main.js:622:9)
+    at handleIncomingPacket (/Users/dmieloch/Dev/experiments/claudecodeui/node_modules/[4m.pnpm[24m/esbuild@0.21.5/node_modules/[4mesbuild[24m/lib/main.js:677:12)
+    at Socket.readFromStdout (/Users/dmieloch/Dev/experiments/claudecodeui/node_modules/[4m.pnpm[24m/esbuild@0.21.5/node_modules/[4mesbuild[24m/lib/main.js:600:7)
+[90m    at Socket.emit (node:events:507:28)[39m
+[90m    at addChunk (node:internal/streams/readable:559:12)[39m {
+  errors: [36m[Getter/Setter][39m,
+  warnings: [36m[Getter/Setter][39m
+}
+
+
+
+[?25h[41m[30m ELIFECYCLE [39m[49m [31mCommand failed with exit code 1.[39m

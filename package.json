@@ -1,0 +1,64 @@
+{
+  "name": "cannabis-codex",
+  "private": true,
+  "sideEffects": false,
+  "engines": {
+    "node": ">=v18.17.1"
+  },
+  "scripts": {
+    "build": "turbo build --cache-dir=.turbo",
+    "clean": "git clean -xdf node_modules dist",
+    "clean:workspaces": "turbo clean",
+    "dev": "pnpm env:check && cross-env FORCE_COLOR=1 turbo dev --parallel",
+    "dev:web": "turbo dev --parallel",
+    "format": "turbo format --cache-dir=.turbo --continue -- --cache --cache-location='node_modules/.cache/.prettiercache' --ignore-path='../../.gitignore'",
+    "format:fix": "turbo format --cache-dir=.turbo --continue -- --write --cache --cache-location='node_modules/.cache/.prettiercache' --ignore-path='../../.gitignore'",
+    "lint": "turbo lint --cache-dir=.turbo --continue -- --cache --cache-location 'node_modules/.cache/.eslintcache' && pnpm manypkg check",
+    "lint:fix": "turbo lint --cache-dir=.turbo --continue -- --fix --cache --cache-location 'node_modules/.cache/.eslintcache' && pnpm manypkg fix",
+    "typecheck": "turbo typecheck --cache-dir=.turbo",
+    "test": "turbo test --cache-dir=.turbo",
+    "update": "pnpm update -r",
+    "generate:env": "tsx tooling/scripts/generate-env.ts",
+    "env:generate": "turbo gen env",
+    "env:validate": "turbo gen validate-env",
+    "env:check": "tsx tooling/scripts/check-and-setup-env.ts",
+    "env:setup-worktree": "tsx tooling/scripts/setup-worktree-env.ts",
+    "gen:library": "tsx tooling/generators/create-library/index.ts",
+    "rules:build": "tsx .cursor/sync/build-consolidated-rules.ts",
+    "rules:watch": "tsx watch .cursor/sync/build-consolidated-rules.ts .cursor/rules/*.mdc",
+    "rules:validate-docs": "tsx .cursor/sync/validate-root-docs.ts",
+    "brain:validate": "node tooling/brain-monitor/bin/brain-monitor.js validate",
+    "brain:watch": "node tooling/brain-monitor/bin/brain-monitor.js watch",
+    "brain:typecheck-failures": "node tooling/brain-monitor/bin/brain-monitor.js typecheck",
+    "brain:lint-failures": "node tooling/brain-monitor/bin/brain-monitor.js lint",
+    "brain:format-failures": "node tooling/brain-monitor/bin/brain-monitor.js format",
+    "brain:logs": "node tooling/brain-monitor/bin/brain-monitor.js logs",
+    "brain:dev": "node tooling/brain-monitor/bin/brain-monitor.js dev",
+    "brain:test-failures-unit": "node tooling/brain-monitor/bin/brain-monitor.js test unit",
+    "brain:test-failures-integration": "node tooling/brain-monitor/bin/brain-monitor.js test integration",
+    "brain:test-failures-e2e": "node tooling/brain-monitor/bin/brain-monitor.js test e2e",
+    "ci:test": "node tooling/brain-monitor/bin/brain-monitor.js ci:test",
+    "ci:test:validate": "node tooling/brain-monitor/bin/brain-monitor.js ci:test --job validate"
+  },
+  "prettier": "@kit/prettier-config",
+  "dependencies": {
+    "yaml": "^2.8.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.1",
+    "cross-env": "^7.0.3",
+    "tsx": "^4.20.3",
+    "turbo": "^2.3.3",
+    "@manypkg/cli": "^0.21.4",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.7.3"
+  },
+  "pnpm": {
+    "overrides": {}
+  },
+  "packageManager": "pnpm@9.1.4",
+  "version": "1.0.0",
+  "main": "index.js",
+  "keywords": [],
+  "author": "David Mieloch"
+}

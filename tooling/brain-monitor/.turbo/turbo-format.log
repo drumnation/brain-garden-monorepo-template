@@ -1,0 +1,5 @@
+
+> @kit/brain-monitor@0.0.0 format /Users/dmieloch/Dev/singularityApps/core/brain-garden-studio/tooling/brain-monitor
+> prettier --check "**/*.{ts,tsx}" "--check"
+
+Checking formatting...

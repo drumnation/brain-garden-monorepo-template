@@ -1,0 +1,4 @@
+
+> @kit/brain-monitor@0.0.0 test:unit /Users/dmieloch/Dev/singularityApps/financial/plaid-datastore/tooling/brain-monitor
+> vitest run --config ../../tooling/testing/src/unit.js
+

@@ -1,0 +1,42 @@
+---
+description: Brain monitor validation workflow and TDD process
+globs:
+  - "**/*.test.ts"
+  - "**/*.test.tsx"
+  - "**/*.spec.ts"
+alwaysApply: true
+scopes:
+  - monorepo
+  - global
+---
+
+# Validation & Testing
+
+## Brain Monitor (MANDATORY)
+**Always check reports FIRST:**
+```bash
+cat _errors/validation-summary.md
+cat _errors/reports/errors.typecheck-failures.md
+```
+
+## Commands
+| Task | Command |
+|------|---------|
+| All Validations | `pnpm brain:validate` |
+| TypeScript | `pnpm brain:typecheck-failures` |
+| Tests | `pnpm brain:test-failures-unit` |
+
+## TDD 5-Step Workflow
+
+**STEP 1: ORIENT** - Choose test type (E2E > Integration > Unit)
+**STEP 2: SCAFFOLD** - Create test file
+**STEP 3: RED** - Write failing test
+**STEP 4: GREEN** - Minimal code to pass
+**STEP 5: REFACTOR** - Clean up
+
+| Test Type | Path | Pattern | Runner |
+|-----------|------|---------|--------|
+| Unit | `<same-dir>` | `<name>.unit.test.ts(x)` | Vitest |
+| Integration | `testing/integration/` | `<module>.integration.test.ts(x)` | Vitest |
+| Backend E2E | `testing/e2e/` | `<scenario>.backend.e2e.test.ts` | Vitest |
+| Browser E2E | `testing/e2e/` | `<scenario>.browser.e2e.ts` | Playwright |

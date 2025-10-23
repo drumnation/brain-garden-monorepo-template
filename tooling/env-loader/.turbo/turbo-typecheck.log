@@ -1,0 +1,4 @@
+
+> @kit/env-loader@1.0.0 typecheck /Users/dmieloch/Dev/singularityApps/core/brain-garden-studio/tooling/env-loader
+> tsc --noEmit
+

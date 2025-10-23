@@ -1,0 +1,4 @@
+
+> @kit/logger@1.1.0 typecheck /Users/dmieloch/Dev/singularityApps/core/brain-garden-studio/tooling/logger
+> tsc --noEmit
+

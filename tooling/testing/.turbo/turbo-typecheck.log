@@ -1,0 +1,4 @@
+
+> @kit/testing@2.0.0 typecheck /Users/dmieloch/Dev/singularityApps/core/brain-garden-studio/tooling/testing
+> tsc --noEmit
+

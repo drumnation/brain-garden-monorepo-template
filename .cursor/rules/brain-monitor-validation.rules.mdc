@@ -1,0 +1,66 @@
+# Brain Monitor Error Checking Rules
+
+## 🧠 MANDATORY: Check Brain Monitor Reports First
+
+Before running ANY validation commands, ALWAYS check the brain-monitor reports:
+
+```bash
+# 1. Check overall validation status FIRST
+cat _errors/validation-summary.md
+
+# 2. Check specific error reports if needed
+cat _errors/reports/errors.typecheck-failures.md
+cat _errors/reports/errors.test-failures-*.md
+cat _errors/reports/errors.lint-failures.md
+cat _errors/reports/errors.format-failures.md
+```
+
+## 📁 Brain Monitor Directory Structure
+
+```
+_errors/
+├── validation-summary.md      # Overall status - check this FIRST
+├── reports/                   # Detailed error reports
+│   ├── errors.typecheck-failures.md
+│   ├── errors.lint-failures.md
+│   ├── errors.format-failures.md
+│   └── errors.test-failures-*.md
+└── .counts/                   # Hidden run count tracking
+
+_logs/                         # Real-time server logs
+└── [app-name].log
+```
+
+## 🚀 Brain Monitor Commands
+
+| Task | Command | Output Location |
+|------|---------|-----------------|
+| All Validations | `pnpm brain:validate` | `_errors/validation-summary.md` |
+| Watch Mode (Fast) | `pnpm brain:watch` | `_errors/watch-summary.md` + individual reports |
+| Watch Mode (All) | `pnpm brain:watch --all` | `_errors/watch-summary.md` + individual reports |
+| TypeScript Only | `pnpm brain:typecheck-failures` | `_errors/reports/errors.typecheck-failures.md` |
+| Lint Only | `pnpm brain:lint-failures` | `_errors/reports/errors.lint-failures.md` |
+| Format Only | `pnpm brain:format-failures` | `_errors/reports/errors.format-failures.md` |
+| Unit Tests | `pnpm brain:test-failures-unit` | `_errors/reports/errors.test-failures-unit.md` |
+| Integration Tests | `pnpm brain:test-failures-integration` | `_errors/reports/errors.test-failures-integration.md` |
+| E2E Tests | `pnpm brain:test-failures-e2e` | `_errors/reports/errors.test-failures-e2e.md` |
+| Server Logs | `pnpm brain:logs [app]?` | Real-time log monitoring |
+
+## ⚡ Efficiency Rules
+
+1. **ALWAYS** check `validation-summary.md` first - it has error counts for all validations
+2. **ONLY** run validations if reports are stale (>10 minutes old)
+3. **NEVER** run `pnpm brain:validate` if you only need to check one type of error
+4. **USE** specific commands (`brain:typecheck-failures`, etc.) for targeted validation
+5. **PREFER** `pnpm brain:watch` for continuous feedback during development
+6. **CHECK** `watch-summary.md` when watch mode is active
+
+## 🔄 Workflow
+
+1. Check summary: `cat _errors/validation-summary.md`
+2. If errors exist, check specific report: `cat _errors/reports/errors.[type]-failures.md`
+3. Fix errors based on the report
+4. Run ONLY the specific validation: `pnpm brain:[type]-failures`
+5. Repeat until clean
+
+Remember: The reports are your task lists - read them first, run commands second!

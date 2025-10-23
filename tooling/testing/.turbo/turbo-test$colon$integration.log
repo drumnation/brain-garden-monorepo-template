@@ -1,0 +1,8 @@
+
+
+> @kit/testing@2.0.0 test:integration /Users/dmieloch/Dev/experiments/claudecodeui/tooling/testing
+> tsx ./src/runners/recursive.ts integration
+
+
+🚀 Starting Integration tests (attempt 1/3)
+[41m[30m ELIFECYCLE [39m[49m [31mCommand failed with exit code 130.[39m

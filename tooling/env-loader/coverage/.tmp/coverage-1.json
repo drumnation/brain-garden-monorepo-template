@@ -1,0 +1,276 @@
+{
+  "result": [
+    {
+      "scriptId": "384",
+      "url": "file:///Users/dmieloch/Dev/experiments/claudecodeui/tooling/env-loader/src/node.test.ts",
+      "functions": [
+        {
+          "functionName": "",
+          "ranges": [{"startOffset": 0, "endOffset": 18010, "count": 1}],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "",
+          "ranges": [{"startOffset": 13, "endOffset": 18010, "count": 1}],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "",
+          "ranges": [{"startOffset": 714, "endOffset": 6552, "count": 1}],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "",
+          "ranges": [{"startOffset": 792, "endOffset": 887, "count": 23}],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "",
+          "ranges": [{"startOffset": 924, "endOffset": 966, "count": 23}],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "",
+          "ranges": [{"startOffset": 1021, "endOffset": 3269, "count": 1}],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "",
+          "ranges": [{"startOffset": 1112, "endOffset": 1799, "count": 1}],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "",
+          "ranges": [{"startOffset": 1391, "endOffset": 1483, "count": 10}],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "",
+          "ranges": [{"startOffset": 1881, "endOffset": 2203, "count": 1}],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "",
+          "ranges": [{"startOffset": 2292, "endOffset": 3263, "count": 1}],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "",
+          "ranges": [
+            {"startOffset": 2576, "endOffset": 2816, "count": 5},
+            {"startOffset": 2701, "endOffset": 2754, "count": 4},
+            {"startOffset": 2755, "endOffset": 2807, "count": 3}
+          ],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "",
+          "ranges": [{"startOffset": 3315, "endOffset": 3743, "count": 1}],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "",
+          "ranges": [{"startOffset": 3396, "endOffset": 3546, "count": 1}],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "",
+          "ranges": [{"startOffset": 3622, "endOffset": 3737, "count": 1}],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "",
+          "ranges": [{"startOffset": 3793, "endOffset": 4264, "count": 1}],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "",
+          "ranges": [{"startOffset": 3863, "endOffset": 4015, "count": 1}],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "",
+          "ranges": [{"startOffset": 4076, "endOffset": 4258, "count": 1}],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "",
+          "ranges": [{"startOffset": 4119, "endOffset": 4166, "count": 1}],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "",
+          "ranges": [{"startOffset": 4313, "endOffset": 4942, "count": 1}],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "",
+          "ranges": [{"startOffset": 4381, "endOffset": 4514, "count": 1}],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "",
+          "ranges": [{"startOffset": 4592, "endOffset": 4747, "count": 1}],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "",
+          "ranges": [{"startOffset": 4829, "endOffset": 4936, "count": 1}],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "",
+          "ranges": [{"startOffset": 4992, "endOffset": 5639, "count": 1}],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "",
+          "ranges": [{"startOffset": 5295, "endOffset": 5453, "count": 10}],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "",
+          "ranges": [{"startOffset": 5523, "endOffset": 5633, "count": 1}],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "",
+          "ranges": [{"startOffset": 5693, "endOffset": 6548, "count": 1}],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "",
+          "ranges": [{"startOffset": 5775, "endOffset": 6059, "count": 1}],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "",
+          "ranges": [{"startOffset": 6118, "endOffset": 6542, "count": 1}],
+          "isBlockCoverage": true
+        }
+      ],
+      "startOffset": 209
+    },
+    {
+      "scriptId": "386",
+      "url": "file:///Users/dmieloch/Dev/experiments/claudecodeui/tooling/env-loader/src/node.ts",
+      "functions": [
+        {
+          "functionName": "",
+          "ranges": [{"startOffset": 0, "endOffset": 13081, "count": 1}],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "",
+          "ranges": [{"startOffset": 13, "endOffset": 13081, "count": 1}],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "loadEnvironment",
+          "ranges": [
+            {"startOffset": 417, "endOffset": 2725, "count": 3},
+            {"startOffset": 697, "endOffset": 932, "count": 9},
+            {"startOffset": 807, "endOffset": 862, "count": 3},
+            {"startOffset": 862, "endOffset": 932, "count": 6},
+            {"startOffset": 953, "endOffset": 1109, "count": 0},
+            {"startOffset": 1351, "endOffset": 1573, "count": 1},
+            {"startOffset": 1627, "endOffset": 1953, "count": 1},
+            {"startOffset": 1852, "endOffset": 1949, "count": 0},
+            {"startOffset": 1953, "endOffset": 2022, "count": 2},
+            {"startOffset": 1970, "endOffset": 2022, "count": 0},
+            {"startOffset": 2103, "endOffset": 2406, "count": 1},
+            {"startOffset": 2304, "endOffset": 2402, "count": 0},
+            {"startOffset": 2513, "endOffset": 2521, "count": 1},
+            {"startOffset": 2523, "endOffset": 2609, "count": 0}
+          ],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "",
+          "ranges": [{"startOffset": 2449, "endOffset": 2477, "count": 2}],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "get",
+          "ranges": [{"startOffset": 2829, "endOffset": 2860, "count": 3}],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "getEnv",
+          "ranges": [
+            {"startOffset": 2864, "endOffset": 2947, "count": 2},
+            {"startOffset": 2929, "endOffset": 2944, "count": 1}
+          ],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "get",
+          "ranges": [{"startOffset": 3042, "endOffset": 3064, "count": 2}],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "requireEnv",
+          "ranges": [
+            {"startOffset": 3068, "endOffset": 3245, "count": 2},
+            {"startOffset": 3145, "endOffset": 3244, "count": 1}
+          ],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "get",
+          "ranges": [{"startOffset": 3344, "endOffset": 3370, "count": 2}],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "getIntEnv",
+          "ranges": [
+            {"startOffset": 3374, "endOffset": 3592, "count": 3},
+            {"startOffset": 3474, "endOffset": 3504, "count": 1},
+            {"startOffset": 3504, "endOffset": 3566, "count": 2},
+            {"startOffset": 3566, "endOffset": 3580, "count": 1},
+            {"startOffset": 3581, "endOffset": 3589, "count": 1}
+          ],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "get",
+          "ranges": [{"startOffset": 3690, "endOffset": 3715, "count": 3}],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "getBoolEnv",
+          "ranges": [
+            {"startOffset": 3719, "endOffset": 3930, "count": 11},
+            {"startOffset": 3794, "endOffset": 3807, "count": 10},
+            {"startOffset": 3835, "endOffset": 3865, "count": 1},
+            {"startOffset": 3865, "endOffset": 3892, "count": 10},
+            {"startOffset": 3892, "endOffset": 3908, "count": 8},
+            {"startOffset": 3909, "endOffset": 3927, "count": 7}
+          ],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "get",
+          "ranges": [{"startOffset": 4029, "endOffset": 4055, "count": 11}],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "getFilteredEnv",
+          "ranges": [
+            {"startOffset": 4059, "endOffset": 4265, "count": 2},
+            {"startOffset": 4169, "endOffset": 4249, "count": 331},
+            {"startOffset": 4187, "endOffset": 4212, "count": 166},
+            {"startOffset": 4214, "endOffset": 4245, "count": 167}
+          ],
+          "isBlockCoverage": true
+        },
+        {
+          "functionName": "get",
+          "ranges": [{"startOffset": 4368, "endOffset": 4398, "count": 2}],
+          "isBlockCoverage": true
+        }
+      ],
+      "startOffset": 209
+    }
+  ]
+}

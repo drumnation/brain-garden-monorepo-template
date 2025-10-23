@@ -1,0 +1,10 @@
+
+> @kit/prettier-config@0.1.0 preformat /Users/dmieloch/Dev/singularityApps/core/brain-garden-studio/tooling/prettier
+> pnpm run build
+
+
+> @kit/prettier-config@0.1.0 format /Users/dmieloch/Dev/singularityApps/core/brain-garden-studio/tooling/prettier
+> prettier --check "**/*.{ts,mjs,json}" "--check"
+
+Checking formatting...
+All matched files use Prettier code style!
