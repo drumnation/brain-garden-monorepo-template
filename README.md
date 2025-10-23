@@ -227,6 +227,26 @@ pnpm monitor:logs     # View application logs
 
 All tests use Vitest with parallel execution and watch mode support.
 
+## Documentation
+
+Core documentation is organized under `/docs`:
+- `/docs/architecture/` - System architecture and design decisions
+- `/docs/guides/` - Development guides and workflows
+- `/docs/maintenance/` - Maintenance documentation and reports
+- `/docs/ai-platforms/` - AI assistant instruction files (auto-generated)
+
+**Note:** Per the documentation placement policy, only `README.md`, `CHANGELOG.md`, and `.env.example` are allowed in the root directory.
+
+## AI Assistant Rules
+
+This project uses a modular rules system for AI assistants:
+- **Source:** `.brain/rules/**/*.rules.mdc`
+- **Generated:** `docs/ai-platforms/{CLAUDE.md,AGENTS.md,GEMINI.md}`
+- **Build:** `pnpm rules:build`
+- **Watch:** `pnpm rules:watch`
+
+See `docs/ai-platforms/README.md` for details.
+
 ## Project Rules & Documentation
 
 Core architectural rules are documented in `.cursor/_backup/`:

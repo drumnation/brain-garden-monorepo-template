@@ -44,7 +44,7 @@
     "rules:analyze": "tsx scripts/analyze-rule-sizes.ts",
     "rules:build:verify": "pnpm rules:build && pnpm rules:verify",
     "rules:full-check": "pnpm rules:analyze && pnpm rules:build:verify",
-    "rules:watch": "tsx watch --watch-path=.cursor/rules-source .cursor/sync/build-consolidated-rules-and-verify.ts",
+    "rules:watch": "tsx watch --watch-path=.brain/rules .cursor/sync/build-consolidated-rules.ts",
     "dev:with-rules": "pnpm setup:env && concurrently \"pnpm rules:watch\" \"cross-env FORCE_COLOR=1 turbo dev --parallel\"",
     "gen:init": "tsx tooling/generators/init-monorepo/index.ts",
     "gen:react-web": "tsx tooling/generators/create-react-web/index.ts",
