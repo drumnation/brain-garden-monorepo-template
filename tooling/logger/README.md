@@ -446,6 +446,13 @@ function ThemedLogger({children, theme}) {
 }
 ```
 
+## Related Documentation
+
+For comprehensive developer tools documentation:
+- [Developer Tools Guide](/docs/guides/developer-tools/) - Complete guide to CME development tools
+- [Logging & Debugging](/docs/guides/developer-tools/logging-debugging.md) - Detailed logging and debugging guide
+- [Quick Reference](/docs/guides/developer-tools/quick-reference.md) - Fast command lookup
+
 ## 🤝 Contributing
 
 Have a theme idea? We'd love to see it! Check our contribution guidelines for adding new themes.

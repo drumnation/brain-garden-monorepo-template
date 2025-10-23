@@ -26,11 +26,7 @@ cortals-monorepo/
 |--------|---------|------------|---------|----------------|
 | `apps/client` | `client` | React + Vite | Main frontend application | Foundation, Validation, Frontend Patterns, React Standards, Workflow |
 | `apps/server` | `@scala-cme/server` | Express + TypeScript | API backend server | Foundation, Validation, Backend Express, Workflow |
-| `apps/storybook` | `storybook` | Storybook | Component library docs | Foundation, Frontend Patterns, React Standards |
-| `apps/config-pro` | `config-pro` | React + Vite | Configuration UI | Foundation, Frontend Patterns, React Standards |
-| `apps/testing-unit` | `@scala-cme/testing-unit` | Vitest | Unit test runner | Foundation, Validation |
-| `apps/testing-integration` | `@scala-cme/testing-integration` | Vitest | Integration test runner | Foundation, Validation |
-| `apps/testing-e2e` | `@scala-cme/testing-e2e` | Playwright | E2E test runner | Foundation, Validation |
+| `apps/storybook` | `storybook` | Storybook | Component library docs | Foundation, Frontend Patterns, React Standards, Storybook |
 
 ### 📦 Packages (Shared React UI Libraries)
 
@@ -52,7 +48,6 @@ cortals-monorepo/
 | `services/cm` | `@scala-cme/cm-service` | Express | Content Manager proxy | Foundation, Validation, Backend Express, Workflow |
 | `services/pg` | `@scala-cme/pg-service` | Node + PostgreSQL | Database service | Foundation, Backend Functional, Documentation |
 | `services/mailer` | `@scala-cme/mailer-service` | Node | Email service | Foundation, Backend Functional, Documentation |
-| `services/logger` | `@scala-cme/logger-service` | Node | Logging wrapper | Foundation, Backend Functional, Documentation |
 
 ### ⚙️ Tooling (Shared Build/Dev Tools)
 
@@ -118,6 +113,8 @@ cortals-monorepo/
 | 06-backend-functional | `backend` | `node` | `services/*`, `tooling/*` | - |
 | 07-documentation | `foundation` | - | `*` | `documentation` |
 | 08-workflow | `workflow` | - | `*` | - |
+| 09-agent-documentation-coordination | `foundation` | - | `*` | `documentation` |
+| storybook | `frontend` | `react`, `storybook` | `apps/storybook`, `packages/*-ui` | `testing`, `components` |
 
 ---
 
@@ -239,19 +236,70 @@ Update `build-consolidated-rules.ts` to:
 
 ---
 
+## Audit Results
+
+**Date:** 2025-10-22
+**Auditor:** Campaign Conductor (Genesis Protocol v2.1)
+
+### Key Findings
+
+1. **✅ RESOLVED: Storybook Rule Over-Distribution**
+   - **Issue:** `storybook.mdc` had no YAML frontmatter, causing it to appear in all contexts
+   - **Fix:** Added frontmatter with scopes: [react, storybook, testing, ui]
+   - **Result:** Rule now correctly excluded from backend contexts (apps/server, services/*)
+
+2. **✅ COMPLETED: Context Expansion**
+   - **Before:** 5 contexts covering 33% of monorepo
+   - **After:** 15 contexts covering 100% of key directories
+   - **New Contexts:** apps/storybook, packages/admin-ui, packages/navigation-ui, packages/shared-redux, tooling/brain-monitor, tooling/logger, tooling/testing, services/cm, services/pg, plugins/
+
+3. **✅ IMPLEMENTED: Validation Infrastructure**
+   - **Feature:** Build script now validates frontmatter (scopes, alwaysApply, valid scope values)
+   - **Feature:** Verification script audits distribution correctness
+   - **Scripts:** `pnpm rules:verify`, `pnpm rules:build:verify`
+   - **Warnings:** 3 contradictory alwaysApply + scopes warnings (informational only)
+
+4. **✅ UPDATED: Documentation**
+   - `.cursor/rules/README.md` now documents frontmatter requirements and scope system
+   - Added usage examples for verification commands
+
+5. **⚠️ PARTIAL: Directory Validation**
+   - Build script now skips non-existent directories instead of creating them
+   - Note: Some contexts in HIERARCHICAL_CONTEXTS may reference non-existent directories (this is acceptable for future expansion)
+
+### Implementation Status
+
+| Phase | Status | Completion Date |
+|-------|--------|-----------------|
+| Phase 1: Critical Fix (storybook.mdc) | ✅ Complete | 2025-10-22 |
+| Phase 2: Context Expansion (5→15 contexts) | ✅ Complete | 2025-10-22 |
+| Phase 3: Validation Infrastructure | ✅ Complete | 2025-10-22 |
+| Phase 4: Documentation Updates | ✅ Complete | 2025-10-22 |
+| Phase 5: Final Verification | ✅ Complete | 2025-10-22 |
+
+---
+
 ## Next Steps
 
-1. **Review this proposal** - Does the tagging system make sense?
-2. **Choose Option A or B** - Path-based or Role-based contexts?
-3. **Update rule frontmatter** - Add layer/tech/scope/purpose tags
-4. **Update build script** - Implement new context generation
-5. **Test & verify** - Ensure all contexts have appropriate rules
+1. ~~**Review this proposal** - Does the tagging system make sense?~~ ✅ Implemented with scope-based system
+2. ~~**Choose Option A or B** - Path-based or Role-based contexts?~~ ✅ Chose Path-Based (Option A)
+3. ~~**Update rule frontmatter** - Add layer/tech/scope/purpose tags~~ ✅ All rules have frontmatter with scopes
+4. ~~**Update build script** - Implement new context generation~~ ✅ Build script expanded to 15 contexts
+5. ~~**Test & verify** - Ensure all contexts have appropriate rules~~ ✅ Verification script created
+
+### Optional Future Enhancements
+
+1. **CI/CD Integration** - Add `pnpm rules:verify` to GitHub Actions workflow
+2. **Strict Mode** - Add `--strict` flag to treat validation warnings as errors
+3. **Verification Script Enhancement** - Improve AGENTS.md parsing to reduce false positives
+4. **Resolve alwaysApply Contradictions** - Clarify rules 01, 02, 09 frontmatter
+5. **Additional Contexts** - Consider per-plugin contexts (plugins/displays/, plugins/flight-boards/)
 
 ---
 
 **Questions to Answer:**
 
-1. Should we use Path-Based (Option A) or Role-Based (Option B) contexts?
-2. Do the layer categories make sense? (foundation, frontend, backend, validation, workflow)
-3. Should we generate CLAUDE.md at every folder level, or just major sections?
-4. Any other folder-specific rules we're missing?
+1. ~~Should we use Path-Based (Option A) or Role-Based (Option B) contexts?~~ ✅ Answer: Path-Based (Option A)
+2. ~~Do the layer categories make sense?~~ ✅ Answer: Using scope-based system instead
+3. ~~Should we generate CLAUDE.md at every folder level, or just major sections?~~ ✅ Answer: Major sections (15 key directories)
+4. ~~Any other folder-specific rules we're missing?~~ ✅ Answer: All major rules covered; storybook.mdc added

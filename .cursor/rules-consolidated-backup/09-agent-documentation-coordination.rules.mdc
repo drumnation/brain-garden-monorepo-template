@@ -1,0 +1,278 @@
+---
+description: Documentation coordination and BMAD-style agent workflows
+globs:
+  - "**/*"
+alwaysApply: true
+scopes:
+  - global
+---
+
+# Agent Documentation Coordination
+
+This rule establishes BMAD method patterns for documentation workflows, emphasizing agent coordination, handoff protocols, and documentation as code principles.
+
+## Core Principle - Documentation as Code
+
+Treat documentation with the same rigor as production code:
+
+- **Atomic Updates:** Documentation changes committed with code changes
+- **Definition of Done:** Features incomplete without documentation updates
+- **PR Review:** Documentation reviewed alongside code
+- **Testing:** Validate links, examples, and diagrams before merging
+
+**Implementation:**
+```bash
+# Pre-commit checks include documentation validation
+pnpm validate  # Checks code AND docs
+```
+
+## Documentation System Overview
+
+### Three-Tier Hierarchy
+
+1. **Package-level:** `packages/[name]/docs/` or `packages/[name]/README.md`
+   - Implementation details, package API, configuration
+2. **Feature-level:** `/docs/features/[name]/`
+   - Cross-package features, requirements, architecture, testing
+3. **Global:** `/docs/architecture/`
+   - System-wide architecture, cross-cutting concerns, ADRs
+
+### Key Resources
+
+| Resource | Path | Purpose |
+|----------|------|---------|
+| Agent Instructions | `/docs/maintenance/AGENT_INSTRUCTIONS.md` | Comprehensive agent guide |
+| Documentation Standards | `/docs/maintenance/DOCUMENTATION_STANDARDS.md` | Style guide and conventions |
+| Templates | `/docs/maintenance/templates/` | Feature, PRD, ADR templates |
+| Feature Example | `/docs/features/authentication/` | Production reference implementation |
+
+**Complete details:** See [AGENT_INSTRUCTIONS.md](/docs/maintenance/AGENT_INSTRUCTIONS.md)
+
+## Documentation Update Triggers
+
+Update documentation when:
+
+- Adding/modifying features → Feature docs in `/docs/features/[name]/`
+- Changing architecture → Update `/docs/architecture/` files
+- Adding/modifying APIs → Update `api.md` with examples
+- Making architectural decisions → Create ADR in `/docs/architecture/decisions/`
+- Changing deployment → Update `/docs/guides/` operational docs
+- Modifying schemas → Update `database.md` with diagrams
+- Changing auth/security → Update `security.md`
+- Adding packages → Create package README.md
+- Updating dependencies → Update CHANGELOG.md
+
+**Complete trigger list:** See [AGENT_INSTRUCTIONS.md - Documentation Update Triggers](/docs/maintenance/AGENT_INSTRUCTIONS.md#documentation-update-triggers)
+
+## BMAD-Style Agent Coordination
+
+### Agent Personas
+
+Specialized agent personas are available in `.brain/prompts/agents/`:
+
+**Planning Agents:**
+- **PM** (`pm.md`) - Product requirements, feature definition, PRD sections
+- **Analyst** (`analyst.md`) - Requirements analysis, user journeys, success metrics
+- **Architect** (`architect.md`) - Technical design, ADRs, component diagrams
+
+**Execution Agents:**
+- **SM** (`sm.md`) - Story breakdown, MECE task decomposition, sprint planning
+- **Dev** (`dev.md`) - Implementation, TDD, code quality
+- **QA** (`qa.md`) - Validation, E2E tests, quality assurance
+
+**Orchestrator:**
+- **Orchestrator** (`orchestrator.md`) - Coordinates multi-agent workflows
+
+**Usage:**
+```
+Act as Product Manager and define requirements for [feature]
+Switch to Architect mode and design the technical architecture
+Use the orchestrator to coordinate PM → Architect → SM workflow
+```
+
+**Agent Checklists:**
+Each agent has a quality checklist in `.brain/prompts/agents/checklists/` to ensure completeness before handoff.
+
+### Orchestrator Patterns
+
+**Planning → Development → QA → Documentation** workflow with clear handoffs:
+
+**1. Planning Agents** (Analyst/PM/Architect)
+- **Prompts:** `@.brain/prompts/agents/pm.md`, `@.brain/prompts/agents/analyst.md`, `@.brain/prompts/agents/architect.md`
+- **Input:** Requirements, stakeholder input
+- **Output:** PRDs, architecture docs, ADRs
+- **Documentation:** `/docs/features/[name]/requirements.md`, `/docs/architecture/`
+- **Checklists:** `@.brain/prompts/agents/checklists/pm-checklist.md`, `analyst-checklist.md`, `architect-checklist.md`
+
+**2. Scrum Master Agent**
+- **Prompt:** `@.brain/prompts/agents/sm.md`
+- **Input:** PRDs, architecture docs
+- **Output:** User stories, sprint backlog, acceptance criteria
+- **Documentation:** Task tickets, story definitions
+- **Checklist:** `@.brain/prompts/agents/checklists/sm-checklist.md`
+
+**3. Development Agents**
+- **Prompt:** `@.brain/prompts/agents/dev.md`
+- **Input:** Stories, architecture docs
+- **Output:** Working code, tests, API implementations
+- **Documentation:** Code references in feature docs, package READMEs
+- **Checklist:** `@.brain/prompts/agents/checklists/dev-checklist.md`
+
+**4. QA Agents**
+- **Prompt:** `@.brain/prompts/agents/qa.md`
+- **Input:** Requirements, test strategy
+- **Output:** Test execution, validation reports
+- **Documentation:** Updated `testing.md`, test coverage reports
+- **Checklist:** `@.brain/prompts/agents/checklists/qa-checklist.md`
+
+**5. Documentation Agents**
+- **Input:** All outputs from above agents
+- **Output:** Consistent, complete documentation set
+- **Documentation:** Updated indexes, cross-references, quality checks
+
+### Handoff Points
+
+| Handoff | Input Documents | Output Documents | Next Agent |
+|---------|-----------------|------------------|------------|
+| Planning → Stories | PRD, architecture.md | User stories, tasks | Development |
+| Stories → Code | User stories, api.md | Implementation, tests | QA |
+| Code → Test | Code, testing.md | Test reports | Documentation |
+| Test → Docs | All above | Complete docs set | Review |
+
+### Multi-File Architecture Strategy
+
+Separate concerns across focused documents (BMAD pattern):
+
+```
+/docs/features/[feature-name]/
+├── README.md           # Overview, navigation
+├── requirements.md     # FR, NFR, user stories
+├── architecture.md     # Technical design
+├── api.md             # API contracts
+└── testing.md         # Test strategy
+```
+
+**Benefits:** Parallel agent work, focused updates, no merge conflicts, clear ownership
+
+**Reference:** [BMAD Method](https://github.com/bmad-code-org/BMAD-METHOD)
+
+## Ticket-Based Workflow
+
+**For Day-to-Day Development:**
+
+When working from GitHub Issues/Projects instead of feature plans:
+
+**Step 1: Fetch Issue**
+```bash
+# Using GitHub CLI
+gh issue view [issue-number]
+
+# Or let agent fetch via GitHub MCP
+```
+
+**Step 2: Determine Workflow**
+- Simple (bug fix, single package) → Dev → QA
+- Complex (multi-package, task breakdown) → SM → Dev → QA
+- Large feature → Full BMAD workflow
+
+**Step 3: Execute Workflow**
+- Run `@.brain/prompts/routine/planning/work-from-github-issue.prompt.md`
+- Agent fetches issue context and routes to appropriate workflow
+- Follow workflow prompts in `.brain/prompts/workflows/ticket-based/`
+
+**Step 4: Update Documentation**
+- Update CHANGELOG.md (if user-facing)
+- Update package README.md (if API changed)
+- Update existing feature docs (if behavior changed)
+- Do NOT create new feature docs for tickets
+
+**Step 5: Close Issue**
+- Comment with PR link
+- Verify acceptance criteria
+- Link PR to issue
+
+**When to Use:**
+- Bug fixes
+- Small enhancements
+- Refactoring
+- Chores
+- UI tweaks
+
+**When NOT to Use:**
+- Large features requiring PRD
+- MVP milestone features
+- Cross-cutting concerns
+- Features needing architecture docs
+
+**Related Prompts:**
+- `@.brain/prompts/routine/planning/work-from-github-issue.prompt.md`
+- `@.brain/prompts/routine/planning/determine-workflow-type.prompt.md`
+- `@.brain/prompts/workflows/ticket-based/simple-ticket-workflow.md`
+- `@.brain/prompts/workflows/ticket-based/complex-ticket-workflow.md`
+
+## Quick Start for Agents
+
+### Before Starting Work
+
+- [ ] Read [AGENT_INSTRUCTIONS.md](/docs/maintenance/AGENT_INSTRUCTIONS.md)
+- [ ] Check `_errors/validation-summary.md` for current issues
+- [ ] Review related feature docs in `/docs/features/`
+- [ ] Identify which tier of documentation hierarchy applies
+- [ ] Identify which agent role is appropriate (PM, Analyst, Architect, SM, Dev, QA)
+- [ ] Review agent prompt in `.brain/prompts/agents/[agent].md`
+- [ ] Use orchestrator for multi-agent workflows: `@.brain/prompts/agents/orchestrator.md`
+
+### When Creating Documentation
+
+- [ ] Use appropriate template from `/docs/maintenance/templates/`
+- [ ] Fill all sections completely (no placeholders)
+- [ ] Add YAML frontmatter with `last_updated: YYYY-MM-DD`
+- [ ] Use absolute paths from repo root for all links
+- [ ] Include code references with line numbers: `file.ts:123`
+- [ ] Add Mermaid diagrams for architecture/flows
+- [ ] Update relevant indexes (README.md, FEATURE_MAP.md)
+
+### When Updating Documentation
+
+- [ ] Update `last_updated` date in YAML frontmatter
+- [ ] Verify all affected cross-references
+- [ ] Update related documentation (follow links both ways)
+- [ ] Run documentation validation checks
+- [ ] Update CHANGELOG.md with documentation changes
+- [ ] Ensure no broken links or outdated references
+
+## Brain Garden Integration
+
+The Brain Garden agent communication system supports documentation coordination through specialized prompts.
+
+### Documentation Prompts
+
+Available in `.brain/prompts/routine/documentation/`:
+
+- `update-core-docs.prompt.md` - Core documentation update workflow
+- `use-monorepo-docs.prompt.md` - Consult and update monorepo documentation
+- `use-project-docs.prompt.md` - Load relevant docs before starting work
+- `workflows/consult-docs.workflow.md` - Documentation consultation workflow
+
+**Usage:** Brain Garden agents reference these prompts for consistent documentation workflows.
+
+## Quality Checklist
+
+Before committing documentation changes:
+
+- [ ] YAML frontmatter complete (`title`, `description`, `keywords`, `last_updated`)
+- [ ] All code references use absolute paths from repo root
+- [ ] All internal links tested and working
+- [ ] Mermaid diagrams render correctly
+- [ ] Code snippets have syntax highlighting (` ```typescript `)
+- [ ] No placeholder text (`[PLACEHOLDER]`, `TODO`) remains
+- [ ] Spelling and grammar checked
+- [ ] Formatting follows DOCUMENTATION_STANDARDS.md
+- [ ] Related documentation updated (indexes, cross-references)
+- [ ] Examples are accurate and tested
+
+**Complete checklist:** See [AGENT_INSTRUCTIONS.md - Documentation Quality Checklist](/docs/maintenance/AGENT_INSTRUCTIONS.md#documentation-quality-checklist)
+
+---
+
+**Note:** This rule complements `07-documentation.rules.mdc` (hierarchy, versioning) by adding agent coordination workflows and BMAD patterns. Always reference [AGENT_INSTRUCTIONS.md](/docs/maintenance/AGENT_INSTRUCTIONS.md) for detailed procedures.

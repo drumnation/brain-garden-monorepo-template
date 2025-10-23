@@ -35,7 +35,8 @@
     "test": "vitest run --config ../../tooling/testing/src/unit.js",
     "test:unit": "vitest run --config ../../tooling/testing/src/unit.js",
     "test:integration": "echo 'n/a' && exit 0",
-    "test:e2e": "echo 'n/a' && exit 0"
+    "test:e2e": "echo 'n/a' && exit 0",
+    "ci:init": "tsx src/ci/init.ts"
   },
   "dependencies": {
     "yargs": "^17.7.2",

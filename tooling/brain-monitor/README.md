@@ -341,6 +341,14 @@ _errors/
 - Standard test runners (Vitest, Jest, etc.)
 - (Optional) Docker for local CI testing with act
 
+## Related Documentation
+
+For comprehensive developer tools documentation:
+- [Developer Tools Guide](/docs/guides/developer-tools/) - Complete guide to CME development tools
+- [Quick Reference](/docs/guides/developer-tools/quick-reference.md) - Fast command lookup
+- [Validation Tools](/docs/guides/developer-tools/validation-tools.md) - Detailed validation guide
+- [Development Workflows](/docs/guides/developer-tools/development-workflow.md) - Common workflows using brain-monitor
+
 ## Contributing
 
 This is an internal tool for the financial monorepo. For issues or improvements, please open a PR in the main repository.

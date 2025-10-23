@@ -1,0 +1,41 @@
+---
+description: Functional patterns for scripts, CLIs, and standalone Node programs
+globs:
+  - "scripts/**/*"
+  - "tooling/**/*"
+  - "packages/**/cli/**/*"
+  - "**/*.script.ts"
+alwaysApply: false
+scopes:
+  - node
+  - backend
+  - tooling
+---
+
+# Functional Isolated Concerns
+
+## Use Cases
+- Scripts, CLIs, background workers
+- NOT for Express apps (see `05-backend-express.rules.mdc`)
+
+## Structure
+```
+feature/
+├─ feature.service.ts     # Pure business logic
+├─ feature.repository.ts  # Data access
+├─ feature.validation.ts  # Pure validation
+├─ feature.types.ts       # TypeScript types
+└─ index.ts               # Exports
+```
+
+## Transformation Rules
+- Classes → Pure functions
+- Constructor deps → Function params or closure
+- Instance state → Function arguments
+- Private methods → Non-exported functions
+
+## Refactoring Checklist
+- [ ] No classes exist
+- [ ] All functions pure where possible
+- [ ] Side effects isolated
+- [ ] File pattern: `<name>.<purpose>.ts`

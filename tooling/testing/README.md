@@ -284,6 +284,14 @@ For large test suites, adjust Node.js memory:
 NODE_OPTIONS="--max-old-space-size=4096" pnpm test
 ```
 
+## Related Documentation
+
+For comprehensive developer tools documentation:
+- [Developer Tools Guide](/docs/guides/developer-tools/) - Complete guide to CME development tools
+- [Validation Tools](/docs/guides/developer-tools/validation-tools.md) - Detailed testing and validation guide
+- [Quick Reference](/docs/guides/developer-tools/quick-reference.md) - Fast command lookup for testing
+- [Development Workflows](/docs/guides/developer-tools/development-workflow.md) - Testing workflows
+
 ## Contributing
 
 See [CONTRIBUTING.md](../../CONTRIBUTING.md) for development guidelines.

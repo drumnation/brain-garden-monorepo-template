@@ -1,3 +1,37 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+.next/
+.turbo/
+
+# Environment files
+.env
+.env.local
+
+# Brain Monitor outputs - tracked for multi-agent coordination
+# _errors/ and _logs/ directories and contents are tracked
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Generated AI Platform Files (TRACKED)
+# These files are auto-generated but committed to git
+# so they're immediately available after clone.
+# Regenerate with: pnpm rules:build
+# docs/ai-platforms/CLAUDE.md
+# docs/ai-platforms/AGENTS.md
+# docs/ai-platforms/GEMINI.md
+# docs/ai-platforms/.clinerules
+# docs/ai-platforms/.windsurfrules
 
 # Git worktrees (Crystal)
 /worktrees/

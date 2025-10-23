@@ -14,7 +14,7 @@ This directory contains the development rules for the Cortals monorepo, optimize
 
 ### Source Files (Modular - Edit These)
 
-The following **8 focused `.mdc` files** are the **single source of truth**. Edit these, then regenerate consolidated files:
+The following **9 focused `.mdc` files** are the **single source of truth**. Edit these, then regenerate consolidated files:
 
 - **`01-foundation.rules.mdc`** - Core monorepo foundation (ESM, structure, env vars)
 - **`02-validation-testing.rules.mdc`** - Brain monitor validation & TDD workflow
@@ -24,7 +24,7 @@ The following **8 focused `.mdc` files** are the **single source of truth**. Edi
 - **`06-backend-functional.rules.mdc`** - Functional patterns for scripts/CLIs
 - **`07-documentation.rules.mdc`** - Documentation hierarchy and versioning
 - **`08-workflow.rules.mdc`** - PR creation and essential commands
-- **`09-ai-documentation-maintenance.rules.mdc`** - AI agent documentation responsibilities
+- **`09-agent-documentation-coordination.rules.mdc`** - Documentation coordination and BMAD-style agent workflows
 
 **Original files backed up:** The 19 original verbose `.mdc` files are in `_backup/` for reference.
 
@@ -170,15 +170,15 @@ These files contain **all rules**, so they're less token-efficient but work with
 
 | Rule File | Applies To | Always Apply? |
 |:----------|:-----------|:--------------|
-| `monorepo-structure-and-configuration` | All files | ✅ Yes |
-| `tests.unified-testing` | All test files | ✅ Yes |
-| `brain-monitor-validation` | All files | ✅ Yes |
-| `atomic-design-component-strategy` | UI components | ❌ No (contextual) |
-| `storybook-first-composition` | UI packages | ❌ No (contextual) |
-| `monorepo-node-express-architecture` | Backend apps | ❌ No (contextual) |
-| `node.functional-isolated-concerns` | Scripts/CLIs | ❌ No (contextual) |
-| `testid` | When adding testIDs | ❌ No (manual trigger) |
-| `pr-creation-guidelines` | Git workflows | ❌ No (manual trigger) |
+| `01-foundation` | All files | ✅ Yes |
+| `02-validation-testing` | All files | ✅ Yes |
+| `03-frontend-patterns` | UI components | ❌ No (contextual) |
+| `04-react-standards` | React files | ❌ No (contextual) |
+| `05-backend-express` | Backend apps | ❌ No (contextual) |
+| `06-backend-functional` | Scripts/CLIs | ❌ No (contextual) |
+| `07-documentation` | Documentation files | ❌ No (contextual) |
+| `08-workflow` | Git workflows | ❌ No (contextual) |
+| `09-agent-documentation-coordination` | All files | ✅ Yes |
 
 ## Maintenance
 
@@ -221,7 +221,7 @@ These files contain **all rules**, so they're less token-efficient but work with
 
 The build script (`pnpm rules:build`) generates:
 1. **`master.rules.mdc`** - Consolidated single file (≤50% of original)
-2. **`_cursor/*.mdc`** - 8 focused Cursor-aligned files
+2. **`_cursor/*.mdc`** - 9 focused Cursor-aligned files
 3. **Hierarchical context files** - CLAUDE.md, GEMINI.md, AGENTS.md per context
 4. **Platform files** - .clinerules, .windsurfrules
 
@@ -269,6 +269,7 @@ The build script (`pnpm rules:build`) generates:
 ✅ **Version control** - Git tracks both modular and consolidated
 ✅ **Easy migration** - Switch AI platforms without losing rules
 ✅ **Automation-ready** - Can add to CI/CD pipeline
+✅ **Coordinated documentation** - BMAD-style workflows ensure comprehensive coverage
 
 ## CI/CD Integration (Optional)
 
@@ -329,7 +330,7 @@ pnpm rules:watch
 
 **What gets generated:**
 - `master.rules.mdc` (consolidated, ≤50% of original)
-- `_cursor/*.mdc` (8 focused Cursor-aligned files)
+- `_cursor/*.mdc` (9 focused Cursor-aligned files)
 - Hierarchical context files (CLAUDE.md, GEMINI.md, AGENTS.md)
 - Platform files (.clinerules, .windsurfrules)
 
