@@ -1,26 +1,81 @@
-# Scheduling Station
+# Monorepo Mega Starter Template
 
-A modern calendar and task editing system built with a functional monorepo architecture.
+A production-ready monorepo mega starter template with showcase applications for web, mobile, desktop, and backend, complete testing infrastructure, automated validation, and comprehensive tooling.
 
-## Project Overview
+## 🚀 What's Included
 
-Scheduling Station is a backend API system for managing calendar events and tasks. The project follows a strict ESM-only, functional programming approach with shared tooling and no-build libraries.
+This mega template provides everything you need to start building modern full-stack applications:
 
-## Monorepo Structure
+- **React Web App** - Vite + Mantine UI + Zustand + React Router
+- **React Native Mobile** - Expo + Expo Router + React Native Paper
+- **Electron Desktop** - Cross-platform desktop app with auto-updates
+- **Express API** - Functional DI pattern with Prisma + Zod + JWT
+- **Shared Packages** - Common utilities and UI components
+- **Comprehensive Testing** - Unit, Integration, and E2E tests for all apps
+- **Brain Monitor** - AI-assisted validation and error tracking
+- **GitHub Actions** - Automated CI/CD workflows
+- **Complete Tooling** - ESLint, Prettier, TypeScript, Turborepo
+
+## 🎯 Quick Start
+
+```bash
+# Clone the template
+git clone https://github.com/your-org/monorepo-mega-template.git my-project
+cd my-project
+
+# Install dependencies
+pnpm install
+
+# Generate your apps (choose what you need)
+pnpm gen:express-api     # Generate Express API server → apps/api
+pnpm gen:react-web       # Generate React web app → apps/web (if available)
+pnpm gen:react-native    # Generate React Native app → apps/mobile (if available)
+pnpm gen:electron        # Generate Electron desktop app → apps/desktop (if available)
+
+# Start all generated apps in development mode
+pnpm dev
+
+# Run validation
+pnpm validate
+```
+
+### What Runs When You `pnpm dev` (After Generating Apps)
+
+The following apps run **after you generate them** using the generators above:
+
+- **Web App** → http://localhost:3000 (after `pnpm gen:react-web`)
+- **API** → http://localhost:8080 (after `pnpm gen:express-api`)
+- **Mobile** → Expo Dev Server (after `pnpm gen:react-native`)
+- **Desktop** → Electron app window (after `pnpm gen:electron`)
+
+## 📦 Template Structure
 
 ```
-scheduling-station/
+monorepo-mega-template/
 ├── apps/                      # Executable applications
-│   └── scheduling-api/       # Backend Express API server
+│   ├── web/                  # React web app (Vite + Mantine UI)
+│   ├── mobile/               # React Native app (Expo)
+│   ├── desktop/              # Electron desktop app
+│   └── api/                  # Express REST API (Prisma + JWT)
 ├── packages/                  # Shared libraries (no build step)
-│   └── scheduling-api/       # Domain-specific packages
-│       ├── calendar/         # Calendar domain logic & types
-│       └── tasks/            # Tasks domain logic & types
+│   ├── shared-utils/         # Common utility functions
+│   └── shared-ui/            # Shared React components
 ├── tooling/                   # Shared tooling packages
-│   └── @kit/*               # Development tools (brain-monitor, logger, etc.)
-├── _errors/                   # Brain Monitor error reports (gitignored)
-├── _logs/                     # Application logs (gitignored)
-└── .cursor/                   # Project rules and configuration
+│   ├── brain-monitor/        # Validation orchestration
+│   ├── testing/              # Centralized test configs
+│   ├── eslint/               # ESLint configurations
+│   ├── prettier/             # Prettier configuration
+│   ├── typescript/           # TypeScript configurations
+│   ├── logger/               # Structured logging
+│   └── generators/           # App/package generators
+├── docs/                      # Documentation
+│   ├── guides/               # How-to guides
+│   ├── architecture/         # Architecture decisions
+│   └── MEGA_TEMPLATE_SETUP.md
+├── scripts/                   # Automation scripts
+├── _errors/                   # Validation error reports (tracked in git)
+├── _logs/                     # Application logs (tracked in git)
+└── .github/workflows/         # GitHub Actions CI/CD
 ```
 
 ## Getting Started
@@ -47,23 +102,25 @@ pnpm install
 cp .env.example .env
 ```
 
-2. Copy app-specific environment files:
+2. Configure your environment variables in the `.env` file
 
-```bash
-cp apps/scheduling-api/.env.example apps/scheduling-api/.env
-```
-
-3. Configure your environment variables in the `.env` files
+**Note**: This template uses `tooling/env-loader` to consolidate all environment variables in the monorepo root `.env` file. Individual apps should use `@kit/env-loader` to access environment variables rather than maintaining separate `.env` files.
 
 ### Running the Development Server
 
-Start the API server with hot-reloading:
+**Prerequisites:** Generate apps first using the generators (e.g., `pnpm gen:express-api`)
+
+Start all generated apps with hot-reloading:
 
 ```bash
 pnpm dev
 ```
 
-The API will be available at `http://localhost:8080` (or your configured PORT).
+**Available endpoints** (after generating apps):
+- API: `http://localhost:8080` (after `pnpm gen:express-api`)
+- Web: `http://localhost:3000` (after `pnpm gen:react-web`, if available)
+- Mobile: Expo Dev Server (after `pnpm gen:react-native`, if available)
+- Desktop: Electron window (after `pnpm gen:electron`, if available)
 
 ## Architecture
 
@@ -90,26 +147,26 @@ The API will be available at `http://localhost:8080` (or your configured PORT).
 
 ### Adding a New Feature
 
-1. **Define types** in the appropriate shared package (`@scheduling-api/calendar` or `@scheduling-api/tasks`)
+1. **Define types** in the appropriate shared package (e.g., `@starter/shared-utils` or create a new package using `pnpm gen:library`)
 2. **Implement business logic** in the package's service layer
-3. **Create API endpoints** in `apps/scheduling-api/src/modules/<feature>/`
-4. **Register routes** in `apps/scheduling-api/src/infra/http/routes.ts`
-5. **Write tests** using Vitest
+3. **Create API endpoints** in your Express app (e.g., `apps/api/src/modules/<feature>/`)
+4. **Register routes** in your app's route configuration
+5. **Write tests** using the centralized `@kit/testing` configs
 
 ### Package Naming Conventions
 
-- **Apps**: `@[app-name]` (e.g., `@scheduling-api`)
-- **Packages**: `@[app-name]/[package-name]` (e.g., `@scheduling-api/calendar`)
-- **Tooling**: `@kit/[tool-name]` (e.g., `@kit/logger`)
+- **Apps**: `@[app-name]` (e.g., `@starter/web`, `@starter/api`)
+- **Shared Packages**: `@starter/[package-name]` (e.g., `@starter/shared-utils`, `@starter/shared-ui`)
+- **Tooling**: `@kit/[tool-name]` (e.g., `@kit/logger`, `@kit/testing`)
 
 ### Importing from Packages
 
 ```typescript
-// Shared domain packages
-import type { CalendarEvent } from '@scheduling-api/calendar';
-import type { Task } from '@scheduling-api/tasks';
+// Shared packages
+import { formatDate, addDays } from '@starter/shared-utils';
+import { Button } from '@starter/shared-ui';
 
-// Tooling packages
+// Tooling packages (use @kit/logger for all logging)
 import { createLogger } from '@kit/logger';
 import { loadEnvironment } from '@kit/env-loader/node';
 ```
@@ -133,14 +190,18 @@ pnpm validate         # Run lint + typecheck + test
 pnpm clean            # Remove all node_modules and build artifacts
 ```
 
-### App Level (in apps/scheduling-api/)
+### App Level Scripts
+
+Each app (web, mobile, desktop, api) has its own scripts. For example, in `apps/api/`:
 
 ```bash
 pnpm dev              # Start dev server with hot-reload
 pnpm build            # Build for production
 pnpm start            # Start production server
-pnpm test             # Run tests
-pnpm test:coverage    # Run tests with coverage
+pnpm test             # Run all tests (unit, integration, e2e)
+pnpm test:unit        # Run unit tests only
+pnpm test:integration # Run integration tests
+pnpm test:e2e         # Run end-to-end tests
 ```
 
 ## Agent Coordination with Brain Monitor

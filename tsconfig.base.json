@@ -15,7 +15,6 @@
     "noUncheckedIndexedAccess": true,
     "baseUrl": ".",
     "paths": {
-      "@scheduling-api/*": ["packages/scheduling-api/*/src"],
       "@kit/*": ["tooling/*/src"]
     }
   },

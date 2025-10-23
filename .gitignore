@@ -10,11 +10,8 @@ dist/
 .env
 .env.local
 
-# Brain Monitor outputs
-_errors/*.md
-!_errors/.gitkeep
-_logs/*.log
-!_logs/.gitkeep
+# Brain Monitor outputs - tracked for multi-agent coordination
+# _errors/ and _logs/ directories and contents are tracked
 
 # IDE
 .vscode/
