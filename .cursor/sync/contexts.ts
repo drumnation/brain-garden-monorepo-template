@@ -16,31 +16,31 @@ export interface Context {
 export const contexts: Context[] = [
   {
     name: 'Monorepo Root (Claude)',
-    outputPath: 'docs/ai-platforms/CLAUDE.md',
+    outputPath: 'CLAUDE.md',
     scopes: ['monorepo', 'global'],
     description: 'Monorepo-wide rules and global standards for Claude',
   },
   {
     name: 'Monorepo Root (Agents)',
-    outputPath: 'docs/ai-platforms/AGENTS.md',
+    outputPath: 'AGENTS.md',
     scopes: ['monorepo', 'global'],
     description: 'Concise, action-oriented format for autonomous agents',
   },
   {
     name: 'Monorepo Root (Gemini)',
-    outputPath: 'docs/ai-platforms/GEMINI.md',
+    outputPath: 'GEMINI.md',
     scopes: ['monorepo', 'global'],
     description: 'Structured format with decision points for Google Gemini',
   },
   {
     name: 'Monorepo Root (Cline)',
-    outputPath: 'docs/ai-platforms/.clinerules',
+    outputPath: 'CLINE_RULES.md',
     scopes: ['monorepo', 'global'],
     description: 'Single-file format for Cline',
   },
   {
     name: 'Monorepo Root (Windsurf)',
-    outputPath: 'docs/ai-platforms/.windsurfrules',
+    outputPath: '.windsurfrules',
     scopes: ['monorepo', 'global'],
     description: 'Single-file format for Windsurf',
   },
