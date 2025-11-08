@@ -1,378 +1,427 @@
 ---
-title: "Frontend Architecture - TEMPLATE"
-description: "[TEMPLATE] Frontend architecture documentation template"
-keywords: [frontend, architecture, template, react, ui]
-last_updated: "2025-10-23"
-status: "TEMPLATE - NOT REAL DOCUMENTATION"
+title: "Frontend Architecture"
+description: "React-based frontend applications with Electron desktop support"
+keywords: [frontend, architecture, react, electron, vite, mantine]
+last_updated: "2025-11-08"
+status: "ACTIVE DOCUMENTATION"
 ---
 
-# Frontend Architecture [TEMPLATE]
-
-> **⚠️ THIS IS A TEMPLATE FILE ⚠️**  
-> This file is a template for documenting frontend architecture. It is NOT actual project documentation.
-> Fill in the sections below with your actual frontend architecture details.
-> Remove this notice when you convert this template to real documentation.
+# Frontend Architecture
 
 ## 1. Overview
 
-[Provide an overview of your frontend architecture:]
+The Dev Garden frontend consists of two React-based applications:
+- **Web Application** - Browser-based SPA built with Vite
+- **Desktop Application** - Electron-wrapped React app for native desktop
 
-- **Framework:** [React, Vue, Angular, Svelte, etc.]
-- **Version:** [e.g., React 18.3]
-- **Build Tool:** [Vite, Webpack, Parcel, etc.]
-- **UI Paradigm:** [SPA, MPA, SSR, SSG]
-- **State Management:** [Redux, MobX, Zustand, Context, etc.]
-- **Styling Approach:** [CSS-in-JS, CSS Modules, Tailwind, etc.]
+Both applications share components and utilities through the monorepo structure, ensuring consistency and code reuse.
+
+**Key Characteristics:**
+- **Framework:** React 18.3 with TypeScript
+- **Build Tool:** Vite 6.0 for fast development
+- **UI Library:** Mantine 7.15 for component library
+- **State Management:** Zustand 5.0 for global state
+- **Desktop:** Electron 33.2 for cross-platform desktop
+- **Styling:** Mantine's built-in styling system
 
 ## 2. Technology Stack
 
-[Document frontend technologies:]
+### Shared Technologies
 
 | Category | Technology | Purpose |
 |----------|-----------|---------|
-| **Framework** | [e.g., React] | [UI component library] |
-| **Build Tool** | [e.g., Vite] | [Development and production builds] |
-| **State Management** | [e.g., Redux] | [Application state] |
-| **Styling** | [e.g., styled-components] | [Component styling] |
-| **Routing** | [e.g., React Router] | [Client-side navigation] |
-| **Forms** | [e.g., React Hook Form] | [Form handling] |
-| **HTTP Client** | [e.g., Axios, Fetch] | [API communication] |
-| **Testing** | [e.g., Vitest, Jest] | [Unit and integration tests] |
-| **E2E Testing** | [e.g., Playwright, Cypress] | [End-to-end tests] |
+| **Framework** | React 18.3 | UI component library |
+| **Language** | TypeScript 5.7 | Type safety |
+| **Build Tool** | Vite 6.0 | Development and production builds |
+| **State Management** | Zustand 5.0 | Application state management |
+| **UI Components** | Mantine 7.15 | Pre-built component library |
+| **Routing** | React Router 6.28 | Client-side navigation (web only) |
+| **Testing** | Vitest | Unit and integration tests |
+| **Code Quality** | ESLint + Prettier | Code formatting and linting |
+
+### Desktop-Specific Technologies
+
+| Category | Technology | Purpose |
+|----------|-----------|---------|
+| **Desktop Framework** | Electron 33.2 | Native desktop wrapper |
+| **Builder** | electron-builder 25.1 | Cross-platform packaging |
+| **IPC** | Electron IPC | Main-renderer communication |
+| **Preload Scripts** | Electron Preload | Secure context bridge |
 
 ## 3. Application Structure
 
-### Entry Point
+### Web Application (`apps/web`)
 
-**File:** `[path/to/entry/file]`
+```
+apps/web/
+├── src/
+│   ├── App.tsx              # Root component
+│   ├── main.tsx             # Entry point
+│   ├── components/          # Shared components
+│   ├── features/            # Feature modules
+│   ├── hooks/               # Custom hooks
+│   ├── lib/                 # Utilities
+│   ├── store/               # Zustand stores
+│   └── types/               # TypeScript types
+├── public/                  # Static assets
+├── index.html              # HTML template
+├── vite.config.ts          # Vite configuration
+├── package.json
+└── tsconfig.json
+```
 
-[Describe how the application initializes:]
+### Desktop Application (`apps/desktop`)
 
-- Provider setup
-- Router configuration
-- Global state initialization
-- Authentication check
-
-### Root Component
-
-[Describe the root component structure:]
-- App wrapper
-- Provider nesting order
-- Route configuration
-- Error boundaries
+```
+apps/desktop/
+├── src/
+│   ├── main/               # Electron main process
+│   │   └── index.ts        # Main process entry
+│   ├── preload/            # Preload scripts
+│   │   └── index.ts        # Context bridge
+│   └── renderer/           # React application
+│       ├── App.tsx         # Root component
+│       └── main.tsx        # Renderer entry
+├── electron-builder.json   # Build configuration
+├── vite.config.ts         # Vite configuration
+├── package.json
+└── tsconfig.json
+```
 
 ## 4. Component Architecture
 
-### Design System
+### Component Organization
 
-[Describe your component organization:]
+Components follow a hierarchical structure:
 
-**Component Categories:**
-1. **[Category Name]** - `[directory]`
-   - [Description of components in this category]
-   - Examples: [component names]
+1. **Atomic Components** (`packages/shared-ui/src/atoms/`)
+   - Basic building blocks (Button, Input, Text)
+   - Highly reusable across applications
 
-2. **[Category Name]** - `[directory]`
-   - [Description]
-   - Examples: [component names]
+2. **Feature Components** (`apps/*/src/features/`)
+   - Domain-specific components
+   - Self-contained with their own state
 
-### Component Patterns
+3. **Layout Components** (`apps/*/src/components/layout/`)
+   - Page layouts and navigation
+   - Application shells
 
-[Document component patterns you follow:]
+### Component Pattern
 
-**File Structure:**
-```
-ComponentName/
-├── ComponentName.tsx           # Component implementation
-├── ComponentName.test.tsx      # Unit tests
-├── ComponentName.stories.tsx   # Storybook stories (if applicable)
-└── ComponentName.styles.ts     # Styles (if separate)
-```
-
-**Component Template:**
 ```tsx
 // Example component structure
-export interface [ComponentName]Props {
-  // Props definition
+interface ComponentNameProps {
+  title: string;
+  onAction?: () => void;
+  children?: React.ReactNode;
 }
 
-export const [ComponentName]: React.FC<[ComponentName]Props> = (props) => {
-  // Implementation
+export const ComponentName: React.FC<ComponentNameProps> = ({
+  title,
+  onAction,
+  children
+}) => {
+  // Component implementation
+  return (
+    <div>
+      <h2>{title}</h2>
+      {children}
+      {onAction && <button onClick={onAction}>Action</button>}
+    </div>
+  );
 };
 ```
 
 ## 5. State Management
 
-### State Architecture
+### Zustand Store Pattern
 
-[Describe your state management approach:]
-
-**Global State:**
-- [What belongs in global state]
-- [State management tool/pattern]
-- [Where state is defined]
-
-**Local State:**
-- [When to use local state]
-- [Patterns for local state]
-
-### State Slices/Modules
-
-[If using Redux or similar, list state slices:]
-
-#### `[slice name]`
-- **Purpose:** [What this slice manages]
-- **Location:** `[file path]`
-- **Key Actions:** [List main actions]
-- **Selectors:** [Key selectors]
-
-## 6. API Integration
-
-### API Client Setup
-
-[Describe how API calls are configured:]
-
-**Base Configuration:**
-- Base URL
-- Authentication headers
-- Error handling
-- Interceptors
-
-### API Services
-
-[Document API service organization:]
+Global state is managed with Zustand stores:
 
 ```typescript
-// Example API service structure
-export const [EntityName]API = {
-  getAll: () => { /* ... */ },
-  getById: (id) => { /* ... */ },
-  create: (data) => { /* ... */ },
-  update: (id, data) => { /* ... */ },
-  delete: (id) => { /* ... */ },
-};
+// store/appStore.ts
+import { create } from 'zustand';
+
+interface AppState {
+  user: User | null;
+  projects: Project[];
+  isLoading: boolean;
+
+  // Actions
+  setUser: (user: User) => void;
+  loadProjects: () => Promise<void>;
+  reset: () => void;
+}
+
+export const useAppStore = create<AppState>((set) => ({
+  user: null,
+  projects: [],
+  isLoading: false,
+
+  setUser: (user) => set({ user }),
+
+  loadProjects: async () => {
+    set({ isLoading: true });
+    try {
+      const projects = await fetchProjects();
+      set({ projects, isLoading: false });
+    } catch (error) {
+      set({ isLoading: false });
+      throw error;
+    }
+  },
+
+  reset: () => set({ user: null, projects: [] })
+}));
 ```
 
-### Data Fetching Strategy
+### State Management Strategy
 
-[Describe data fetching approach:]
-- Loading states
-- Error handling
-- Caching strategy
-- Optimistic updates
+1. **Component State** - Use `useState` for local UI state
+2. **Global State** - Use Zustand for cross-component state
+3. **Server State** - Use React Query (planned) for API data
+4. **Form State** - Use controlled components or React Hook Form (planned)
 
-## 7. Routing
+## 6. Routing (Web Application)
 
-### Route Structure
-
-[Document your routes:]
-
-| Route | Component | Access | Description |
-|-------|-----------|--------|-------------|
-| `/` | [Component] | [Public/Protected] | [Purpose] |
-| `/[path]` | [Component] | [Public/Protected] | [Purpose] |
-
-### Protected Routes
-
-[Describe authentication/authorization for routes:]
-- Authentication check
-- Authorization logic
-- Redirect behavior
-
-### Route Parameters
-
-[Document dynamic routes and parameters]
-
-## 8. Styling & Theming
-
-### Styling Strategy
-
-[Describe styling approach:]
-
-**Method:** [CSS-in-JS, CSS Modules, Utility-first, etc.]
-**Tool:** [styled-components, Emotion, Tailwind, etc.]
-
-### Theme Configuration
-
-[Describe theming system:]
-
-**Theme Structure:**
-```typescript
-// Example theme structure
-const theme = {
-  colors: { /* ... */ },
-  spacing: { /* ... */ },
-  typography: { /* ... */ },
-  // ...
-};
-```
-
-### Responsive Design
-
-[Describe responsive design approach:]
-- Breakpoints
-- Mobile-first strategy
-- Platform-specific components
-
-## 9. Forms & Validation
-
-### Form Handling
-
-[Describe form management approach:]
-
-**Library:** [React Hook Form, Formik, etc.]
-**Validation:** [Yup, Zod, etc.]
-
-### Form Patterns
-
-[Document common form patterns:]
+The web application uses React Router for client-side navigation:
 
 ```tsx
-// Example form structure
-const [FormName] = () => {
-  // Form setup
-  // Validation
-  // Submit handler
-};
+// App.tsx
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+export function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/projects" element={<ProjectsPage />} />
+        <Route path="/projects/:id" element={<ProjectDetailPage />} />
+        <Route path="/settings" element={<SettingsPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
 ```
 
-## 10. Internationalization
+## 7. Electron Architecture (Desktop)
 
-### i18n Setup
+### Process Architecture
 
-[Describe internationalization approach:]
+The desktop application uses Electron's multi-process architecture:
 
-**Library:** [react-i18next, FormatJS, etc.]
-**Supported Languages:** [List languages]
+1. **Main Process** (`src/main/index.ts`)
+   - Manages application lifecycle
+   - Creates browser windows
+   - Handles system integration
+   - IPC communication hub
 
-### Translation Organization
+2. **Renderer Process** (`src/renderer/`)
+   - Runs the React application
+   - Isolated from system APIs
+   - Communicates via IPC
 
-[Describe how translations are organized:]
-- File structure
-- Namespaces
-- Loading strategy
+3. **Preload Script** (`src/preload/index.ts`)
+   - Bridge between main and renderer
+   - Exposes safe APIs to renderer
 
-## 11. Error Handling
+### IPC Communication
 
-### Error Boundaries
+```typescript
+// preload/index.ts
+import { contextBridge, ipcRenderer } from 'electron';
 
-[Describe error boundary setup:]
-- Component-level boundaries
-- Route-level boundaries
-- Global error boundary
+contextBridge.exposeInMainWorld('electronAPI', {
+  // Safe API exposure
+  getProjects: () => ipcRenderer.invoke('get-projects'),
+  saveProject: (project: Project) => ipcRenderer.invoke('save-project', project),
 
-### User Feedback
+  // Event listeners
+  onProjectUpdate: (callback: (project: Project) => void) => {
+    ipcRenderer.on('project-updated', (_, project) => callback(project));
+  }
+});
 
-[Describe user feedback mechanisms:]
-- Toast notifications
-- Error messages
-- Loading states
+// main/index.ts
+ipcMain.handle('get-projects', async () => {
+  return await loadProjects();
+});
 
-## 12. Performance Optimization
+ipcMain.handle('save-project', async (_, project: Project) => {
+  return await saveProject(project);
+});
+```
 
-### Code Splitting
+## 8. UI Component Library (Mantine)
 
-[Describe code splitting strategy:]
-- Route-based splitting
-- Component lazy loading
-- Suspense boundaries
+### Mantine Configuration
 
-### Optimization Techniques
+```tsx
+// main.tsx or App.tsx
+import { MantineProvider } from '@mantine/core';
+import '@mantine/core/styles.css';
 
-[Document performance optimizations:]
-- Memoization (useMemo, useCallback)
-- Virtualization (for lists)
-- Image optimization
-- Bundle optimization
+export function App() {
+  return (
+    <MantineProvider
+      theme={{
+        primaryColor: 'blue',
+        fontFamily: 'Inter, sans-serif',
+        defaultRadius: 'md',
+      }}
+    >
+      {/* Application content */}
+    </MantineProvider>
+  );
+}
+```
 
-## 13. Testing Strategy
+### Common Components Used
 
-### Unit Tests
+- **Layout:** AppShell, Container, Grid
+- **Navigation:** NavLink, Tabs, Breadcrumbs
+- **Forms:** TextInput, Select, Checkbox, Button
+- **Feedback:** Notification, Modal, Alert
+- **Data Display:** Table, Card, Badge
 
-[Describe unit testing approach:]
-- Test location
-- Testing patterns
-- Mock strategy
+## 9. Build & Development
 
-### Integration Tests
+### Development Workflow
 
-[Describe integration testing:]
-- Component integration
-- State integration
-- API integration
+```bash
+# Web application
+cd apps/web
+pnpm dev              # Start dev server at http://localhost:5173
 
-### E2E Tests
+# Desktop application
+cd apps/desktop
+pnpm dev              # Start Electron app in development mode
 
-[Describe end-to-end testing:]
-- Test scenarios
-- Test organization
-- CI integration
-
-## 14. Build Configuration
-
-### Development Build
-
-[Describe development setup:]
-- Dev server configuration
-- Hot module replacement
-- Proxy setup
-- Environment variables
+# Run from monorepo root
+pnpm --filter @dev-garden/web dev
+pnpm --filter @dev-garden/desktop dev
+```
 
 ### Production Build
 
-[Describe production build:]
-- Build command
-- Optimization settings
-- Output directory
-- Asset handling
+```bash
+# Web application
+pnpm --filter @dev-garden/web build
+# Output: apps/web/dist/
 
-### Environment Variables
+# Desktop application
+pnpm --filter @dev-garden/desktop build
+# Output: apps/desktop/release/
+```
 
-[Document environment variable usage:]
+### Build Configuration
 
-**Client-side Variables:**
-- Naming convention
-- Access method
-- Example variables
+**Vite Configuration (Web):**
+```typescript
+// vite.config.ts
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    port: 5173,
+    proxy: {
+      '/api': 'http://localhost:3000'
+    }
+  }
+});
+```
 
-## 15. Accessibility
+**Electron Builder Configuration:**
+```json
+{
+  "appId": "com.dev-garden.desktop",
+  "productName": "Dev Garden PM",
+  "directories": {
+    "output": "release/${version}"
+  },
+  "mac": {
+    "target": ["dmg", "zip"]
+  },
+  "win": {
+    "target": ["nsis", "zip"]
+  },
+  "linux": {
+    "target": ["AppImage", "deb"]
+  }
+}
+```
 
-### WCAG Compliance
+## 10. Testing Strategy
 
-[Describe accessibility targets:]
-- Target level (A, AA, AAA)
-- Testing approach
-- Common patterns
+### Test Types
 
-### Accessibility Patterns
+1. **Component Tests** - Test individual components in isolation
+2. **Integration Tests** - Test feature workflows
+3. **E2E Tests** - Test full user journeys (planned)
 
-[Document accessibility best practices you follow:]
-- Keyboard navigation
-- Screen reader support
-- ARIA attributes
-- Focus management
+### Test Setup
 
-## 16. Cross-References
+```typescript
+// Example component test
+import { render, screen } from '@testing-library/react';
+import { ProjectCard } from './ProjectCard';
 
-### Related Documentation
+describe('ProjectCard', () => {
+  it('displays project name', () => {
+    const project = { name: 'Test Project', id: '1' };
+    render(<ProjectCard project={project} />);
 
-- **[Backend Architecture](./backend.md)** - [How frontend connects to backend]
-- **[System Overview](./system-overview.md)** - [Frontend's role in system]
-- **[Security](./security.md)** - [Client-side security]
+    expect(screen.getByText('Test Project')).toBeInTheDocument();
+  });
+});
+```
 
-### Source Code References
+## 11. Performance Optimization
 
-[List key source files:]
-- `[path/to/file]` - [Purpose]
-- `[path/to/directory]` - [Contents]
+### Current Optimizations
+
+1. **Code Splitting** - Dynamic imports for routes
+2. **Memoization** - React.memo for expensive components
+3. **Virtual Scrolling** - For large lists (planned)
+4. **Image Optimization** - Lazy loading and responsive images
+
+### Build Optimizations
+
+- Tree shaking via Vite
+- Minification and compression
+- Asset optimization
+- Bundle splitting
+
+## 12. Future Enhancements
+
+### Planned Features
+
+1. **PM Agent UI Features**
+   - Motivation dashboard
+   - Project quality visualization
+   - Session tracking interface
+   - Screenshot gallery
+
+2. **Technical Improvements**
+   - React Query for server state
+   - React Hook Form for complex forms
+   - Playwright for E2E testing
+   - Storybook for component documentation
+
+3. **Desktop Enhancements**
+   - System tray integration
+   - Native notifications
+   - File system integration
+   - Auto-updater
+
+## Related Documentation
+
+- [System Overview](./system-overview.md) - High-level architecture
+- [Backend Architecture](./backend.md) - API server documentation
+- [Database Architecture](./database.md) - Data layer
+- [Component Design](../../.cursor/rules/component-design-decision-tree.rules.mdc) - Component patterns
 
 ---
 
-**Template Instructions:**
-1. Replace all bracketed placeholders with actual information
-2. Include actual code examples from your project
-3. Add diagrams if they help explain architecture
-4. Document all major patterns and conventions
-5. Include links to actual source files
-6. Add sections specific to your framework/tools
-7. Remove this instructions section when complete
+**Last Updated:** 2025-11-08
+**Status:** Active Documentation

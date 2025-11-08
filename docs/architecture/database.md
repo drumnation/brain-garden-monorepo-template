@@ -1,366 +1,657 @@
 ---
-title: "Database Architecture - TEMPLATE"
-description: "[TEMPLATE] Database architecture documentation template"
-keywords: [database, architecture, template, schema]
-last_updated: "2025-10-23"
-status: "TEMPLATE - NOT REAL DOCUMENTATION"
+title: "Database Architecture"
+description: "Database architecture and data persistence strategy for PM Agent"
+keywords: [database, architecture, sqlite, electron, data-model, persistence, api]
+last_updated: "2025-11-08"
+status: "ACTIVE DOCUMENTATION - Reflects Actual Implementation"
 ---
 
-# Database Architecture [TEMPLATE]
-
-> **⚠️ THIS IS A TEMPLATE FILE ⚠️**  
-> This file is a template for documenting database architecture. It is NOT actual project documentation.
-> Fill in the sections below with your actual database architecture details.
-> Remove this notice when you convert this template to real documentation.
+# Database Architecture
 
 ## 1. Overview
 
-[Provide an overview of your database strategy:]
+The Dev Garden PM Agent uses SQLite as the primary database for tracking project metadata, quality metrics, development sessions, and motivation data. The database is actively used and contains comprehensive tracking for 177+ projects in the Dev workspace.
 
-- **Database Type:** [PostgreSQL, MySQL, MongoDB, etc.]
-- **Version:** [e.g., PostgreSQL 14+, MySQL 8.0+]
-- **Storage Strategy:** [Single database, multiple databases, hybrid approach]
-- **Data Model:** [Relational, document, graph, hybrid]
+**Current State:**
+- **Database:** ✅ **IMPLEMENTED** at `/Users/dmieloch/Dev/.pm-agent/db/pm-agent.db`
+- **Size:** 1MB (active with project data)
+- **Engine:** SQLite 3 with WAL mode enabled
+- **Driver:** better-sqlite3 (Node.js)
+- **Schema:** Comprehensive 37+ tables/views tracking all project aspects
+
+**Architecture:**
+- **Local Storage:** SQLite database in `.pm-agent/db/` directory
+- **Data Model:** Relational model with 37+ tables, views, and triggers
+- **Access Pattern:** Repository pattern with hexagonal architecture (planned)
+- **Schema Files:** Multiple schema files for different subsystems
 
 ## 2. Technology Stack
 
-[Document database technologies:]
+### Planned Technologies
 
-| Component | Technology | Purpose |
-|-----------|-----------|---------|
-| **Database** | [e.g., PostgreSQL] | [Primary data storage] |
-| **Client Library** | [e.g., node-postgres] | [Database driver] |
-| **ORM/Query Builder** | [e.g., Prisma, TypeORM] | [Data access layer] |
-| **Migration Tool** | [e.g., Flyway, TypeORM] | [Schema versioning] |
-| **Connection Pooling** | [Implementation] | [Connection management] |
+| Component | Technology | Purpose | Status |
+|-----------|-----------|---------|---------|
+| **Local Database** | SQLite | Development and desktop app | Planned |
+| **Production Database** | PostgreSQL | Cloud deployment | Future |
+| **ORM/Query Builder** | Prisma | Type-safe database access | Planned |
+| **Migration Tool** | Prisma Migrate | Schema versioning | Planned |
+| **Database Client** | better-sqlite3 | SQLite driver | Planned |
 
-## 3. Connection Configuration
+## 3. Planned Database Schema
 
-### Database Service
+### Core Tables Design
 
-[Describe how database connections are configured:]
+The database will track project management data with the following core entities:
 
-**Environment Variables:**
-```bash
-DB_HOST=[describe]
-DB_PORT=[describe]
-DB_NAME=[describe]
-DB_USER=[describe]
-DB_PASSWORD=[describe]
+#### Projects Table
+```sql
+CREATE TABLE projects (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL UNIQUE,
+  path TEXT NOT NULL UNIQUE,
+  description TEXT,
+  status TEXT CHECK(status IN ('active', 'on-hold', 'archived')),
+  origin_type TEXT CHECK(origin_type IN ('created', 'forked', 'cloned')),
+  ownership TEXT CHECK(ownership IN ('mine', 'customized-fork', 'exploring')),
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  last_worked_on DATETIME,
+  repository_url TEXT,
+  deployed_url TEXT
+);
 ```
 
-### Connection Pooling
-
-[Describe connection pool configuration:]
-- Pool size
-- Connection timeout
-- Idle timeout
-- Error handling
-
-## 4. Database Schema
-
-### Current Tables
-
-[Document each table in your schema:]
-
-#### `[table_name]`
-
-[Table purpose and description]
-
-**Columns:**
-- `id` ([type], [constraints]) - [Description]
-- `name` ([type], [constraints]) - [Description]
-- `created_at` ([type], [constraints]) - [Description]
-- [Additional columns...]
-
-**Indexes:**
-- [Index name] on [columns] - [Purpose]
-
-**Relations:**
-- [Foreign key relationships]
-
-### Entity Relationships
-
-[Include an ERD or describe key relationships:]
-
-```
-[Table A] ---< [Table B]
-    |
-    +---< [Table C]
+#### Quality Metrics Table
+```sql
+CREATE TABLE quality_metrics (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  project_id INTEGER NOT NULL,
+  quality_score INTEGER CHECK(quality_score BETWEEN 0 AND 100),
+  test_coverage INTEGER CHECK(test_coverage BETWEEN 0 AND 100),
+  has_tests BOOLEAN DEFAULT FALSE,
+  has_ci_cd BOOLEAN DEFAULT FALSE,
+  has_documentation BOOLEAN DEFAULT FALSE,
+  documentation_score INTEGER CHECK(documentation_score BETWEEN 0 AND 100),
+  linting_score INTEGER CHECK(linting_score BETWEEN 0 AND 100),
+  calculated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
+);
 ```
 
-## 5. Data Storage Strategy
+#### Sessions Table
+```sql
+CREATE TABLE development_sessions (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  project_id INTEGER NOT NULL,
+  session_id TEXT UNIQUE,
+  started_at DATETIME NOT NULL,
+  ended_at DATETIME,
+  duration_minutes INTEGER,
+  tokens_used INTEGER,
+  goals TEXT, -- JSON array
+  accomplishments TEXT, -- JSON array
+  blockers TEXT, -- JSON array
+  FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
+);
+```
 
-### Local Database Storage
+#### Features Table
+```sql
+CREATE TABLE features (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  project_id INTEGER NOT NULL,
+  name TEXT NOT NULL,
+  description TEXT,
+  status TEXT CHECK(status IN ('planned', 'in_progress', 'completed', 'blocked')),
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  completed_at DATETIME,
+  estimated_hours INTEGER,
+  actual_hours INTEGER,
+  FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
+);
+```
 
-[If using local database, describe what data is stored:]
+#### Todos Table
+```sql
+CREATE TABLE todos (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  project_id INTEGER,
+  content TEXT NOT NULL,
+  active_form TEXT,
+  status TEXT CHECK(status IN ('pending', 'in_progress', 'completed', 'cancelled')),
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  completed_at DATETIME,
+  session_id TEXT,
+  FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE SET NULL
+);
+```
 
-**Data Types:**
-1. **[Category]** - [What kind of data]
-2. **[Category]** - [What kind of data]
+### Planned Indexes
 
-**Rationale:** [Why this data is stored locally]
+```sql
+-- Performance indexes
+CREATE INDEX idx_projects_status ON projects(status);
+CREATE INDEX idx_projects_last_worked ON projects(last_worked_on DESC);
+CREATE INDEX idx_quality_project ON quality_metrics(project_id);
+CREATE INDEX idx_sessions_project ON development_sessions(project_id);
+CREATE INDEX idx_features_project_status ON features(project_id, status);
+CREATE INDEX idx_todos_status ON todos(status);
+CREATE INDEX idx_todos_session ON todos(session_id);
+```
 
-### External Storage
+## 4. Data Access Layer
 
-[If using external services/APIs, describe what data is stored externally:]
+### Repository Pattern Implementation
 
-**Data Types:**
-1. **[Category]** - [What kind of data]
-2. **[Category]** - [What kind of data]
-
-**Rationale:** [Why this data is stored externally]
-
-### Data Synchronization
-
-[If data is synchronized between systems:]
-- **Sync Strategy:** [Real-time, batch, event-driven]
-- **Conflict Resolution:** [How conflicts are handled]
-- **Consistency Guarantees:** [Eventual, strong, etc.]
-
-## 6. Query Patterns
-
-### Repository Pattern
-
-[If using repository pattern, describe it:]
+The data access layer will follow the repository pattern to abstract database operations:
 
 ```typescript
-// Example of your repository pattern
-export const [EntityName]Repository = {
-  findAll: () => { /* ... */ },
-  findById: (id) => { /* ... */ },
-  create: (data) => { /* ... */ },
-  update: (id, data) => { /* ... */ },
-  delete: (id) => { /* ... */ },
-};
+// packages/core-projects/src/project.repo.ts
+export interface ProjectRepository {
+  findAll(): Promise<Project[]>;
+  findById(id: number): Promise<Project | null>;
+  findByName(name: string): Promise<Project | null>;
+  create(project: CreateProjectDto): Promise<Project>;
+  update(id: number, updates: UpdateProjectDto): Promise<Project>;
+  delete(id: number): Promise<boolean>;
+
+  // Complex queries
+  findActiveProjects(): Promise<Project[]>;
+  findProjectsWithQuality(): Promise<ProjectWithQuality[]>;
+  searchProjects(query: string): Promise<Project[]>;
+}
+
+// Implementation with Prisma (planned)
+export class PrismaProjectRepository implements ProjectRepository {
+  constructor(private prisma: PrismaClient) {}
+
+  async findAll(): Promise<Project[]> {
+    return this.prisma.project.findMany({
+      orderBy: { lastWorkedOn: 'desc' }
+    });
+  }
+
+  async findProjectsWithQuality(): Promise<ProjectWithQuality[]> {
+    return this.prisma.project.findMany({
+      include: {
+        qualityMetrics: {
+          orderBy: { calculatedAt: 'desc' },
+          take: 1
+        }
+      }
+    });
+  }
+}
 ```
 
-### Type Safety
+## 5. Migration Strategy
 
-[Describe how queries are type-safe:]
-- Type definitions
-- Query validation
-- Result typing
+### Version Control for Schema
 
-## 7. Migration Strategy
+All database migrations will be tracked in version control:
 
-### Current Approach
+```
+db/migrations/
+├── 001_initial_schema.sql
+├── 002_add_sessions_table.sql
+├── 003_add_features_table.sql
+├── 004_add_todos_table.sql
+└── 005_add_indexes.sql
+```
 
-[Describe your migration approach:]
+### Migration Workflow
 
-**Migration Location:** `[path/to/migrations]`
-**Migration Format:** [SQL files, TypeScript, etc.]
-**Execution:** [Manual, automated, CI/CD]
+```typescript
+// db/migrate.ts
+export async function runMigrations() {
+  const db = new Database('./pm-agent.db');
+  const migrations = await loadMigrations('./db/migrations');
 
-### Migration Process
+  for (const migration of migrations) {
+    if (!await isApplied(db, migration.version)) {
+      await applyMigration(db, migration);
+      await recordMigration(db, migration.version);
+    }
+  }
+}
+```
 
-[Describe how to create and run migrations:]
+## 6. Data Storage Strategy
+
+### Local Database (.pm-agent/db/)
+
+The local SQLite database will store:
+
+1. **Project Metadata**
+   - Basic project information
+   - Status and lifecycle data
+   - File system paths
+
+2. **Quality Metrics**
+   - Test coverage percentages
+   - Documentation scores
+   - Code quality metrics
+
+3. **Development History**
+   - Session tracking
+   - Feature completion
+   - Todo items
+
+4. **Motivation Data**
+   - Effort metrics
+   - Progress tracking
+   - Accomplishments
+
+### File System Storage
+
+Some data will remain in the file system for performance:
+
+```
+.pm-agent/
+├── db/
+│   └── pm-agent.db          # SQLite database
+├── screenshots/             # Image files
+│   └── [project-name]/
+├── knowledge/              # Markdown files
+│   ├── patterns/
+│   └── insights/
+└── cache/                  # Temporary data
+    └── quality-checks/
+```
+
+## 7. Database Access Architecture
+
+### Recommended: Electron-Owned Database with Local API
+
+**PM Agent uses a desktop-first architecture** where Electron owns the database and exposes it via multiple interfaces:
+
+```
+┌─────────────────────────────────────────┐
+│   Electron Main Process (DB Owner)     │
+│   ┌───────────────────────────────┐   │
+│   │   SQLite Database             │   │
+│   │   .pm-agent/db/pm-agent.db    │   │
+│   └───────────────────────────────┘   │
+│              ▲                          │
+│              │                          │
+│   ┌──────────┴──────────┐              │
+│   │                     │              │
+│   │  IPC Handlers   Express Server    │
+│   │  (Renderer)     (localhost:8080)   │
+└───┼─────────────────────┼───────────────┘
+    │                     │
+    ▼                     ▼
+Electron UI          Claude Scripts
+(React App)         (CLI Tools)
+```
+
+**Why This Works:**
+1. ✅ **Single DB Owner** - Electron has exclusive write access (no conflicts)
+2. ✅ **Scripts Work** - HTTP API at `http://localhost:8080` for scripts
+3. ✅ **Fast UI** - Electron renderer uses IPC (no HTTP overhead)
+4. ✅ **No Remote DB Needed** - Everything runs locally
+5. ✅ **Future-Proof** - Can add cloud sync later without architecture change
+
+### Implementation
+
+#### Electron Main Process (DB Owner)
+
+```typescript
+// apps/desktop/src/main/database.ts
+import Database from 'better-sqlite3';
+import express from 'express';
+
+export class DatabaseService {
+  private db: Database.Database;
+  private apiServer: express.Application;
+
+  constructor() {
+    this.db = this.initializeDatabase();
+    this.startLocalAPI();
+  }
+
+  private initializeDatabase(): Database.Database {
+    const dbPath = '/Users/dmieloch/Dev/.pm-agent/db/pm-agent.db';
+
+    const db = new Database(dbPath);
+    db.pragma('journal_mode = WAL'); // Better concurrency
+    db.pragma('foreign_keys = ON');
+
+    return db;
+  }
+
+  // Expose via IPC for Electron renderer
+  registerIpcHandlers() {
+    ipcMain.handle('db:getProjects', () => {
+      return this.db.prepare('SELECT * FROM projects').all();
+    });
+
+    ipcMain.handle('db:updateProject', (event, id, data) => {
+      return this.db.prepare(
+        'UPDATE projects SET name = ?, purpose = ? WHERE id = ?'
+      ).run(data.name, data.purpose, id);
+    });
+  }
+
+  // Expose via HTTP for scripts
+  private startLocalAPI() {
+    this.apiServer = express();
+    this.apiServer.use(express.json());
+
+    // GET /api/projects
+    this.apiServer.get('/api/projects', (req, res) => {
+      const projects = this.db.prepare('SELECT * FROM projects').all();
+      res.json(projects);
+    });
+
+    // POST /api/projects/scan
+    this.apiServer.post('/api/projects/scan', async (req, res) => {
+      // Run project scan logic
+      const result = await scanDevFolder(this.db);
+      res.json(result);
+    });
+
+    // Start server on localhost only
+    this.apiServer.listen(8080, 'localhost', () => {
+      console.log('PM Agent API running at http://localhost:8080');
+    });
+  }
+
+  async query<T>(sql: string, params?: any[]): Promise<T[]> {
+    return this.db.prepare(sql).all(params);
+  }
+
+  async execute(sql: string, params?: any[]): Promise<void> {
+    this.db.prepare(sql).run(params);
+  }
+
+  transaction<T>(fn: () => T): T {
+    return this.db.transaction(fn)();
+  }
+}
+```
+
+#### Scripts Access via HTTP
+
+```typescript
+// packages/pm-scripts/src/scan-projects.ts
+import fetch from 'node-fetch';
+
+const PM_AGENT_API = 'http://localhost:8080';
+
+async function scanProjects() {
+  const response = await fetch(`${PM_AGENT_API}/api/projects/scan`, {
+    method: 'POST',
+  });
+
+  if (!response.ok) {
+    throw new Error('Electron app must be running to scan projects');
+  }
+
+  const result = await response.json();
+  console.log(`Scanned ${result.projectsFound} projects`);
+}
+```
+
+#### Manual Claude Code Updates
 
 ```bash
-# Create migration
-[command to create migration]
+# Option 1: Use the HTTP API (when Electron is running)
+curl -X POST http://localhost:8080/api/projects/scan
 
-# Run migrations
-[command to run migrations]
-
-# Rollback
-[command to rollback]
+# Option 2: Direct SQLite access (when Electron is NOT running)
+sqlite3 /Users/dmieloch/Dev/.pm-agent/db/pm-agent.db \
+  "UPDATE projects SET lifecycle='paused' WHERE name='old-project'"
 ```
 
-## 8. Data Access Layer
+### Connection Management
 
-### Query Organization
+**SQLite WAL Mode** allows:
+- ✅ Multiple readers simultaneously
+- ✅ One writer at a time
+- ✅ Readers don't block writer
+- ✅ Writer doesn't block readers (mostly)
 
-[Describe how queries are organized:]
-- File structure
-- Naming conventions
-- Query composition
+**Rules:**
+1. **When Electron is running** - Use HTTP API for all script updates
+2. **When Electron is NOT running** - Direct SQLite access is safe
+3. **Never** - Have both Electron AND scripts write simultaneously
+```
 
-### Error Handling
+## 8. Caching Strategy
 
-[Describe database error handling:]
-- Connection errors
-- Query errors
-- Constraint violations
+### Query Result Caching
 
-### Logging
+Frequently accessed data will be cached in memory:
 
-[Describe query logging strategy:]
-- What gets logged
-- Log levels
-- Performance tracking
+```typescript
+// packages/core-cache/src/cache.service.ts
+export class CacheService {
+  private cache: Map<string, CacheEntry>;
+  private ttl: number = 5 * 60 * 1000; // 5 minutes default
 
-## 9. Security Considerations
+  async get<T>(key: string): Promise<T | null> {
+    const entry = this.cache.get(key);
 
-### Connection Security
+    if (!entry) return null;
 
-[Describe connection security:]
-- SSL/TLS configuration
-- Certificate management
-- Network security
+    if (Date.now() > entry.expiresAt) {
+      this.cache.delete(key);
+      return null;
+    }
 
-### Access Control
+    return entry.value as T;
+  }
 
-[Describe database access control:]
-- User permissions
-- Role-based access
-- Principle of least privilege
+  set<T>(key: string, value: T, ttl?: number): void {
+    this.cache.set(key, {
+      value,
+      expiresAt: Date.now() + (ttl || this.ttl)
+    });
+  }
 
-### Credential Management
+  invalidate(pattern?: string): void {
+    if (!pattern) {
+      this.cache.clear();
+      return;
+    }
 
-[Describe how credentials are managed:]
-- Environment variables
-- Secrets management
-- Rotation policy
+    // Invalidate keys matching pattern
+    for (const key of this.cache.keys()) {
+      if (key.includes(pattern)) {
+        this.cache.delete(key);
+      }
+    }
+  }
+}
+```
 
-## 10. Performance Optimization
+## 9. Backup & Recovery
 
-### Connection Pooling
+### Automated Backups
 
-[Describe connection pool optimization:]
-- Pool configuration
-- Monitoring
-- Tuning guidelines
+```bash
+# Daily backup script
+#!/bin/bash
+BACKUP_DIR=".pm-agent/backups"
+DB_FILE=".pm-agent/db/pm-agent.db"
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 
-### Indexes
+# Create backup
+sqlite3 $DB_FILE ".backup $BACKUP_DIR/pm-agent_$TIMESTAMP.db"
 
-[Document indexing strategy:]
+# Keep only last 7 backups
+find $BACKUP_DIR -name "pm-agent_*.db" -mtime +7 -delete
+```
 
-**Current Indexes:**
-- `[index_name]` on `[table]([columns])` - [Purpose]
+### Recovery Process
 
-**Index Guidelines:**
-- When to add indexes
-- Index maintenance
-- Performance impact
+```typescript
+// Restore from backup
+export async function restoreDatabase(backupPath: string): Promise<void> {
+  const currentDb = '.pm-agent/db/pm-agent.db';
+  const backupDb = `.pm-agent/db/pm-agent.db.backup-${Date.now()}`;
 
-### Query Optimization
+  // Backup current database
+  await copyFile(currentDb, backupDb);
 
-[Describe query optimization practices:]
-- Query analysis tools
-- Common optimizations
-- Performance benchmarks
+  try {
+    // Restore from backup
+    await copyFile(backupPath, currentDb);
 
-### Caching Strategy
+    // Verify integrity
+    const db = new Database(currentDb);
+    db.pragma('integrity_check');
 
-[If using caching:]
-- Cache layer (Redis, in-memory, etc.)
-- Cache invalidation
-- TTL strategy
+  } catch (error) {
+    // Rollback on failure
+    await copyFile(backupDb, currentDb);
+    throw error;
+  }
+}
+```
 
-## 11. Backup & Recovery
+## 10. Performance Considerations
 
-### Backup Strategy
+### Optimization Strategies
 
-[Describe backup approach:]
+1. **Indexing**
+   - Index frequently queried columns
+   - Composite indexes for common join patterns
 
-**Backup Types:**
-- **Full Backups:** [Frequency, storage]
-- **Incremental Backups:** [Frequency, storage]
-- **Point-in-Time Recovery:** [If supported]
+2. **Query Optimization**
+   - Use prepared statements
+   - Batch operations where possible
+   - Limit result sets with pagination
 
-**Retention Policy:**
-- Daily: [Duration]
-- Weekly: [Duration]
-- Monthly: [Duration]
+3. **Connection Pooling**
+   - Reuse database connections
+   - Configure appropriate pool size
 
-### Recovery Procedures
+4. **Data Archival**
+   - Archive old sessions periodically
+   - Compress historical data
 
-[Document recovery procedures:]
+## 11. Common Questions & Decisions
 
-1. **Identify Issue:** [Steps]
-2. **Select Backup:** [Process]
-3. **Restore Data:** [Commands]
-4. **Verify Integrity:** [Validation]
+### Q: Can Claude Code update the database manually?
+**A: Yes, two ways:**
+1. **When Electron is running**: Use HTTP API
+   ```bash
+   curl -X POST http://localhost:8080/api/projects/scan
+   ```
+2. **When Electron is NOT running**: Direct SQLite access
+   ```bash
+   sqlite3 .pm-agent/db/pm-agent.db "UPDATE projects SET ..."
+   ```
 
-### Testing
+### Q: Can scripts update the database?
+**A: Yes, via HTTP API (preferred) or direct SQLite (fallback)**
+```typescript
+// Preferred: Use HTTP API
+await fetch('http://localhost:8080/api/projects/scan', { method: 'POST' });
 
-[Describe backup testing:]
-- Test frequency
-- Validation procedures
-- Recovery drills
+// Fallback: Direct DB (only when Electron not running)
+const db = new Database('.pm-agent/db/pm-agent.db');
+db.prepare('UPDATE projects SET ...').run();
+```
 
-## 12. Monitoring
+### Q: Does Electron need access to the database?
+**A: Yes, and it OWNS the database!**
+- Electron main process has exclusive write access
+- Renderer gets data via IPC (fast, no HTTP overhead)
+- This prevents conflicts and corruption
 
-### Metrics to Track
+### Q: Should we use a seed file instead?
+**A: No - Database is better because:**
+- ❌ Seed file = static snapshot (stale immediately)
+- ❌ Need to regenerate constantly
+- ❌ Loses relationships, triggers, views
+- ✅ Database = live, relational, with triggers
+- ✅ Can query/filter/aggregate
+- ✅ Supports 177+ projects efficiently
 
-[List key database metrics:]
+### Q: Does database need to be outside Electron to serve an API?
+**A: No! Electron CAN run Express internally**
+```typescript
+// In Electron main process
+import express from 'express';
 
-- **Connection Pool:** [Metrics]
-- **Query Performance:** [Metrics]
-- **Disk Usage:** [Metrics]
-- **Error Rates:** [Metrics]
+const app = express();
+app.listen(8080, 'localhost'); // ← Electron runs this!
+```
+Many Electron apps do this (VS Code, Postman, etc.)
 
-### Monitoring Tools
+### Q: Do we need a remote database?
+**A: Not yet - local SQLite is perfect for PM Agent**
 
-[Describe monitoring setup:]
-- Tool/service used
-- Alert configuration
-- Dashboard links
+**Current (Local-First):**
+```
+Electron ──> SQLite DB (1MB, fast, 177 projects) ✅
+```
 
-### Query Performance Monitoring
+**Future (Optional Cloud Sync):**
+```
+Electron ──> SQLite DB ──┐
+                         ├──> Cloud Sync Service
+Web App ──> PostgreSQL ──┘
+```
 
-[Describe query monitoring:]
-- Slow query logging
-- Query analysis
-- Performance baselines
+**When to add remote DB:**
+- ❌ Not needed now (SQLite handles 177 projects easily)
+- ✅ Add later when you want:
+  - Multi-device sync
+  - Web-only access (no Electron)
+  - Team collaboration
 
-## 13. Scaling Strategy
+### Q: What if Electron and a script write simultaneously?
+**A: SQLite WAL mode handles this gracefully**
+- One writer succeeds
+- Other writer gets "SQLITE_BUSY" error
+- Solution: Script should check if Electron is running:
+  ```typescript
+  // Try HTTP API first
+  try {
+    await fetch('http://localhost:8080/api/projects');
+  } catch {
+    // Electron not running, safe for direct DB access
+    const db = new Database('.pm-agent/db/pm-agent.db');
+  }
+  ```
 
-### Current Architecture
+## 12. Future Enhancements
 
-[Describe current database setup:]
-- Single instance / Replica set
-- Vertical / Horizontal scaling
-- Read replicas (if any)
+### Planned Features
 
-### Future Scaling Plans
+1. **Cloud Sync (Optional)**
+   - Sync local SQLite to PostgreSQL
+   - Conflict resolution for multi-device
+   - Background sync worker
 
-[Describe scaling approach:]
-- Read replicas
-- Sharding strategy
-- Multi-region deployment
+2. **Real-time Updates**
+   - WebSocket updates for live data
+   - Optimistic UI updates in Electron
+   - Event-driven refresh
 
-## 14. Data Modeling Guidelines
+3. **Advanced Analytics**
+   - Time-series data for metrics
+   - Aggregated project insights
+   - Trend analysis dashboard
 
-### Design Principles
+4. **Data Export/Import**
+   - JSON export for backup
+   - CSV export for analysis
+   - Project template import/export
 
-[Document data modeling principles:]
+## Related Documentation
 
-1. **[Principle]:** [Description]
-2. **[Principle]:** [Description]
-3. **[Principle]:** [Description]
-
-### Naming Conventions
-
-[Document naming standards:]
-
-- **Tables:** [Convention]
-- **Columns:** [Convention]
-- **Indexes:** [Convention]
-- **Constraints:** [Convention]
-
-## 15. Cross-References
-
-### Related Documentation
-
-- **[Backend Architecture](./backend.md)** - [How backend accesses database]
-- **[Security Architecture](./security.md)** - [Database security details]
-- **[Infrastructure](./infrastructure.md)** - [Database deployment]
-
-### Schema Files
-
-[List schema definition files:]
-- `[path/to/schema/file]` - [Description]
-- `[path/to/migration/directory]` - [Migration history]
+- [System Overview](./system-overview.md) - High-level architecture
+- [Backend Architecture](./backend.md) - API server and data access
+- [PM Agent SQLite Patterns](../../.cursor/rules-source-builder/pm-agent-sqlite-patterns.rules.mdc) - Detailed patterns
+- [Three Phase Roadmap](../goals/THREE_PHASE_ROADMAP.md) - Implementation timeline
 
 ---
 
-**Template Instructions:**
-1. Replace all bracketed placeholders with actual information
-2. Include actual schema definitions (tables, columns, types)
-3. Document all indexes with their purposes
-4. Add ERD diagrams if helpful
-5. Include real migration examples
-6. Document any special database features you use
-7. Remove this instructions section when complete
+**Last Updated:** 2025-11-08
+**Status:** Active Documentation (Planning Phase)

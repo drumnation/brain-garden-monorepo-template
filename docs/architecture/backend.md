@@ -1,243 +1,365 @@
 ---
-title: "Backend Architecture - TEMPLATE"
-description: "[TEMPLATE] Backend architecture documentation template"
-keywords: [backend, architecture, template]
-last_updated: "2025-10-23"
-status: "TEMPLATE - NOT REAL DOCUMENTATION"
+title: "Backend Architecture"
+description: "Express.js API server architecture with hexagonal pattern"
+keywords: [backend, architecture, express, api, hexagonal]
+last_updated: "2025-11-08"
+status: "ACTIVE DOCUMENTATION"
 ---
 
-# Backend Architecture [TEMPLATE]
-
-> **⚠️ THIS IS A TEMPLATE FILE ⚠️**  
-> This file is a template for documenting backend architecture. It is NOT actual project documentation.
-> Fill in the sections below with your actual backend architecture details.
-> Remove this notice when you convert this template to real documentation.
+# Backend Architecture
 
 ## 1. Overview
 
-[Provide a high-level overview of your backend architecture. Include:]
-
-- **Primary framework/technology** (e.g., Express, NestJS, FastAPI)
-- **Key architectural patterns** (e.g., MVC, microservices, API gateway)
-- **Integration approach** (if connecting to legacy systems or external APIs)
-- **Data storage strategy** (database types, caching)
-- **Module system** (ESM, CommonJS, or both)
-
-**Example structure:**
-```
-The [ProjectName] backend serves as [purpose]. Built on [framework], it implements 
-[architectural pattern] with [key principles].
+The Dev Garden backend provides RESTful API services for the project management system. Built on Express.js v5, it implements a hexagonal architecture pattern with clear separation between core business logic and adapters.
 
 **Key Characteristics:**
-- **[Framework]** - [purpose/role]
-- **[Integration approach]** - [description]
-- **[Pattern/principle]** - [description]
-- **[Database]** - [usage description]
-- **[Architecture style]** - [description]
-```
+- **Express.js 5.0** - Modern async middleware support
+- **Hexagonal Architecture** - Core business logic isolated from delivery mechanisms
+- **TypeScript ESM** - ES Modules only, no CommonJS
+- **Functional DI Pattern** - Dependency injection without classes
+- **Monorepo Integration** - Shares types and utilities with other apps
 
 ## 2. Technology Stack
 
-[Document all backend technologies in a table format:]
-
 | Category | Technology | Purpose |
 |----------|-----------|---------|
-| **Runtime** | [e.g., Node.js, Python, Go] | [Description] |
-| **Framework** | [e.g., Express, NestJS, Django] | [Description] |
-| **Database** | [e.g., PostgreSQL, MongoDB] | [Description] |
-| **ORM/Query Builder** | [e.g., Prisma, TypeORM, SQLAlchemy] | [Description] |
-| **Validation** | [e.g., Zod, Joi, Pydantic] | [Description] |
-| **Logging** | [Your logging solution] | [Description] |
-| **Testing** | [e.g., Jest, Vitest, pytest] | [Description] |
+| **Runtime** | Node.js 20+ | JavaScript runtime |
+| **Framework** | Express 5.0.1 | HTTP server and routing |
+| **Language** | TypeScript 5.7 | Type safety and modern JS features |
+| **Validation** | Zod 3.24 | Runtime validation and type inference |
+| **Logging** | Pino 9.6 | Structured JSON logging |
+| **CORS** | cors 2.8 | Cross-origin resource sharing |
+| **Environment** | @kit/env-loader | Environment variable management |
+| **Testing** | Vitest | Unit and integration testing |
 
 ## 3. Server Architecture
 
 ### Entry Point
 
-**File:** `[path/to/main/server/file]`
+**File:** `apps/api/src/main.ts`
 
-[Describe the server bootstrap process, initialization sequence, and startup logic.]
+The server bootstrap process follows this sequence:
+1. Load environment variables via `@kit/env-loader`
+2. Validate required environment variables
+3. Create Express server with middleware stack
+4. Configure routes
+5. Start server on configured port
 
-**Example:**
 ```typescript
-// Describe your server initialization:
-// 1. Load environment variables
-// 2. Initialize database connections
-// 3. Configure middleware
-// 4. Register routes
-// 5. Start server
+// Bootstrap sequence
+async function bootstrap() {
+  // 1. Load and validate environment
+  const env = loadEnvironment({
+    appName: 'api',
+    required: ['PORT'],
+  });
+
+  // 2. Create server with middleware
+  const server = createServer();
+
+  // 3. Start listening
+  const PORT = process.env.PORT || 3000;
+  server.listen(PORT);
+}
 ```
 
 ### Configuration
 
-[Document how your server is configured:]
-- Environment variable loading
-- Port configuration
-- Feature flags
-- Runtime settings
+Environment variables are loaded hierarchically:
+- Global: `/Users/dmieloch/Dev/.env`
+- App-specific: `/Users/dmieloch/Dev/apps/api/.env`
+- System environment variables (highest priority)
 
-## 4. Route Structure
+**Key Configuration:**
+```bash
+PORT=3000                    # Server port
+NODE_ENV=development         # Environment mode
+LOG_LEVEL=info              # Logging verbosity
+CORS_ORIGIN=http://localhost:5173  # Allowed origins
+```
 
-[Document your API routes. For each major route group, include:]
+## 4. Directory Structure
 
-### [Route Group Name]
+```
+apps/api/src/
+├── infra/                  # Infrastructure layer
+│   └── http/              # HTTP-specific code
+│       ├── server.ts      # Express server setup
+│       └── routes.ts      # Route registration
+├── modules/               # Feature modules
+│   └── user/             # User module example
+│       ├── user.controller.ts  # HTTP controller
+│       ├── user.service.ts     # Business logic
+│       ├── user.repo.ts        # Data access
+│       ├── user.types.ts       # TypeScript types
+│       └── index.ts            # Module exports
+├── shared/               # Shared utilities
+│   ├── errors/          # Error handling
+│   │   └── handler.ts
+│   └── logging/         # Logging configuration
+│       └── logger.ts
+└── main.ts              # Application entry point
+```
 
-**Base Path:** `/api/[resource]`
-**Authentication:** [Required/Optional/Public]
+## 5. Hexagonal Architecture Pattern
 
-**Endpoints:**
-- `[METHOD] /path` - [Description]
-  - **Request:** [Body/Query params]
-  - **Response:** [Shape of response]
-  - **Permissions:** [Required permissions]
+### Core Principles
 
-## 5. Middleware Architecture
+The backend follows hexagonal architecture (Ports & Adapters):
 
-[Document your middleware stack in order of execution:]
+1. **Core Domain** (`modules/*/service.ts`)
+   - Pure business logic
+   - No framework dependencies
+   - Platform-agnostic
 
-1. **[Middleware Name]**
-   - **Purpose:** [What it does]
-   - **Location:** `[file path]`
-   - **Applied to:** [All routes / Specific routes]
+2. **Adapters** (`modules/*/controller.ts`)
+   - Translate HTTP requests to service calls
+   - Handle HTTP-specific concerns
+   - Error response formatting
 
-2. **[Middleware Name]**
-   - **Purpose:** [What it does]
-   - **Location:** `[file path]`
-   - **Applied to:** [All routes / Specific routes]
+3. **Repositories** (`modules/*/repo.ts`)
+   - Data access abstraction
+   - Database queries
+   - External API calls
 
-## 6. Authentication & Authorization
+### Module Structure Example
 
-### Authentication Strategy
+```typescript
+// user.service.ts - Core business logic
+export const makeUserService = (deps: {
+  userRepo: ReturnType<typeof makeUserRepo>;
+}) => ({
+  getAllUsers: async () => {
+    return deps.userRepo.findAll();
+  },
 
-[Describe how users authenticate:]
-- Authentication method (JWT, sessions, OAuth, etc.)
-- Token storage and transmission
-- Token validation process
-- Session management
+  getUserById: async (id: string) => {
+    const user = await deps.userRepo.findById(id);
+    if (!user) throw new NotFoundError('User not found');
+    return user;
+  }
+});
 
-### Authorization Model
+// user.controller.ts - HTTP adapter
+export const makeUserController = (deps: {
+  userService: ReturnType<typeof makeUserService>;
+}) => ({
+  getUsers: async (req: Request, res: Response) => {
+    const users = await deps.userService.getAllUsers();
+    res.json(users);
+  },
 
-[Describe how permissions are enforced:]
-- Permission/role structure
-- Authorization checks
-- Access control patterns
+  getUser: async (req: Request, res: Response) => {
+    const user = await deps.userService.getUserById(req.params.id);
+    res.json(user);
+  }
+});
+```
 
-## 7. Service Layer
+## 6. Route Structure
 
-[Document your service architecture:]
+### API Routes
 
-### [Service Name]
+**Base Path:** `/api`
 
-**Location:** `[path/to/service]`
-**Purpose:** [What this service handles]
+Routes are organized by feature modules:
 
-**Responsibilities:**
-- [Responsibility 1]
-- [Responsibility 2]
-- [Responsibility 3]
+```typescript
+// infra/http/routes.ts
+export function configureRoutes(app: Express) {
+  // Health check
+  app.get('/health', (req, res) => {
+    res.json({ status: 'ok' });
+  });
 
-**Key Functions:**
-- `[functionName]` - [Description]
+  // User routes
+  app.get('/api/users', userController.getUsers);
+  app.get('/api/users/:id', userController.getUser);
+  app.post('/api/users', userController.createUser);
+  app.put('/api/users/:id', userController.updateUser);
+  app.delete('/api/users/:id', userController.deleteUser);
 
-## 8. Data Access Layer
-
-[Describe how you interact with databases:]
-
-- **Pattern:** [Repository, Active Record, Query Builder, etc.]
-- **Type Safety:** [How types are enforced]
-- **Connection Management:** [Pooling strategy]
-- **Query Organization:** [File structure]
-
-## 9. Error Handling
-
-[Document your error handling strategy:]
-
-### Error Types
-
-[Define your error categories and how they're handled]
-
-### Error Response Format
-
-```json
-{
-  "error": "[structure of error responses]"
+  // Additional feature routes...
 }
 ```
 
-### Logging Strategy
+## 7. Middleware Architecture
 
-[Describe what gets logged and where]
+Middleware stack (order matters):
 
-## 10. Integration Patterns
+1. **CORS**
+   - Purpose: Enable cross-origin requests
+   - Configuration: Allows configured origins
 
-[If you integrate with external services or legacy systems:]
+2. **Body Parser**
+   - Purpose: Parse JSON request bodies
+   - Limit: 10mb by default
 
-### [Integration Name]
+3. **Request Logger**
+   - Purpose: Log incoming requests
+   - Uses Pino for structured logging
 
-**Type:** [REST API, GraphQL, SOAP, gRPC, etc.]
-**Purpose:** [Why you integrate]
-**Implementation:** [How you connect]
+4. **Error Handler** (last)
+   - Purpose: Catch and format errors
+   - Returns consistent error responses
 
-## 11. Testing Strategy
+```typescript
+// infra/http/server.ts
+export function createServer() {
+  const app = express();
 
-[Document your backend testing approach:]
+  // Middleware stack
+  app.use(cors({ origin: process.env.CORS_ORIGIN }));
+  app.use(express.json({ limit: '10mb' }));
+  app.use(requestLogger);
 
-- **Unit Tests:** [Location, patterns, tools]
-- **Integration Tests:** [Location, patterns, tools]
-- **E2E Tests:** [Location, patterns, tools]
-- **Test Data:** [Mocking strategy, fixtures]
+  // Routes
+  configureRoutes(app);
 
-## 12. Performance Considerations
+  // Error handler (must be last)
+  app.use(errorHandler);
 
-[Document performance optimizations:]
+  return app;
+}
+```
 
-- **Caching:** [Strategy and implementation]
-- **Connection Pooling:** [Configuration]
-- **Query Optimization:** [Patterns and tools]
-- **Rate Limiting:** [If implemented]
+## 8. Error Handling
 
-## 13. Security
+### Error Types
 
-[Document security measures - can reference security.md for details:]
+```typescript
+// shared/errors/types.ts
+export class AppError extends Error {
+  constructor(
+    public statusCode: number,
+    public message: string,
+    public isOperational = true
+  ) {
+    super(message);
+  }
+}
 
-- **Input Validation:** [Approach]
-- **SQL Injection Prevention:** [Methods]
-- **Authentication Security:** [Token handling, storage]
-- **Authorization Checks:** [Where and how]
+export class NotFoundError extends AppError {
+  constructor(message: string) {
+    super(404, message);
+  }
+}
 
-## 14. Code Quality Standards
+export class ValidationError extends AppError {
+  constructor(message: string) {
+    super(400, message);
+  }
+}
+```
 
-[Document your code standards:]
+### Global Error Handler
 
-- **Linting:** [Tool and configuration]
-- **Formatting:** [Tool and configuration]
-- **Type Checking:** [If applicable]
-- **File Organization:** [Naming conventions, structure]
-- **Code Review Standards:** [What to look for]
+```typescript
+// shared/errors/handler.ts
+export const errorHandler = (
+  err: Error,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (err instanceof AppError) {
+    return res.status(err.statusCode).json({
+      error: err.message,
+      status: err.statusCode
+    });
+  }
 
-## 15. Cross-References
+  // Unhandled errors
+  logger.error('Unhandled error:', err);
+  return res.status(500).json({
+    error: 'Internal server error',
+    status: 500
+  });
+};
+```
 
-### Related Documentation
+## 9. Testing Strategy
 
-- **[Frontend Architecture](./frontend.md)** - [How backend connects to frontend]
-- **[Database Architecture](./database.md)** - [Database schema details]
-- **[Security Architecture](./security.md)** - [Security implementation details]
-- **[System Overview](./system-overview.md)** - [How backend fits in overall system]
+### Test Types
 
-### Source Code References
+1. **Unit Tests** - Service logic testing
+2. **Integration Tests** - API endpoint testing
+3. **Repository Tests** - Data access testing
 
-[List key source files and their purposes:]
+### Test Configuration
 
-- `[path/to/file]` - [Purpose/description]
-- `[path/to/file]` - [Purpose/description]
+Tests use Vitest with the monorepo's shared testing configuration:
+
+```json
+{
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
+  }
+}
+```
+
+## 10. Deployment & Runtime
+
+### Local Development
+
+```bash
+# Install dependencies
+pnpm install
+
+# Start development server with hot reload
+pnpm --filter @dev-garden/api dev
+
+# Run tests
+pnpm --filter @dev-garden/api test
+```
+
+### Production Build
+
+```bash
+# Build TypeScript
+pnpm --filter @dev-garden/api build
+
+# Start production server
+pnpm --filter @dev-garden/api start
+```
+
+### Docker Support (Planned)
+
+Dockerfile and docker-compose configuration pending implementation.
+
+## 11. Future Enhancements
+
+### Planned Features
+
+1. **Database Integration**
+   - SQLite for local development
+   - PostgreSQL for production
+   - Prisma ORM integration
+
+2. **Authentication**
+   - JWT-based auth
+   - Session management
+   - Role-based access control
+
+3. **PM Agent Features**
+   - Project scanning endpoints
+   - Quality metrics calculation
+   - Motivation verdict generation
+
+4. **WebSocket Support**
+   - Real-time updates
+   - Live project monitoring
+
+## Related Documentation
+
+- [System Overview](./system-overview.md) - High-level architecture
+- [Database Architecture](./database.md) - Data layer documentation
+- [Frontend Architecture](./frontend.md) - Client applications
+- [Monorepo Structure](../guides/monorepo-structure.md) - Project organization
 
 ---
 
-**Template Instructions:**
-1. Replace all bracketed placeholders with actual information
-2. Remove sections that don't apply to your architecture
-3. Add sections specific to your backend needs
-4. Include code examples where helpful
-5. Link to actual source files with line numbers when referencing implementation
-6. Update cross-references to match your documentation structure
-7. Remove this instructions section when complete
+**Last Updated:** 2025-11-08
+**Status:** Active Documentation
