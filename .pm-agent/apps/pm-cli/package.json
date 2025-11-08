@@ -1,0 +1,32 @@
+{
+  "name": "@pm-agent/cli",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "pm": "./src/cli.ts"
+  },
+  "scripts": {
+    "dev": "tsx watch src/cli.ts",
+    "build": "echo 'No build needed for ESM-only package'",
+    "clean": "rimraf node_modules .turbo",
+    "lint": "echo 'No linting configured yet'",
+    "typecheck": "tsc --noEmit",
+    "test": "echo 'No tests configured yet'",
+    "pm": "tsx src/cli.ts"
+  },
+  "dependencies": {
+    "@pm-agent/core-db": "workspace:*",
+    "@pm-agent/core-scanner": "workspace:*",
+    "chalk": "^5.3.0",
+    "commander": "^11.1.0",
+    "ora": "^8.0.1",
+    "table": "^6.8.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "rimraf": "^5.0.5",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  }
+}
