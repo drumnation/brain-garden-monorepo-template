@@ -1,10 +1,12 @@
 
-> @kit/prettier-config@0.1.0 preformat /Users/dmieloch/Dev/singularityApps/core/brain-garden-studio/tooling/prettier
+> @kit/prettier-config@0.1.0 preformat /Users/dmieloch/Dev/tooling/prettier
 > pnpm run build
 
 
-> @kit/prettier-config@0.1.0 format /Users/dmieloch/Dev/singularityApps/core/brain-garden-studio/tooling/prettier
-> prettier --check "**/*.{ts,mjs,json}" "--check"
+> @kit/prettier-config@0.1.0 format /Users/dmieloch/Dev/tooling/prettier
+> prettier --check "**/*.{ts,mjs,json}"
 
 Checking formatting...
-All matched files use Prettier code style!
+[error] Invalid configuration for file "/Users/dmieloch/Dev/tooling/prettier/index.ts":
+[error] Cannot find module '/Users/dmieloch/Dev/tooling/prettier/index.js' imported from /Users/dmieloch/Dev/node_modules/.pnpm/prettier@3.6.2/node_modules/prettier/index.mjs
+ ELIFECYCLE  Command failed with exit code 2.

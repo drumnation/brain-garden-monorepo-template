@@ -1,11 +1,11 @@
 
-> @kit/env-loader@1.0.0 lint /Users/dmieloch/Dev/experiments/claudecodeui/tooling/env-loader
+> @kit/env-loader@1.0.0 lint /Users/dmieloch/Dev/tooling/env-loader
 > eslint .
 
 
 Oops! Something went wrong! :(
 
-ESLint: 9.30.0
+ESLint: 9.38.0
 
 ESLint couldn't find an eslint.config.(js|mjs|cjs) file.
 

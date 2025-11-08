@@ -1,6 +1,5 @@
 
-> @kit/env-loader@1.0.0 format /Users/dmieloch/Dev/singularityApps/core/brain-garden-studio/tooling/env-loader
-> prettier --check "**/*.{ts,tsx}" "--check"
+> @kit/env-loader@1.0.0 format /Users/dmieloch/Dev/tooling/env-loader
+> prettier --check "**/*.{ts,tsx}"
 
 Checking formatting...
-All matched files use Prettier code style!

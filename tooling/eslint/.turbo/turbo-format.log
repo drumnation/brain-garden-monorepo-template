@@ -1,6 +1,5 @@
 
-> @kit/eslint-config@0.2.0 format /Users/dmieloch/Dev/singularityApps/core/brain-garden-studio/tooling/eslint
-> prettier --check "**/*.{ts,js,json}" "--check"
+> @kit/eslint-config@0.2.0 format /Users/dmieloch/Dev/tooling/eslint
+> prettier --check "**/*.{ts,js,json}"
 
 Checking formatting...
-All matched files use Prettier code style!

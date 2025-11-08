@@ -1,15 +1,19 @@
 
-> @kit/eslint-config@0.2.0 prelint /Users/dmieloch/Dev/singularityApps/core/brain-garden-studio/tooling/eslint
+> @kit/eslint-config@0.2.0 prelint /Users/dmieloch/Dev/tooling/eslint
 > pnpm run build
 
 
-> @kit/eslint-config@0.2.0 lint /Users/dmieloch/Dev/singularityApps/core/brain-garden-studio/tooling/eslint
+> @kit/eslint-config@0.2.0 build /Users/dmieloch/Dev/tooling/eslint
+> tsc
+
+
+> @kit/eslint-config@0.2.0 lint /Users/dmieloch/Dev/tooling/eslint
 > eslint .
 
 
 Oops! Something went wrong! :(
 
-ESLint: 9.30.1
+ESLint: 9.38.0
 
 ESLint couldn't find an eslint.config.(js|mjs|cjs) file.
 

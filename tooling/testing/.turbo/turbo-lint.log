@@ -1,4 +1,15 @@
 
-> @kit/testing@2.0.0 lint /Users/dmieloch/Dev/experiments/claudecodeui/tooling/testing
+> @kit/testing@2.0.0 lint /Users/dmieloch/Dev/tooling/testing
 > eslint .
 
+
+Oops! Something went wrong! :(
+
+ESLint: 9.38.0
+
+TypeError [ERR_UNKNOWN_FILE_EXTENSION]: Unknown file extension ".ts" for /Users/dmieloch/Dev/tooling/eslint/base.ts
+    at Object.getFileProtocolModuleFormat [as file:] (node:internal/modules/esm/get_format:219:9)
+    at defaultGetFormat (node:internal/modules/esm/get_format:245:36)
+    at defaultLoad (node:internal/modules/esm/load:120:22)
+    at async ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:580:32)
+ ELIFECYCLE  Command failed with exit code 2.

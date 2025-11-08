@@ -1,23 +1,5 @@
 
-> @kit/logger@1.1.0 format /Users/dmieloch/Dev/singularityApps/core/brain-garden-studio/tooling/logger
-> prettier --check "**/*.{ts,tsx,md}" "--check"
+> @kit/logger@1.1.0 format /Users/dmieloch/Dev/tooling/logger
+> prettier --check "**/*.{ts,tsx,md}"
 
-node:internal/modules/cjs/loader:1408
-  throw err;
-  ^
-
-Error: Cannot find module '/Users/dmieloch/Dev/singularityApps/core/brain-garden-studio/tooling/logger/node_modules/prettier/bin/prettier.cjs'
-    at Function._resolveFilename (node:internal/modules/cjs/loader:1405:15)
-    at defaultResolveImpl (node:internal/modules/cjs/loader:1061:19)
-    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1066:22)
-    at Function._load (node:internal/modules/cjs/loader:1215:37)
-    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
-    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
-    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:151:5)
-    at node:internal/main/run_main_module:33:47 {
-  code: 'MODULE_NOT_FOUND',
-  requireStack: []
-}
-
-Node.js v23.11.0
- ELIFECYCLE  Command failed with exit code 1.
+Checking formatting...
