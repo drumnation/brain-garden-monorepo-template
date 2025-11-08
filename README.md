@@ -1,4 +1,4 @@
-# Brain Garden Monorepo Template
+# Overseer Pm Agent
 
 A production-ready monorepo template with generator-first approach for web, mobile, desktop, and backend applications. Features Brain Garden AI tooling, complete testing infrastructure, automated validation, and comprehensive development tools.
 
@@ -314,3 +314,10 @@ When contributing:
 ## License
 
 Private project - all rights reserved.
+
+## Applications
+
+| Path | Type | Description |
+|------|------|-------------|
+| `apps/web` | web | web |
+| `apps/api` | api | api |

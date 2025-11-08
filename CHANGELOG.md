@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.0] - 2025-11-08
+
+### Added
+
+- Generated web: `apps/web`
+- Generated api: `apps/api`
+- Complete project setup from mega-setup generator
+- Comprehensive PRD and documentation
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
