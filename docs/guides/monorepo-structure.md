@@ -149,7 +149,7 @@ docs/
 │   └── adr/               # Architecture Decision Records
 ├── features/              # Feature documentation
 ├── guides/                # How-to guides
-└── TEMPLATE_USAGE.md      # How to use as template (if template)
+└── guides/TEMPLATE_USAGE.md      # How to use as template (if template)
 ```
 
 **Content:**
@@ -613,7 +613,7 @@ This structure provides:
 ---
 
 See also:
-- `/docs/TEMPLATE_USAGE.md` - How to customize the template
+- `/docs/guides/TEMPLATE_USAGE.md` - How to customize the template
 - `/docs/guides/adding-new-packages.md` - Creating packages
 - `/docs/guides/adding-new-apps.md` - Creating apps
 - `/docs/guides/validation-workflow.md` - Using validation tools

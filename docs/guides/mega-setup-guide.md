@@ -174,7 +174,7 @@ Auto-fixes are attempted for formatting and linting issues.
 ## Need Help?
 
 - This guide: `docs/guides/mega-setup-guide.md`
-- Template usage: `docs/TEMPLATE_USAGE.md`
+- Template usage: `docs/guides/TEMPLATE_USAGE.md`
 - System overview: `docs/architecture/system-overview.md`
 
 ---

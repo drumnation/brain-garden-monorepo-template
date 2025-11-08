@@ -236,7 +236,7 @@ However, these **generation scripts appear to not exist**.
 - No placeholders/variables for project names
 
 **❌ MISSING DOCUMENTATION:**
-- `/docs/TEMPLATE_USAGE.md` - How to customize when using as template
+- `/docs/guides/TEMPLATE_USAGE.md` - How to customize when using as template
 - `/docs/guides/monorepo-structure.md` - Explanation of structure
 - `/docs/guides/adding-new-packages.md` - How to add packages
 - `/docs/guides/adding-new-apps.md` - How to add apps
@@ -251,7 +251,7 @@ However, these **generation scripts appear to not exist**.
 
 ### Recommendations
 
-1. **Create** `/docs/TEMPLATE_USAGE.md` with:
+1. **Create** `/docs/guides/TEMPLATE_USAGE.md` with:
    - How to clone and customize
    - Variables to replace
    - Checklist of customization steps
@@ -444,7 +444,7 @@ pnpm gen:express-api      # Generates apps/api with complete setup
 **Status:** Generated apps include vitest.config.ts that references @kit/testing
 
 ### 7. Create Template Usage Guide
-**Create:** `/docs/TEMPLATE_USAGE.md`
+**Create:** `/docs/guides/TEMPLATE_USAGE.md`
 **Content:** How to customize when using as template
 
 ### 8. Document Monorepo Structure
@@ -528,7 +528,7 @@ Key files for remediation:
 - `/.cursorrules` - Complete rules system
 - `/package.json` (root) - Add scripts and documentation
 - `/docs/guides/` - Create documentation files
-- `/docs/TEMPLATE_USAGE.md` - Create template guide
+- `/docs/guides/TEMPLATE_USAGE.md` - Create template guide
 - `/docs/guides/using-generators.md` - Document generator usage (new)
 
 ---

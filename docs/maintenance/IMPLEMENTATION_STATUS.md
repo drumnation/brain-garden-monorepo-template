@@ -48,9 +48,9 @@ Created in `scripts/`:
 
 ### 4. Documentation ✅
 Created comprehensive guides:
-- ✅ `docs/MEGA_TEMPLATE_SETUP.md` (400+ lines) - Complete mega template guide
+- ✅ `docs/guides/MEGA_TEMPLATE_SETUP.md` (400+ lines) - Complete mega template guide
 - ✅ `docs/guides/testing-strategy.md` (500+ lines) - Testing philosophy and patterns
-- ✅ `docs/TEMPLATE_USAGE.md` (530+ lines) - How to use template for new projects
+- ✅ `docs/guides/TEMPLATE_USAGE.md` (530+ lines) - How to use template for new projects
 - ✅ Updated `README.md` - Transformed to mega template overview
 - ✅ Updated `CHANGELOG.md` - Documented all mega template changes
 

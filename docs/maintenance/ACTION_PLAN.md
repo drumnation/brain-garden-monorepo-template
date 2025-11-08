@@ -198,7 +198,7 @@ pnpm monitor:logs            # Check logs
 **Status:** 📋 MEDIUM
 **Time:** 45 minutes
 **Files to Create:**
-- `/docs/TEMPLATE_USAGE.md`
+- `/docs/guides/TEMPLATE_USAGE.md`
 
 **Content Structure:**
 ```markdown
@@ -464,7 +464,7 @@ Template is **complete** when:
 
 ### To Create/Update
 - [ ] `/docs/guides/validation-workflow.md`
-- [ ] `/docs/TEMPLATE_USAGE.md`
+- [ ] `/docs/guides/TEMPLATE_USAGE.md`
 - [ ] `/docs/guides/monorepo-structure.md`
 - [ ] `/docs/guides/using-generators.md` (document gen:express-api and other generators)
 - [ ] `/docs/guides/adding-new-packages.md` (optional)

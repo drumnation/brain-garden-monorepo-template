@@ -37,7 +37,7 @@
   - Impact: Clear documentation on how to use validation system
 
 - [x] **Created template usage guide**
-  - File: `/docs/TEMPLATE_USAGE.md`
+  - File: `/docs/guides/TEMPLATE_USAGE.md`
   - Content: Step-by-step customization, renaming, configuration
   - Impact: New users can quickly adapt template for their projects
 
@@ -140,7 +140,7 @@
    - Comprehensive validation guide
    - 300+ lines of documentation
 
-4. `/docs/TEMPLATE_USAGE.md`
+4. `/docs/guides/TEMPLATE_USAGE.md`
    - Template customization guide
    - 400+ lines of step-by-step instructions
 
@@ -282,7 +282,7 @@ cat _errors/validation-summary.md
 
 **Users can now:**
 1. Clone this template
-2. Follow `/docs/TEMPLATE_USAGE.md`
+2. Follow `/docs/guides/TEMPLATE_USAGE.md`
 3. Generate their apps using `pnpm gen:express-api` and other generators
 4. Start developing immediately
 
@@ -439,7 +439,7 @@ cat _errors/validation-summary.md
 3. `/apps/scheduling-api/vitest.config.ts` - Test configuration
 4. `/apps/scheduling-api/src/infra/http/server.test.ts` - Sample test
 5. `/docs/guides/validation-workflow.md` - Validation guide
-6. `/docs/TEMPLATE_USAGE.md` - Template customization guide
+6. `/docs/guides/TEMPLATE_USAGE.md` - Template customization guide
 7. `/docs/guides/monorepo-structure.md` - Structure explanation
 8. `/IMPLEMENTATION_SUMMARY.md` - This file
 
