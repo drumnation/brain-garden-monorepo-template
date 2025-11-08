@@ -1,0 +1,333 @@
+---
+description: PM Agent todo tracking using .pm-agent/todos/ for session and project management
+globs:
+  - ".pm-agent/todos/**/*"
+scopes:
+  - pm-agent
+  - todos
+  - session
+  - pm-memory
+alwaysApply: true
+---
+
+# PM Agent Todo Discipline
+
+## 📁 Todo Files Location
+
+```
+.pm-agent/todos/
+├── session-todos.json      # Current session (ephemeral)
+├── project-todos.json      # Per-project backlog (persistent)
+├── completed-todos.json    # Accomplishments (permanent)
+└── blocked-todos.json      # Impediments being tracked
+```
+
+## ⚡ MANDATORY: Todo Workflow
+
+**CRITICAL:** Track ALL work in the todo system. This is how you maintain continuity across sessions.
+
+### Session Start (Load Context)
+
+```bash
+# Check current session todos
+cat .pm-agent/todos/session-todos.json
+
+# Check project backlog (if working on specific project)
+jq '.[] | select(.project == "cannabis-codex")' .pm-agent/todos/project-todos.json
+
+# Check blockers
+cat .pm-agent/todos/blocked-todos.json
+```
+
+### Before Starting ANY Task
+
+Create session todo FIRST:
+
+```json
+// session-todos.json
+{
+  "id": "todo_1699380000",
+  "content": "Fix Docker networking in brain-garden-os",
+  "activeForm": "Fixing Docker networking in brain-garden-os",
+  "status": "pending",
+  "createdAt": "2025-11-07T18:30:00Z",
+  "project": "brain-garden-os",
+  "context": {
+    "files": [],
+    "relatedIssues": ["Port 8090 conflict"],
+    "approach": ""
+  }
+}
+```
+
+### Mark In Progress When Starting
+
+```json
+{
+  "id": "todo_1699380000",
+  "status": "in_progress",
+  "startedAt": "2025-11-07T18:32:00Z",
+  "context": {
+    "files": ["docker-compose.yml"],
+    "approach": "Changing port from 8090 to 8091"
+  }
+}
+```
+
+### MANDATORY: Record Accomplishment When Complete
+
+**NEVER mark todo complete without recording what was accomplished:**
+
+```json
+// completed-todos.json
+{
+  "id": "todo_comp_1699381000",
+  "originalId": "todo_1699380000",
+  "project": "brain-garden-os",
+  "title": "Fix Docker networking",
+  "completedAt": "2025-11-07T19:15:00Z",
+  "durationMinutes": 43,
+  "accomplishment": {
+    "what": "Fixed Docker compose port conflict",
+    "how": "Changed port from 8090 to 8091 in docker-compose.yml",
+    "impact": "Dashboard now runs without conflicts on macOS",
+    "filesChanged": [
+      "docker-compose.yml",
+      ".env.example",
+      "README.md"
+    ],
+    "commits": ["abc123: Fix Docker networking port conflict"],
+    "learnings": [
+      "Port 8090 conflicts with AirPlay Receiver on macOS",
+      "Always document port changes in README",
+      "Use ports 8091+ to avoid system conflicts"
+    ]
+  },
+  "tags": ["devops", "docker", "bugfix"]
+}
+```
+
+**Why accomplishment tracking matters:**
+- ✅ Creates permanent record of what was done
+- ✅ Captures learnings for knowledge base
+- ✅ Enables pattern detection
+- ✅ Provides accomplishment feed (motivation!)
+- ✅ Shows invisible progress visibly
+
+### If Blocked
+
+```json
+// blocked-todos.json
+{
+  "id": "todo_block_1699382000",
+  "project": "parenting-copilot",
+  "title": "Fix authentication tests",
+  "blockedAt": "2025-11-07T16:00:00Z",
+  "blocker": {
+    "type": "technical",
+    "description": "Tests require external API credentials that aren't available",
+    "possibleSolutions": [
+      "Mock the external API",
+      "Get test API keys from service provider",
+      "Refactor to use dependency injection"
+    ],
+    "priority": "medium"
+  },
+  "context": {
+    "attemptedSolutions": [
+      "Tried using production credentials - failed (rate limited)"
+    ]
+  }
+}
+```
+
+### Session End (Capture Summary)
+
+**MANDATORY at end of EVERY session:**
+
+```bash
+# Show session summary
+jq '.[] | select(.status == "completed")' .pm-agent/todos/session-todos.json
+
+# Move incomplete todos to project backlog
+jq '.[] | select(.status != "completed") | {
+  project: .project,
+  title: .content,
+  description: "Continued from session",
+  priority: "high",
+  tags: ["in-progress"]
+}' .pm-agent/todos/session-todos.json >> .pm-agent/todos/project-todos.json
+
+# Clear session todos (new session starts fresh)
+echo "[]" > .pm-agent/todos/session-todos.json
+```
+
+## 📊 Todo Queries
+
+### Accomplishments This Week
+
+```bash
+# Show all completed todos from last 7 days
+jq '[.[] | select(
+  (.completedAt | fromdateiso8601) > (now - 604800)
+)]' .pm-agent/todos/completed-todos.json
+```
+
+### Project Backlog
+
+```bash
+# Show all todos for specific project
+jq '[.[] | select(.project == "cannabis-codex")]' \
+  .pm-agent/todos/project-todos.json
+```
+
+### Active Blockers
+
+```bash
+# Show all unresolved blockers
+jq '[.[] | select(.resolvedAt == null)]' \
+  .pm-agent/todos/blocked-todos.json
+```
+
+## 🎯 Integration with Accomplishment Feed
+
+Transform completed todos into motivation metrics:
+
+```bash
+# Count accomplishments this month
+jq '[.[] | select(
+  (.completedAt | fromdateiso8601) > (now - 2592000)
+)] | length' .pm-agent/todos/completed-todos.json
+
+# Group by project
+jq 'group_by(.project) | map({
+  project: .[0].project,
+  count: length,
+  recent: map(.title) | .[0:3]
+})' .pm-agent/todos/completed-todos.json
+
+# Extract learnings for knowledge base
+jq '[.[] | .accomplishment.learnings // []] | flatten | unique' \
+  .pm-agent/todos/completed-todos.json
+```
+
+## 💬 Communicating Progress
+
+### Daily Summary
+
+```
+✨ Today's Accomplishments
+
+You completed 5 tasks:
+✅ Fixed Docker networking (43 min)
+✅ Added 12 tests to quality service (67 min)
+✅ Updated README with screenshots (15 min)
+✅ Deployed to staging (22 min)
+✅ Created knowledge pattern for Docker issue (10 min)
+
+Total: 2.6 hours productive work
+
+📝 Saved 5 tasks to brain-garden-os backlog
+🧠 Captured 3 new learnings in knowledge base
+
+Great session!
+```
+
+### Weekly Summary
+
+```
+📅 This Week's Progress
+
+Projects Worked On: 3
+✅ Tasks Completed: 18
+⏱️  Estimated Hours: 24hrs
+
+By Project:
+• brain-garden-os: 12 tasks ✅
+• cannabis-codex: 4 tasks ✅
+• scheduling-station: 2 tasks ✅
+
+Top Accomplishments:
+1. Fixed critical Docker bug (affects 3 projects)
+2. Pushed cannabis-codex to 87% completion
+3. Added 47 new tests to brain-garden-os
+
+Learnings Captured: 8
+Patterns Detected: 1 (docker-port-conflicts)
+```
+
+## 🚫 What NOT to Do
+
+### Don't Skip Accomplishment Recording
+
+❌ **WRONG:**
+```json
+{
+  "id": "todo_123",
+  "status": "completed"
+}
+```
+
+✅ **CORRECT:**
+```json
+{
+  "id": "todo_123",
+  "status": "completed",
+  "accomplishment": {
+    "what": "Implemented user authentication",
+    "how": "Added JWT with refresh tokens using passport.js",
+    "impact": "Users can now securely log in and stay logged in",
+    "learnings": ["JWT expiry should be configurable via env var"]
+  }
+}
+```
+
+### Don't Lose Context Between Sessions
+
+❌ **WRONG:** Clear session todos without saving to backlog
+
+✅ **CORRECT:** Move incomplete todos to project backlog
+
+### Don't Skip Blocker Documentation
+
+❌ **WRONG:** "Can't do this, moving on"
+
+✅ **CORRECT:** Document blocker with possible solutions
+
+## 📈 Analytics & Insights
+
+Todo data enables powerful insights:
+
+```bash
+# Velocity tracking
+echo "Velocity: $(jq '[.[] | select(
+  (.completedAt | fromdateiso8601) > (now - 2592000)
+)] | length' .pm-agent/todos/completed-todos.json) tasks/month"
+
+# Average completion time
+jq '[.[] | .durationMinutes // 0] | add / length' \
+  .pm-agent/todos/completed-todos.json
+
+# Most productive project
+jq 'group_by(.project) | map({
+  project: .[0].project,
+  count: length
+}) | sort_by(.count) | reverse | .[0]' \
+  .pm-agent/todos/completed-todos.json
+```
+
+## 🔗 Related Rules
+
+- `pm-agent-session-protocol.rules.mdc` - Load todos at session start
+- `pm-agent-project-analysis.rules.mdc` - Use todos to calculate progress
+- `pm-agent-knowledge-management.rules.mdc` - Extract learnings to knowledge base
+
+## 📖 Related Documentation
+
+See `.pm-agent/docs/TODO_FRAMEWORK.md` for complete framework documentation.
+
+---
+
+**Remember:** Todos are your continuity mechanism. Without them, every session starts from zero. With them, you always know where you left off and what you accomplished.
+
+**Never skip accomplishment recording.** This is the single most important rule.

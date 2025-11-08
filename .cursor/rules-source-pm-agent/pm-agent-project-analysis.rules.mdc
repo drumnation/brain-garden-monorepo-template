@@ -1,0 +1,242 @@
+---
+description: PM Agent project scanning, quality analysis, and motivation verdict generation
+globs: []
+scopes:
+  - pm-agent
+  - project-analysis
+  - motivation
+alwaysApply: false
+---
+
+# PM Agent Project Analysis
+
+## 🎯 Your Analysis Tools
+
+You have scripts in `packages/pm-scripts/` for analyzing projects:
+
+- **scan-projects.js** - Scan all projects, update database
+- **quality-check.js** - Calculate quality scores
+- **health-check.js** - Check build status, tests
+- **pm-edit.js** - Enrich project metadata
+
+## 📊 Running Analysis
+
+### Scan All Projects
+```bash
+node packages/pm-scripts/scan-projects.js
+
+# Updates:
+# - New projects added to database
+# - Git status for all projects
+# - Last commit dates
+# - Tech stack detection
+```
+
+### Check Project Quality
+```bash
+node packages/pm-scripts/quality-check.js <project-name>
+
+# Calculates:
+# - Quality score (0-100)
+# - Test coverage
+# - Documentation completeness
+# - CI/CD presence
+# - Brain Garden integration
+```
+
+### Query Project Status
+```bash
+sqlite3 .pm-agent/db/pm-agent.db "
+  SELECT * FROM project_quality_dashboard
+  WHERE name = '<project-name>'
+"
+```
+
+## 🧮 Quality Score Calculation
+
+**Quality score (0-100) is based on:**
+
+### Testing (40 points max)
+- Has tests: +10
+- Test coverage >= 80%: +20 (or +10 if >= 50%)
+- Has CI/CD: +10
+
+### Documentation (30 points max)
+- Has README: +10
+- Has changelog: +5
+- Has docs/ folder: +10
+- Has PRD: +5
+
+### Architecture (30 points max)
+- Brain Garden integrated: +15
+- Has ARCHITECTURE.md: +10
+- Has tooling/ folder: +5
+
+**Scoring guidelines:**
+- 90-100: Excellent
+- 80-89: Very good
+- 70-79: Good
+- 60-69: Acceptable
+- Below 60: Needs improvement
+
+## 💪 Motivation Verdict Generation
+
+When developer asks "Should I resume this project?", calculate verdict:
+
+### Data to Gather
+```bash
+# 1. Quality metrics
+sqlite3 .pm-agent/db/pm-agent.db "
+  SELECT quality_score, test_coverage, has_ci_cd, documentation_score
+  FROM quality_scores
+  WHERE project_id = (SELECT id FROM projects WHERE name = '<project>')
+"
+
+# 2. Effort invested
+sqlite3 .pm-agent/db/pm-agent.db "
+  SELECT COUNT(*) as session_count
+  FROM claude_sessions
+  WHERE project_id = (SELECT id FROM projects WHERE name = '<project>')
+"
+
+# 3. Features completed
+sqlite3 .pm-agent/db/pm-agent.db "
+  SELECT
+    COUNT(CASE WHEN status = 'completed' THEN 1 END) as completed,
+    COUNT(*) as total
+  FROM features
+  WHERE project_id = (SELECT id FROM projects WHERE name = '<project>')
+"
+
+# 4. Last worked on
+sqlite3 .pm-agent/db/pm-agent.db "
+  SELECT
+    last_worked_on,
+    julianday('now') - julianday(last_worked_on) as days_ago
+  FROM projects
+  WHERE name = '<project>'
+"
+```
+
+### Generate Verdict
+
+**ABSOLUTELY WORTH RESUMING** (if):
+- Quality score >= 80
+- Progress >= 70%
+- Session count >= 20
+- Tests passing
+
+**WORTH RESUMING** (if):
+- Quality score >= 60
+- Progress >= 50%
+- Session count >= 10
+
+**RECONSIDER** (if):
+- Quality score < 60
+- Progress < 50%
+- Low effort invested
+
+**CONSIDER ARCHIVING** (if):
+- Quality score < 40
+- Not touched in 6+ months
+- Minimal progress
+- No clear value
+
+### Format Verdict
+
+```
+<project-name>
+
+💪 EFFORT INVESTED:
+   <X> Claude sessions, <Y>M tokens
+   <Z> commits over <N> months
+   ~<hours> of development time
+
+🏗️ INFRASTRUCTURE DEPTH:
+   <passing>/<total> tests passing
+   <coverage>% code coverage (target: 80%)
+   ✅ Brain Garden integrated
+   ✅ CI/CD on <platform>
+   ✅ Zero errors (lint, type, build)
+
+✨ WORKING FEATURES:
+   <completed>/<total> planned features complete
+   <stories> user stories fully implemented
+   Integration tests prove end-to-end flow
+   Deployed to <staging/production>
+
+📚 DOCUMENTATION:
+   <score>/100 documentation score
+   ✅ Full README + changelog
+   ✅ Complete API docs
+
+🎯 PROGRESS:
+   <percent>% to v1.0 release
+   <remaining> features remaining
+   No blockers
+   Clear path to completion
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+VERDICT: <ABSOLUTELY WORTH RESUMING|etc>
+
+<reasoning paragraph>
+
+<concrete next action>
+```
+
+## 📸 Screenshot Capture
+
+When analyzing project, suggest capturing screenshot if:
+- Project has UI
+- No screenshot exists yet
+- Significant changes since last screenshot
+
+```bash
+# Capture screenshot (manual for now)
+# Developer runs app, takes screenshot
+# Save to: .pm-agent/screenshots/<project-name>/<date>-<description>.png
+```
+
+## 🔍 Pattern Detection
+
+After analyzing 3+ projects, check for patterns:
+
+```bash
+# Look for recurring issues
+sqlite3 .pm-agent/db/pm-agent.db "
+  SELECT issue_type, COUNT(*) as occurrences
+  FROM project_issues
+  GROUP BY issue_type
+  HAVING COUNT(*) >= 3
+  ORDER BY occurrences DESC
+"
+
+# If pattern found (3+ occurrences):
+# Create file in .pm-agent/knowledge/patterns/<pattern-name>.md
+```
+
+## 📝 Updating Project Metadata
+
+Use `pm-edit.js` to enrich project data:
+
+```bash
+# Set purpose
+node packages/pm-scripts/pm-edit.js set <project> purpose "Description of what it does"
+
+# Set lifecycle
+node packages/pm-scripts/pm-edit.js set <project> lifecycle using|building|paused
+
+# Set deployed URL
+node packages/pm-scripts/pm-edit.js set <project> deployed_url "https://..."
+```
+
+## 🔗 Related Rules
+
+- `pm-agent-session-protocol.rules.mdc` - When to run analysis
+- `pm-agent-knowledge-management.rules.mdc` - Storing patterns found
+- `pm-agent-decision-framework.rules.mdc` - Using verdicts for decisions
+
+---
+
+**Remember:** Analysis serves motivation. Every metric should help developer see their progress and value.

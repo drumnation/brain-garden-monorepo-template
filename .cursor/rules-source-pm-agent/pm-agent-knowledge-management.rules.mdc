@@ -1,0 +1,315 @@
+---
+description: Managing PM Agent's file-based knowledge system in .pm-agent/knowledge/
+globs:
+  - ".pm-agent/knowledge/**/*"
+scopes:
+  - pm-agent
+  - knowledge
+  - pm-memory
+alwaysApply: false
+---
+
+# PM Agent Knowledge Management
+
+## 📁 Knowledge Directory Structure
+
+```
+.pm-agent/knowledge/
+├── patterns/           # Recurring issues (3+ occurrences)
+├── insights/           # Developer preferences and workflows
+└── decisions/          # Architecture decision records
+```
+
+## 🔍 When to Create Knowledge Files
+
+### Patterns (Automatic Detection)
+
+If same issue appears in **3+ projects**, create a pattern file:
+
+```bash
+# Example: Docker port conflicts
+cat > .pm-agent/knowledge/patterns/docker-port-conflicts.md << 'EOF'
+# Docker Port Conflicts on macOS
+
+## Pattern
+Port 8090 conflicts with AirPlay Receiver on macOS.
+
+## Affected Projects
+- brain-garden-os (2025-11-05)
+- scheduling-station (2025-10-12)
+- cannabis-codex (2025-09-28)
+
+## Solution
+Use ports 8091+ to avoid system conflicts.
+
+Update docker-compose.yml:
+```yaml
+ports:
+  - "8091:8091"  # Changed from 8090
+```
+
+## Impact
+3 projects fixed, ~2 hours saved per occurrence
+
+## Last Updated
+2025-11-07
+
+## Related Files
+- docker-compose.yml
+- .env.example
+EOF
+```
+
+**Pattern detection query:**
+```sql
+-- Find recurring issues
+SELECT issue_type, COUNT(*) as count, GROUP_CONCAT(project_name) as projects
+FROM (
+  SELECT 'docker-network' as issue_type, name as project_name
+  FROM projects WHERE path LIKE '%docker%' AND last_issue LIKE '%port%'
+)
+GROUP BY issue_type
+HAVING COUNT(*) >= 3
+```
+
+### Insights (Developer Observations)
+
+When developer shares preferences or workflows:
+
+```bash
+# Example: Developer workflow patterns
+cat > .pm-agent/knowledge/insights/developer-workflow.md << 'EOF'
+# Developer Workflow Patterns
+
+## Work Schedule
+- **Peak productivity:** Weekday evenings (6-10pm)
+- **Weekend work:** Occasional, usually Sunday afternoons
+- **Context switches:** Every 3-5 days on average
+
+## Project Categories
+- **Brain Garden projects:** Worked on in evening sessions
+- **Scheduling-station:** 2-3 hour bursts monthly
+- **Parenting projects:** Correlate with school schedule
+
+## Technology Preferences
+- Prefers TypeScript over JavaScript
+- Uses pnpm for package management
+- Favors monorepo structures
+- Integrates Brain Garden tooling when possible
+
+## Common Blockers
+- Docker networking issues (see patterns/docker-port-conflicts.md)
+- Authentication complexity (prefers JWT with refresh tokens)
+- Test setup time (mitigated by Brain Garden templates)
+
+## Last Updated
+2025-11-07
+EOF
+```
+
+### Decisions (Architecture Decision Records)
+
+For major architectural or technology decisions:
+
+```bash
+# Example: Why monorepo
+cat > .pm-agent/knowledge/decisions/why-monorepo.md << 'EOF'
+# Decision: Adopt Monorepo Structure
+
+## Context
+Multiple related packages needed to be managed across projects. Separate repos caused:
+- Dependency hell
+- Difficult cross-package changes
+- Version drift between packages
+- Slow development cycles
+
+## Decision
+Adopt pnpm workspaces + Turborepo monorepo structure for all new projects.
+
+## Consequences
+**Positive:**
+- Shared tooling across all packages
+- Atomic commits across related changes
+- Better code sharing
+- Unified build pipeline
+
+**Negative:**
+- Larger git repos
+- More complex initial setup
+- Need to learn pnpm workspaces
+
+## Projects Using This
+- brain-garden-os
+- cannabis-codex
+- PM Agent (this project)
+
+## Date
+2025-10-15
+
+## Status
+Accepted
+EOF
+```
+
+## 🔍 Querying Knowledge
+
+### Before Answering Questions
+
+Always check knowledge base first:
+
+```bash
+# Search all knowledge
+grep -r "docker" .pm-agent/knowledge/
+
+# Find specific pattern
+cat .pm-agent/knowledge/patterns/docker-port-conflicts.md
+
+# Check insights
+cat .pm-agent/knowledge/insights/developer-workflow.md
+
+# Review decisions
+ls .pm-agent/knowledge/decisions/
+```
+
+### When Developer Asks About Recurring Issue
+
+```bash
+# Check if pattern exists
+if [ -f ".pm-agent/knowledge/patterns/<issue-name>.md" ]; then
+  echo "We've seen this before! Check out:"
+  cat .pm-agent/knowledge/patterns/<issue-name>.md
+else
+  echo "First time seeing this issue. I'll track it."
+fi
+```
+
+## 📝 Updating Knowledge
+
+### Add New Occurrence to Pattern
+
+```bash
+# Update existing pattern
+cat >> .pm-agent/knowledge/patterns/docker-port-conflicts.md << 'EOF'
+- another-project (2025-11-08)
+EOF
+
+# Update "Last Updated" date
+sed -i '' "s/Last Updated:.*/Last Updated: $(date +%Y-%m-%d)/" \
+  .pm-agent/knowledge/patterns/docker-port-conflicts.md
+```
+
+### Refine Insights
+
+As you learn more about developer:
+
+```bash
+# Add new preference
+cat >> .pm-agent/knowledge/insights/developer-workflow.md << 'EOF'
+
+## New Observation (2025-11-08)
+- Prefers Electron for desktop apps over web-based solutions
+EOF
+```
+
+### Update Decision Status
+
+```bash
+# Mark decision as superseded
+sed -i '' 's/Status: Accepted/Status: Superseded/' \
+  .pm-agent/knowledge/decisions/old-decision.md
+
+# Add superseded-by link
+echo "Superseded by: new-decision.md" >> \
+  .pm-agent/knowledge/decisions/old-decision.md
+```
+
+## 🎯 Knowledge File Best Practices
+
+### File Naming
+- Use kebab-case: `docker-port-conflicts.md`
+- Be descriptive: `authentication-jwt-refresh-pattern.md`
+- Include domain: `react-component-architecture-decision.md`
+
+### File Structure
+All knowledge files should have:
+
+```markdown
+# Title
+
+## <Pattern/Insight/Decision-specific sections>
+
+## Last Updated
+YYYY-MM-DD
+
+## Related
+- Link to other knowledge files
+- Link to projects
+- Link to documentation
+```
+
+### Keep It Current
+- Update dates when modifying
+- Remove outdated information
+- Mark superseded decisions
+- Archive obsolete patterns
+
+## 📊 Knowledge Metrics
+
+Track knowledge accumulation:
+
+```bash
+# Count patterns
+echo "Patterns detected: $(ls .pm-agent/knowledge/patterns/*.md 2>/dev/null | wc -l)"
+
+# Count insights
+echo "Insights captured: $(ls .pm-agent/knowledge/insights/*.md 2>/dev/null | wc -l)"
+
+# Count decisions
+echo "Decisions recorded: $(ls .pm-agent/knowledge/decisions/*.md 2>/dev/null | wc -l)"
+
+# Recent knowledge updates
+find .pm-agent/knowledge/ -name "*.md" -mtime -7 -exec ls -l {} \;
+```
+
+## 🔄 Integration with Other Systems
+
+### Database Integration
+Link knowledge to database:
+
+```sql
+-- Store pattern reference in database
+UPDATE projects
+SET notes = 'See knowledge/patterns/docker-port-conflicts.md'
+WHERE name = 'brain-garden-os';
+```
+
+### Todo Integration
+Reference knowledge in todos:
+
+```json
+{
+  "content": "Fix Docker networking",
+  "notes": "Follow pattern in knowledge/patterns/docker-port-conflicts.md"
+}
+```
+
+### Session Integration
+Mention knowledge in session summaries:
+
+```json
+{
+  "learnings": [
+    "Port 8090 conflicts with AirPlay (documented in knowledge/patterns/)"
+  ]
+}
+```
+
+## 🔗 Related Rules
+
+- `pm-agent-session-protocol.rules.mdc` - Check knowledge at session start
+- `pm-agent-project-analysis.rules.mdc` - Detect patterns during analysis
+- `pm-agent-todo-discipline.rules.mdc` - Capture learnings in knowledge
+
+---
+
+**Remember:** Knowledge accumulates over time. Every pattern you document saves hours in the future. Every insight you capture helps understand the developer better. This is your institutional memory.
