@@ -1,289 +1,391 @@
+<!--
+PRD Template v2.0
+Based on BMAD Method PRD template
+
+Instructions:
+1. Copy this template to create a new PRD
+2. Replace all [PLACEHOLDER] text with actual content
+3. Update YAML frontmatter with appropriate values
+4. Fill in all sections completely
+5. Remove this instruction block when done
+
+For examples, see: docs/architecture/prd.md
+-->
+
 ---
-title: "Product Requirements Document (PRD) - TEMPLATE"
-description: "[TEMPLATE] Product requirements documentation template"
-keywords: [prd, requirements, template, product]
-last_updated: "2025-10-23"
-status: "TEMPLATE - NOT REAL DOCUMENTATION"
+title: "Overseer Pm Agent - Product Requirements Document (PRD)"
+description: "A high level agent that owns all my project folders, knows about them, and can assist me in understanding progress and many other aspects about my projects. Helps to keep me on track and motivated, single source of truth for all development and development progress."
+keywords: [prd, requirements, [domain], [feature]]
+last_updated: "2025-11-08"
 ---
 
-# Product Requirements Document (PRD) [TEMPLATE]
-
-> **⚠️ THIS IS A TEMPLATE FILE ⚠️**  
-> This file is a template for creating Product Requirements Documents. It is NOT actual project documentation.
-> Fill in the sections below with your actual product requirements.
-> Remove this notice when you convert this template to real documentation.
+# Overseer Pm Agent - Product Requirements Document (PRD)
 
 ## Goals and Background Context
 
 ### Goals
 
-[Describe the primary goals of this product/feature:]
+<!-- List 3-5 primary goals for this product/feature. Format each as:
+- **Goal Title**: Brief description explaining the strategic intent
+Use business language focused on value delivered, not implementation details.
+Example: "Modernize Legacy System: Replace outdated backend with modern React/TypeScript"
+-->
 
-1. **[Goal Category]**
-   - [Specific goal]
-   - [Expected outcome]
-   - [Success metric]
+1. **Build Modern Web Application**
+   - Create a responsive, performant web application using React and modern tooling
 
-2. **[Goal Category]**
-   - [Specific goal]
-   - [Expected outcome]
-   - [Success metric]
+2. **Create Desktop Application**
+   - Build cross-platform desktop application with Electron
 
-### Background Context
+3. **Establish Scalable Backend**
+   - Create RESTful API with Express.js following best practices
 
-[Provide context about why this product/feature is being built:]
-
-- **Problem Statement:** [What problem does this solve?]
-- **Target Users:** [Who will use this?]
-- **Current State:** [What exists today?]
-- **Desired State:** [What should exist?]
-
-### Change Log
-
-| Date | Version | Description | Author |
-|------|---------|-------------|--------|
-| YYYY-MM-DD | v1.0 | [Change description] | [Author name] |
-
----
 
 ## Requirements
 
 ### Functional Requirements
 
-[List all functional requirements - what the system must do:]
+<!-- List all functional requirements with consistent FR-### numbering.
+Format: FR-###: Requirement Title
+Each requirement should:
+- Be testable and measurable
+- Describe specific user-facing functionality
+- Include relevant acceptance criteria
+- Use business language
 
-**FR-001: [Requirement Name]**
-- [Detailed description]
-- [User interaction]
-- [System behavior]
-- [Data handling]
+Example: "FR-001: User Authentication via API
+Users authenticate using username/password credentials
+Authentication proxied to external API with token-based sessions..."
+-->
 
-**FR-002: [Requirement Name]**
-- [Detailed description]
-- [User interaction]
-- [System behavior]
-- [Data handling]
+**FR-001: User Interface**
+- Responsive user interface with intuitive navigation
+- Consistent design language across all screens
+- Accessible components following WCAG AA standards
 
-[Continue for all functional requirements...]
+**FR-002: REST API**
+- RESTful endpoints following HTTP semantics
+- Request/response validation
+- Comprehensive error handling
 
-### Non-Functional Requirements
-
-[List all non-functional requirements - how the system should perform:]
-
-**NFR-001: [Requirement Category]**
-- [Specific requirement]
-- [Measurement criteria]
-- [Target value]
-
-**NFR-002: [Requirement Category]**
-- [Specific requirement]
-- [Measurement criteria]
-- [Target value]
-
-[Continue for all non-functional requirements...]
-
----
 
 ## User Interface Design Goals
 
+<!-- Optional section - include if UI/UX is a primary concern for this product -->
+<!-- If not applicable, remove this entire section -->
+
 ### Overall UX Vision
 
-[Describe the overall user experience vision:]
+<!-- Describe the high-level UX vision in 2-3 sentences.
+What should users feel when using this interface?
+What is the primary user job to be done?
 
-**Key Principles:**
-- [Principle 1]
-- [Principle 2]
-- [Principle 3]
+Example: "Provide an intuitive, fast approval workflow where admins review content with minimal clicks"
+-->
+
+[Description of UX vision and primary user goals]
 
 ### Key Interaction Paradigms
 
-[Describe how users will interact with the system:]
+<!-- Describe the primary interaction patterns:
+- How do users navigate?
+- What are the primary workflows?
+- Any novel or complex interactions?
 
-- **[Pattern Name]:** [Description]
-- **[Pattern Name]:** [Description]
-- **[Pattern Name]:** [Description]
+Example: "Dashboard-based approval queue, drag-and-drop template editing, real-time preview"
+-->
+
+- [Interaction paradigm 1]
+- [Interaction paradigm 2]
+- [Interaction paradigm 3]
 
 ### Core Screens and Views
 
-[List and describe main screens/views:]
+<!-- List the main screens/pages in the application:
+- Dashboard
+- Message Editor
+- Approval Queue
+- Admin Settings
+etc.
+Include brief description of purpose
+-->
 
-1. **[Screen Name]**
-   - [Purpose]
-   - [Key elements]
-   - [User actions]
-   - [Navigation]
-
-2. **[Screen Name]**
-   - [Purpose]
-   - [Key elements]
-   - [User actions]
-   - [Navigation]
+1. **[Screen 1 Name]** - [Purpose and key elements]
+2. **[Screen 2 Name]** - [Purpose and key elements]
+3. **[Screen 3 Name]** - [Purpose and key elements]
 
 ### Accessibility
 
-[Describe accessibility requirements:]
+<!-- Specify accessibility standards: None / WCAG AA / WCAG AAA -->
 
-- **Target:** [WCAG level, standards]
-- **Key Requirements:** [List specific requirements]
+**Target Standard:** WCAG AA
+
+**Key Requirements:**
+- [Specific accessibility requirement]
+- [Specific accessibility requirement]
 
 ### Branding
 
-[Describe branding requirements:]
-- Design system
+<!-- Any branding guidelines for the UI:
 - Color palette
 - Typography
-- Component patterns
+- Logo usage
+- Visual style
+-->
+
+- **Primary Colors:** [List colors]
+- **Typography:** [Font families and sizes]
+- **Visual Style:** [Description of visual approach - modern, minimal, corporate, etc.]
 
 ### Target Devices and Platforms
 
-[List supported devices/platforms:]
+<!-- What devices and browsers should be supported? -->
 
-- **Primary:** [Platform/device]
-- **Secondary:** [Platform/device]
-- **Not Supported:** [Platform/device]
+- **Desktop:** [Browsers and versions]
+- **Tablet:** [Support required? Yes/No]
+- **Mobile:** [Support required? Yes/No]
 
 ---
 
 ## Technical Assumptions
 
-### Technology Stack
+### Repository Structure
 
-[Document assumed technologies:]
+<!-- Describe the expected monorepo/repository structure:
+- Where will code live?
+- Any new packages/applications needed?
+- Directory organization
 
-**Frontend:**
-- Framework: [Technology]
-- Build Tool: [Technology]
-- State Management: [Technology]
+Example: "Built as pnpm monorepo with packages in /packages and applications in /apps"
+-->
 
-**Backend:**
-- Language/Runtime: [Technology]
-- Framework: [Technology]
-- Database: [Technology]
+**Repository Structure**
 
-### Service Architecture
+Built as a pnpm monorepo following Brain Garden template structure:
+- `/apps` - Application code (web, desktop, api)
+- `/packages` - Shared libraries and utilities
+- `/tooling` - Shared configuration and build tools
 
-[Describe high-level architecture:]
+All packages use TypeScript with ESM-only modules. No build step for libraries - source files exported directly.
 
-- [Component 1]: [Purpose]
-- [Component 2]: [Purpose]
-- [Component 3]: [Purpose]
+**Service Architecture**
 
-### Testing Requirements
+Multi-application architecture with:
+- Frontend application(s) consuming REST API
+- Express backend providing RESTful endpoints
+- Shared TypeScript types across frontend/backend
 
-[Describe testing expectations:]
-
-- **Unit Tests:** [Coverage, approach]
-- **Integration Tests:** [Approach]
-- **E2E Tests:** [Scenarios]
-
-### Additional Assumptions
-
-[List any other technical assumptions:]
-
-- [Assumption 1]
-- [Assumption 2]
-- [Assumption 3]
-
----
 
 ## Epic List
 
-[List all epics (major feature groups):]
+<!-- Provide a numbered list of all epics for this product.
+Each epic is a large piece of functionality that can be broken into user stories.
+Keep descriptions brief - details come in Epic Details section below.
 
-1. Epic 1: [Epic Name]
-2. Epic 2: [Epic Name]
-3. Epic 3: [Epic Name]
-4. [Continue...]
+Example:
+1. User Authentication
+2. Role-Based Access Control
+3. Message Creation and Editing
+4. Approval Workflow
+5. Publishing and Distribution
+-->
+
+1. **Project Setup & Infrastructure** - Initialize monorepo with generators and tooling
+2. **API Development** - Build RESTful API endpoints with validation and error handling
+3. **Frontend Development** - Create user interface components and pages
+4. **Testing & Quality Assurance** - Implement comprehensive test suite (unit, integration, e2e)
+5. **Deployment & CI/CD** - Set up deployment pipeline and continuous integration
+
+
+2. **[Epic 2 Name]** - [One-line description]
+3. **[Epic 3 Name]** - [One-line description]
+4. **[Epic 4 Name]** - [One-line description]
 
 ---
 
 ## Epic Details
 
+<!-- For each epic from the Epic List above, provide detailed breakdown.
+Copy this section template for each epic. Format consistently.
+Each epic should have: Description, User Stories, Acceptance Criteria, Technical Notes
+-->
+
 ### Epic 1: [Epic Name]
 
-**Description:**
-[Detailed description of what this epic encompasses]
+#### Description
 
-**Scope:**
-- [Scope item 1]
-- [Scope item 2]
-- [Scope item 3]
+<!-- 2-3 sentences explaining what this epic accomplishes and why it matters -->
 
-**User Stories:**
+[Detailed description of the epic's purpose and value]
 
-1. **As a [user type]**, I want to [action], so that [benefit].
+#### User Stories
 
-2. **As a [user type]**, I want to [action], so that [benefit].
+<!-- User stories in format: "As a [role], I want [goal], so that [benefit]"
+List 3-5 user stories that make up this epic.
+-->
 
-[Continue for all user stories in this epic...]
+- As a [role], I want [goal], so that [benefit]
+- As a [role], I want [goal], so that [benefit]
+- As a [role], I want [goal], so that [benefit]
 
-**Acceptance Criteria:**
+#### Acceptance Criteria
 
-1. [Criterion 1]
-2. [Criterion 2]
-3. [Criterion 3]
-[Continue...]
+<!-- Numbered list of specific, testable acceptance criteria.
+These define what "done" looks like for this epic.
+-->
 
-**Technical Notes:**
+1. [Acceptance criterion 1 - testable and specific]
+2. [Acceptance criterion 2 - testable and specific]
+3. [Acceptance criterion 3 - testable and specific]
+4. [Acceptance criterion 4 - testable and specific]
 
-- **[Aspect]:** [Implementation detail]
-- **[Aspect]:** [Implementation detail]
-- **[Aspect]:** [Implementation detail]
+#### Technical Notes
+
+<!-- Any implementation details, technical constraints, or architectural decisions relevant to this epic -->
+
+- [Technical note 1]
+- [Technical note 2]
+- [Technical consideration or constraint]
 
 ---
 
-[Repeat Epic Details section for each epic...]
+### Epic 2: [Epic Name]
+
+#### Description
+
+[Detailed description of the epic's purpose and value]
+
+#### User Stories
+
+- As a [role], I want [goal], so that [benefit]
+- As a [role], I want [goal], so that [benefit]
+- As a [role], I want [goal], so that [benefit]
+
+#### Acceptance Criteria
+
+1. [Acceptance criterion 1 - testable and specific]
+2. [Acceptance criterion 2 - testable and specific]
+3. [Acceptance criterion 3 - testable and specific]
+
+#### Technical Notes
+
+- [Technical note 1]
+- [Technical note 2]
+
+---
+
+### Epic 3: [Epic Name]
+
+#### Description
+
+[Detailed description of the epic's purpose and value]
+
+#### User Stories
+
+- As a [role], I want [goal], so that [benefit]
+- As a [role], I want [goal], so that [benefit]
+
+#### Acceptance Criteria
+
+1. [Acceptance criterion 1 - testable and specific]
+2. [Acceptance criterion 2 - testable and specific]
+3. [Acceptance criterion 3 - testable and specific]
+
+#### Technical Notes
+
+- [Technical note 1]
+- [Technical note 2]
 
 ---
 
 ## Checklist Results Report
 
-[Document stakeholder review results:]
+<!-- This section documents the results of the PM checklist.
+If you've completed the PM validation checklist, include summary results here.
+This helps track what has been validated and what may need attention.
+-->
 
-**Placeholder items:**
-- [ ] [Review item 1]
-- [ ] [Review item 2]
-- [ ] [Review item 3]
-- [ ] [Review item 4]
+**Checklist Completed:** [Yes/No]
+**Date Completed:** 2025-11-08
+**Completed By:** [PM Name]
+
+### Key Validations
+
+- [ ] Goals clearly articulated and measurable
+- [ ] Requirements are testable and unambiguous
+- [ ] Acceptance criteria define clear success states
+- [ ] Epic breakdown is appropriately sized
+- [ ] User stories follow proper format
+- [ ] Technical assumptions documented
+- [ ] Dependencies and constraints identified
+- [ ] Resources and timeline discussed
+
+### Issues or Gaps
+
+<!-- List any issues discovered during validation that need resolution -->
+
+- [Issue 1 - recommend resolution]
+- [Issue 2 - recommend resolution]
 
 ---
 
 ## Next Steps
 
-### [Role] Prompt
+### UX Expert Prompt
 
-[Provide guidance for next phase - e.g., UX, Architecture:]
+<!-- Provide context for UX expert to begin design work.
+Include key considerations: target users, primary workflows, success metrics.
+-->
 
-"[Instructions for the next role to review and act on this PRD]"
+**Input for UX/UI Team:**
 
-### [Role] Prompt
+Expand the UI Design Goals section with detailed wireframes and prototypes covering:
+- [Primary workflow screens]
+- [Complex interactions]
+- [Responsive design considerations]
 
-"[Instructions for the next role to review and act on this PRD]"
+Key considerations:
+- [User persona 1 and their needs]
+- [User persona 2 and their needs]
+- [Performance or accessibility constraints]
+
+### Architect Prompt
+
+<!-- Provide context for architect/tech lead to begin technical design.
+Include key technical requirements: technology stack, performance targets, security needs.
+-->
+
+**Input for Architecture/Tech Lead Team:**
+
+Create a detailed architecture document covering:
+- Component structure and technology stack
+- Data flow and API contracts
+- Security architecture
+- Performance optimization strategies
+- Testing strategy
+
+Key technical drivers:
+- [Performance requirement and impact]
+- [Scalability need]
+- [Integration complexity]
+
+Reference this PRD sections:
+- Requirements: [Link to section]
+- Technical Assumptions: [Link to section]
 
 ---
 
 ## Cross-References
 
-[Link to related documentation:]
+<!-- Link to related documentation for context and traceability -->
 
-- **[Document Name]:** [Link] - [Purpose]
-- **[Document Name]:** [Link] - [Purpose]
-- **[Document Name]:** [Link] - [Purpose]
-
----
-
-**Document Version:** [Version]
-**Last Updated:** [Date]
-**Authors:** [Author names]
-**Status:** [Draft/Review/Approved]
+- **Example PRD:** [docs/architecture/prd.md](../architecture/prd.md)
+- **Architecture Documentation:** [Link to relevant architecture docs]
+- **Feature Documentation:** [Link to feature-specific docs if applicable]
+- **Related ADRs:** [Link to architectural decision records]
+- **Issue Tracking:** [Link to GitHub issue or project board]
 
 ---
 
-**Template Instructions:**
-1. Replace all bracketed placeholders with actual information
-2. Add/remove epics as needed for your product
-3. Ensure all user stories follow the "As a... I want... so that..." format
-4. Include measurable acceptance criteria
-5. Link to wireframes, designs, or prototypes
-6. Get stakeholder sign-off before starting development
-7. Remove this instructions section when complete
+**Document Status:** [DRAFT | IN REVIEW | APPROVED | PUBLISHED]
+**Last Updated:** 2025-11-08 by [Author Name]

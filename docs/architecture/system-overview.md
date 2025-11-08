@@ -1,361 +1,401 @@
 ---
-title: "System Overview - TEMPLATE"
-description: "[TEMPLATE] System overview documentation template"
-keywords: [system, overview, architecture, template]
-last_updated: "2025-10-23"
-status: "TEMPLATE - NOT REAL DOCUMENTATION"
+title: PM Agent System Overview
+description: High-level architecture of the PM Agent system with dual-mode Claude Code integration
+keywords: [pm-agent, architecture, electron, express, hexagonal, dual-mode]
+last_updated: 2025-11-08
+status: ACTIVE DOCUMENTATION
 ---
 
-# System Overview [TEMPLATE]
+# PM Agent System Overview
 
-> **⚠️ THIS IS A TEMPLATE FILE ⚠️**  
-> This file is a template for documenting system overview. It is NOT actual project documentation.
-> Fill in the sections below with your actual system overview details.
-> Remove this notice when you convert this template to real documentation.
+## What is PM Agent?
 
-## 1. Introduction
+**PM Agent** is a Motivation Engine that solves the AI development motivation crisis. It's both:
+1. **An Electron Desktop Application** - For visual motivation dashboards
+2. **An AI Agent (Steve)** - That manages your 190+ projects in the Dev workspace
 
-[Provide a high-level introduction to your system:]
+## The Core Problem
 
-**System Name:** [Your system name]
-**Purpose:** [What problem does this system solve?]
-**Type:** [Web application, API, desktop app, mobile app, etc.]
+AI-assisted development is 10x faster, but creates a unique motivation crisis:
+- Developers build so fast they don't remember what they built
+- Less hands-on time = Less domain recall
+- Memory distortions cause valuable work to be abandoned
+- Restart spiral instead of resuming nearly-finished projects
 
-### Key Features
+## The Solution
 
-[List the main features of your system:]
+PM Agent tracks and displays **motivation metrics** that prove project value:
+- 💪 **Effort Invested** (sessions, tokens, commits, hours)
+- 🏗️ **Infrastructure Depth** (tests, coverage, CI/CD, zero errors)
+- ✨ **Working Features** (mapped to user stories, proven by tests)
+- 📚 **Documentation Quality** (README scores, changelog, docs/)
+- 🎯 **Progress Tracking** (% complete, proximity to milestones)
+- 🖼️ **Visual Memory** (screenshots to refresh recall)
 
-1. **[Feature Name]** - [Description]
-2. **[Feature Name]** - [Description]
-3. **[Feature Name]** - [Description]
+---
 
-### Target Users
+## System Architecture
 
-[Describe who uses this system:]
+```mermaid
+graph TB
+    subgraph "Dev Workspace Root"
+        Claude[Claude Code]
+        ENV[.env CLAUDE_MODE]
+    end
 
-- **[User Type]** - [Their needs and usage patterns]
-- **[User Type]** - [Their needs and usage patterns]
+    subgraph "Dual Mode System"
+        Builder[Builder Mode<br/>Developer Agent]
+        PM[PM Agent Mode<br/>Steve Persona]
+    end
 
-## 2. High-Level Architecture
+    subgraph "PM Agent Application (Monorepo)"
+        Apps[apps/]
+        Packages[packages/]
+        Tooling[tooling/]
+    end
 
-[Describe your system's high-level architecture. Consider including a diagram:]
+    subgraph "PM Agent Workspace"
+        DB[(Database<br/>pm-agent.db)]
+        Todos[todos/]
+        Knowledge[knowledge/]
+        Screenshots[screenshots/]
+    end
 
-```
-[Include a C4 Context diagram or simple architecture diagram here]
+    subgraph "Hexagonal Core"
+        Core[Core Business Logic<br/>packages/core-*]
+        Motivation[Motivation Service]
+        Quality[Quality Service]
+        Projects[Project Service]
+    end
 
-Example structure:
-┌─────────────┐
-│   Users     │
-└──────┬──────┘
-       │
-┌──────▼──────────┐
-│   Frontend      │
-└──────┬──────────┘
-       │
-┌──────▼──────────┐
-│   Backend/API   │
-└──────┬──────────┘
-       │
-┌──────▼──────────┐
-│   Database      │
-└─────────────────┘
-```
+    subgraph "Adapters"
+        ElectronMain[Electron Main<br/>IPC Handlers]
+        ExpressAPI[Express API<br/>HTTP Routes]
+        Renderer[Electron Renderer<br/>React UI]
+    end
 
-### Component Overview
+    Claude -->|Reads| ENV
+    ENV -->|builder| Builder
+    ENV -->|pm-agent| PM
 
-[Describe each major component:]
+    Builder -->|Develops| Apps
+    Builder -->|Develops| Packages
+    Builder -->|Develops| Tooling
 
-1. **[Component Name]**
-   - **Purpose:** [What it does]
-   - **Technology:** [What it's built with]
-   - **Key Responsibilities:** [Main functions]
+    PM -->|Manages| DB
+    PM -->|Tracks| Todos
+    PM -->|Maintains| Knowledge
 
-2. **[Component Name]**
-   - **Purpose:** [What it does]
-   - **Technology:** [What it's built with]
-   - **Key Responsibilities:** [Main functions]
+    Apps --> ElectronMain
+    Apps --> ExpressAPI
+    Apps --> Renderer
 
-## 3. System Architecture
+    Packages --> Core
 
-[Provide more detailed architecture information:]
+    Core --> Motivation
+    Core --> Quality
+    Core --> Projects
 
-### [If Monorepo]
+    ElectronMain -->|Uses| Core
+    ExpressAPI -->|Uses| Core
+    Renderer -->|Displays| Core
 
-**Repository Structure:**
-- `/[directory]` - [Contents and purpose]
-- `/[directory]` - [Contents and purpose]
-- `/[directory]` - [Contents and purpose]
-
-### [If Microservices]
-
-**Services:**
-- **[Service Name]** - [Purpose and technology]
-- **[Service Name]** - [Purpose and technology]
-
-### [If Modular Monolith]
-
-**Modules:**
-- **[Module Name]** - [Purpose and boundaries]
-- **[Module Name]** - [Purpose and boundaries]
-
-## 4. Request Flow
-
-[Describe how a typical request flows through your system:]
-
-**Example Flow:**
-```
-1. User Action → [What happens]
-2. [Component] → [What it does]
-3. [Component] → [What it does]
-4. Response → [What user sees]
+    Core -->|Queries| DB
+    Core -->|Reads| Todos
+    Core -->|References| Knowledge
 ```
 
-[Consider including a sequence diagram for complex flows]
+---
 
-## 5. Data Flow
+## Directory Structure
 
-[Describe how data moves through your system:]
+```
+/Users/dmieloch/Dev/              # PM Agent's Domain
+├── apps/                         # PM Agent Application
+│   ├── viewer/                   # Electron desktop UI
+│   ├── main/                     # Electron main process
+│   └── api/                      # Express API server
+│
+├── packages/                     # Shared packages
+│   ├── core-motivation/          # Motivation verdict logic
+│   ├── core-quality/             # Quality score calculation
+│   ├── core-projects/            # Project management
+│   ├── pm-scripts/               # CLI tools (scan, health, quality)
+│   └── shared-ui/                # Reusable React components
+│
+├── tooling/                      # Development tooling
+│   ├── env-loader/               # Config management
+│   └── brain-monitor/            # Validation & monitoring
+│
+├── .pm-agent/                    # PM AGENT WORKSPACE
+│   ├── db/
+│   │   └── pm-agent.db           # 177+ projects tracked
+│   ├── todos/
+│   │   ├── session-todos.json   # Current session work
+│   │   ├── project-todos.json   # Per-project backlog
+│   │   └── completed-todos.json # Accomplishment history
+│   ├── knowledge/
+│   │   ├── patterns/             # Recurring issues (3+ occurrences)
+│   │   ├── insights/             # Developer preferences
+│   │   └── decisions/            # Architecture decisions
+│   ├── screenshots/              # Visual memory aids
+│   └── docs/                     # PM Agent procedures
+│
+├── .cursor/                      # DUAL-MODE RULES
+│   ├── rules-source-builder/     # Developer rules (13 files)
+│   ├── rules-source-pm-agent/    # PM behavior rules (6 files)
+│   ├── sync/                     # Build system
+│   └── DUAL_MODE_GUIDE.md
+│
+├── .env                          # CLAUDE_MODE=builder|pm-agent
+├── package.json
+├── pnpm-workspace.yaml
+│
+└── [190+ projects...]            # All projects PM manages
+    ├── cannabis-codex/
+    ├── brain-garden-os/
+    ├── scheduling-station/
+    └── ...
+```
 
-### Data Storage Strategy
+---
 
-[Describe where different types of data are stored:]
+## Dual-Mode Claude Code System
 
-**[Storage Location]:**
-- **Stores:** [What data]
-- **Rationale:** [Why stored here]
-- **Access Pattern:** [How accessed]
+PM Agent uses a unique **dual-mode** approach where Claude Code can be:
 
-**[Storage Location]:**
-- **Stores:** [What data]
-- **Rationale:** [Why stored here]
-- **Access Pattern:** [How accessed]
+### 🔧 Builder Mode (`CLAUDE_MODE=builder`)
 
-### Data Synchronization
+**Purpose:** Build the PM Agent application itself
 
-[If data is synchronized between systems:]
-- Synchronization strategy
-- Conflict resolution
-- Consistency guarantees
+**Rules:** `.cursor/rules-source-builder/` (13 rules)
+- Hexagonal architecture (Electron + Express adapters)
+- TDD workflow (E2E > Integration > Unit)
+- SQLite repository patterns
+- React bulletproof patterns (desktop-only)
+- PM Agent domain logic
 
-## 6. Technology Stack
+**What Claude Does:**
+- Develops apps in `apps/`
+- Builds packages in `packages/`
+- Writes tests first (TDD)
+- Follows hexagonal architecture
+- Implements features
 
-[Document all technologies used:]
+### 🧠 PM Agent Mode (`CLAUDE_MODE=pm-agent`)
 
-| Layer | Technology | Version | Purpose |
-|-------|-----------|---------|---------|
-| **Frontend** | [Framework] | [Version] | [Purpose] |
-| **Backend** | [Framework] | [Version] | [Purpose] |
-| **Database** | [Database] | [Version] | [Purpose] |
-| **Infrastructure** | [Platform] | [Version] | [Purpose] |
-| **Build Tools** | [Tool] | [Version] | [Purpose] |
-| **Testing** | [Tool] | [Version] | [Purpose] |
+**Purpose:** BE the PM Agent (Steve) managing projects
 
-## 7. Key Architectural Decisions
+**Rules:** `.cursor/rules-source-pm-agent/` (6 rules)
+- Session protocol (load context, greet)
+- Project analysis (quality scores, verdicts)
+- Conversation style (Steve persona, ADHD-friendly)
+- Knowledge management (patterns, insights)
+- Todo discipline (track ALL work)
+- Decision framework (resume/pause/archive)
 
-[Document major architectural decisions:]
+**What Claude Does:**
+- Acts as Steve (late 50s South Philly Italian PM)
+- Loads session context from `.pm-agent/todos/`
+- Queries project database
+- Generates motivation verdicts
+- Tracks accomplishments
+- Maintains knowledge base
+- Helps with context switching
 
-### [Decision Category]
-
-**Decision:** [What was decided]
-**Rationale:** [Why this decision was made]
-**Alternatives Considered:** [Other options]
-**Consequences:** [Impact of this decision]
-
-[Repeat for each major decision]
-
-[Note: Link to ADRs if you have them]
-
-## 8. Integration Points
-
-[Document all external integrations:]
-
-### [Integration Name]
-
-**Type:** [API, webhook, database, etc.]
-**Purpose:** [Why you integrate]
-**Direction:** [Inbound, outbound, bi-directional]
-**Implementation:** [How you connect]
-**Dependencies:** [What depends on this]
-
-## 9. Development Workflow
-
-[Describe the development process:]
-
-### Local Development
-
-**Setup:**
+**Switching Modes:**
 ```bash
-# Example setup commands
-[command 1]
-[command 2]
+# Build the app
+echo "CLAUDE_MODE=builder" > .env && npm run rules:build
+
+# Be the PM
+echo "CLAUDE_MODE=pm-agent" > .env && npm run rules:build
 ```
-
-**Running Locally:**
-- [How to start the application]
-- [Available ports/URLs]
-- [Development tools]
-
-### Build Process
-
-[Describe how the system is built:]
-
-**Build Tool:** [Tool name]
-**Build Commands:**
-```bash
-# Development build
-[command]
-
-# Production build
-[command]
-```
-
-### Testing
-
-[Describe testing approach:]
-
-- **Unit Tests:** [How to run, location]
-- **Integration Tests:** [How to run, location]
-- **E2E Tests:** [How to run, location]
-
-## 10. Deployment Architecture
-
-[Describe how the system is deployed:]
-
-### Environments
-
-| Environment | Purpose | URL | Deployment Trigger |
-|-------------|---------|-----|-------------------|
-| Development | [Purpose] | [URL] | [Trigger] |
-| Staging | [Purpose] | [URL] | [Trigger] |
-| Production | [Purpose] | [URL] | [Trigger] |
-
-### Deployment Process
-
-[Describe deployment steps:]
-
-1. **[Step]** - [What happens]
-2. **[Step]** - [What happens]
-3. **[Step]** - [What happens]
-
-## 11. Monitoring & Operations
-
-[Describe monitoring and operational practices:]
-
-### Monitoring
-
-**Tools:** [Monitoring tools]
-**Key Metrics:**
-- [Metric name]: [What it measures]
-- [Metric name]: [What it measures]
-
-### Logging
-
-**Log Aggregation:** [Tool/service]
-**Log Levels:** [Usage of different levels]
-**Log Retention:** [How long logs are kept]
-
-### Alerting
-
-**Alert Channels:** [How alerts are sent]
-**Critical Alerts:** [What triggers urgent alerts]
-**On-Call:** [On-call process]
-
-## 12. Security Overview
-
-[Provide security overview - can reference security.md for details:]
-
-- **Authentication:** [Method]
-- **Authorization:** [Method]
-- **Data Protection:** [Approach]
-- **Network Security:** [Approach]
-
-[See [Security Architecture](./security.md) for complete security details]
-
-## 13. Performance Characteristics
-
-[Describe performance characteristics:]
-
-**Response Times:**
-- Typical: [Time]
-- Target: [Time]
-- Maximum: [Time]
-
-**Throughput:**
-- Current: [Requests/second]
-- Target: [Requests/second]
-
-**Scalability:**
-- [Current scaling approach]
-- [Future scaling plans]
-
-## 14. Limitations & Constraints
-
-[Document known limitations:]
-
-### Technical Limitations
-
-1. **[Limitation]** - [Description and impact]
-2. **[Limitation]** - [Description and impact]
-
-### Business Constraints
-
-1. **[Constraint]** - [Description]
-2. **[Constraint]** - [Description]
-
-## 15. Future Roadmap
-
-[Describe planned improvements:]
-
-### Short-Term (1-3 months)
-
-- [Planned improvement]
-- [Planned improvement]
-
-### Medium-Term (3-6 months)
-
-- [Planned improvement]
-- [Planned improvement]
-
-### Long-Term (6-12 months)
-
-- [Planned improvement]
-- [Planned improvement]
-
-## 16. Cross-References
-
-[Link to detailed documentation:]
-
-### Architecture Documentation
-
-- **[Backend Architecture](./backend.md)** - [Brief description]
-- **[Frontend Architecture](./frontend.md)** - [Brief description]
-- **[Database Architecture](./database.md)** - [Brief description]
-- **[Infrastructure](./infrastructure.md)** - [Brief description]
-- **[Security](./security.md)** - [Brief description]
-
-### Development Documentation
-
-- **[README](../../README.md)** - [Getting started guide]
-- **[Contributing Guide]** - [If you have one]
-
-### API Documentation
-
-- **[API Documentation]** - [Link if available]
 
 ---
 
-**Document Metadata:**
-- **Last Updated:** [Date]
-- **Version:** [Version]
-- **Maintainer:** [Team/person]
-- **Review Cycle:** [How often reviewed]
+## Hexagonal Architecture (Ports & Adapters)
+
+### Core Business Logic (Platform-Agnostic)
+
+**Location:** `packages/core-*/`
+
+**No dependencies on:**
+- ❌ Electron
+- ❌ Express
+- ❌ React
+- ❌ Any platform-specific library
+
+**Pure functions that:**
+- Calculate quality scores
+- Generate motivation verdicts
+- Track progress
+- Manage projects
+
+### Adapters (Platform-Specific)
+
+**Electron Main Process** (`apps/main/`)
+- IPC handlers
+- Translate IPC calls → Core service calls
+- Window management
+- System integration
+
+**Express API Server** (`apps/api/`)
+- HTTP routes
+- Translate HTTP requests → Core service calls
+- RESTful API
+- CLI tool backend
+
+**Electron Renderer** (`apps/viewer/`)
+- React components
+- Displays data from Core
+- Desktop UI (no mobile/responsive)
+- Motivation dashboard
+
+**Same Core, Multiple Delivery Mechanisms:**
+```typescript
+// Core service (platform-agnostic)
+export const makeMotivationService = (deps) => ({
+  getVerdict: async (projectId) => {
+    // Pure business logic
+  }
+});
+
+// Electron adapter
+export const makeGetVerdictIpc = (service) =>
+  async (_event, projectId) => service.getVerdict(projectId);
+
+// Express adapter
+export const makeGetVerdictHttp = (service) =>
+  async (req, res) => res.json(await service.getVerdict(req.params.id));
+```
 
 ---
 
-**Template Instructions:**
-1. Replace all bracketed placeholders with actual information
-2. Include diagrams (C4, sequence, architecture diagrams)
-3. Keep this document high-level - link to detailed docs
-4. Update when major architectural changes are made
-5. Use this as entry point for understanding the system
-6. Remove this instructions section when complete
+## Tech Stack
+
+### Frontend (Desktop Only)
+- **Framework:** React 18+
+- **UI Library:** Mantine
+- **Desktop:** Electron
+- **Styling:** @emotion/styled
+- **State:** React Query
+- **Patterns:** Bulletproof React (desktop-focused)
+
+### Backend
+- **Electron Main:** Node.js + TypeScript
+- **API Server:** Express.js
+- **Database:** SQLite (better-sqlite3)
+- **Pattern:** Hexagonal Architecture with Functional DI
+- **Validation:** Zod
+
+### Development
+- **Monorepo:** pnpm workspaces + Turborepo
+- **Testing:** E2E > Integration > Unit (Brain Garden)
+- **Validation:** Brain Monitor
+- **Language:** TypeScript (ESM-only)
+
+---
+
+## Data Flow
+
+### Motivation Verdict Generation
+
+```
+1. User (PM Agent Mode): "Should I resume cannabis-codex?"
+   ↓
+2. PM Agent queries database:
+   - Quality score (94/100)
+   - Session count (47)
+   - Progress (87%)
+   - Features completed (12/15)
+   ↓
+3. Core Motivation Service calculates verdict:
+   - Score: 94 (quality) + 87 (progress) + ...
+   - Decision: "ABSOLUTELY WORTH RESUMING"
+   ↓
+4. PM Agent (Steve) responds:
+   "You're 87% done with cannabis-codex! Quality is 94/100.
+    Just 3 features left. Want to finish this?"
+```
+
+### Project Scanning
+
+```
+1. PM Agent Mode: "Scan all projects"
+   ↓
+2. pm-scripts/scan-projects.js:
+   - Walks Dev/ directory
+   - Detects git repos
+   - Checks tech stack
+   - Updates database
+   ↓
+3. Database updated with 177+ projects
+   ↓
+4. PM Agent: "Found 3 new projects. Updated all status."
+```
+
+---
+
+## Key Features
+
+### For Developer
+1. **Motivation Dashboard** - See quality scores, progress, effort
+2. **Session Tracking** - All work tracked in `.pm-agent/todos/`
+3. **Knowledge Base** - Patterns detected automatically
+4. **Visual Memory** - Screenshots refresh recall
+5. **Context Switching** - Easy resume after months away
+
+### For PM Agent (Steve)
+1. **Session Protocol** - Load context automatically
+2. **Project Analysis** - Calculate quality & motivation
+3. **Recommendations** - Resume/pause/archive suggestions
+4. **Pattern Detection** - Find recurring issues
+5. **ADHD-Friendly** - Visual, organized, non-judgmental
+
+---
+
+## Database Schema
+
+**Location:** `.pm-agent/db/pm-agent.db`
+
+**Key Tables (20+ total):**
+- `projects` - All 177+ tracked projects
+- `quality_scores` - Calculated quality metrics
+- `claude_sessions` - Session tracking
+- `features` - Feature completion tracking
+- `testing_config` - Test infrastructure
+- `project_health` - Real-time health checks
+
+**Key Views:**
+- `project_quality_dashboard` - CI/CD-like health view
+- `my_projects` - User's original work only
+- `projects_by_value` - Sorted by calculated value
+
+---
+
+## Deployment
+
+**Target:** Local Development Machine
+
+- Electron app runs locally
+- Express API runs locally (optional)
+- SQLite database in `.pm-agent/db/`
+- All data stays on developer's machine
+
+---
+
+## Related Documentation
+
+- [Backend Architecture](./backend.md) - Hexagonal architecture details
+- [Frontend Architecture](./frontend.md) - React/Electron patterns
+- [Database Architecture](./database.md) - SQLite schema
+- [Dual Mode Guide](../../.cursor/DUAL_MODE_GUIDE.md) - Mode switching
+- [PM Agent BMAD](../../.pm-agent/docs/PM_AGENT_BMAD.md) - Complete operating manual
+
+---
+
+**Last Updated:** 2025-11-08
+**Status:** Active Documentation
+**Architecture Type:** Hexagonal (Ports & Adapters)
+**Deployment:** Local Development Environment
