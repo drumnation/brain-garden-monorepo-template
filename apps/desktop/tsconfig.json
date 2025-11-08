@@ -1,0 +1,30 @@
+{
+  "extends": "@kit/tsconfig/react",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ],
+      "@main/*": [
+        "./src/main/*"
+      ],
+      "@renderer/*": [
+        "./src/renderer/*"
+      ],
+      "@preload/*": [
+        "./src/preload/*"
+      ]
+    },
+    "module": "ESNext",
+    "moduleResolution": "bundler"
+  },
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ]
+}

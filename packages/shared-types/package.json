@@ -1,0 +1,44 @@
+{
+  "name": "@dev-garden/shared-types",
+  "private": true,
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "author": "",
+  "description": "",
+  "scripts": {
+    "clean": "git clean -xdf .turbo node_modules",
+    "format": "prettier --check \"**/*.{ts,tsx}\"",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --config ../../tooling/testing/src/configs/vitest/unit.ts",
+    "test:unit": "vitest run --config ../../tooling/testing/src/configs/vitest/unit.ts",
+    "test:watch": "vitest --config ../../tooling/testing/src/configs/vitest/unit.ts"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./types": "./src/types/index.ts"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "@kit/eslint-config/base",
+      "@kit/eslint-config/sort"
+    ]
+  },
+  "prettier": "@kit/prettier-config",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "src/*"
+      ]
+    }
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@kit/eslint-config": "workspace:*",
+    "@kit/prettier-config": "workspace:*",
+    "@kit/testing": "workspace:*",
+    "@kit/tsconfig": "workspace:*"
+  },
+  "peerDependencies": {}
+}

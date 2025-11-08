@@ -1,0 +1,44 @@
+{
+  "name": "@pm-agent/cli",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "pm-scan": "./src/commands/scan.ts",
+    "pm-list": "./src/commands/list.ts",
+    "pm-view": "./src/commands/view.ts"
+  },
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "start": "tsx src/index.ts",
+    "clean": "rimraf node_modules .turbo",
+    "format": "prettier --check \"**/*.{ts,tsx,md}\"",
+    "lint": "eslint . --ext .ts,.tsx",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@pm-agent/core-db": "workspace:*",
+    "@pm-agent/core-scanner": "workspace:*",
+    "chalk": "^5.3.0",
+    "commander": "^12.1.0",
+    "ora": "^8.1.1",
+    "table": "^6.9.0"
+  },
+  "devDependencies": {
+    "@kit/eslint-config": "workspace:*",
+    "@kit/prettier-config": "workspace:*",
+    "@kit/testing": "workspace:*",
+    "@kit/tsconfig": "workspace:*",
+    "@types/node": "^22.10.2",
+    "tsx": "^4.19.2"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "@kit/eslint-config/base"
+    ]
+  },
+  "prettier": "@kit/prettier-config"
+}

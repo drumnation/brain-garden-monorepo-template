@@ -1,0 +1,47 @@
+{
+  "name": "@dev-garden/api",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "A high level agent that owns all my project folders, knows about them, and can assist me in understanding progress and many other aspects about my projects. Helps to keep me on track and motivated, single source of truth for all development and development progress. - API",
+  "main": "dist/main.js",
+  "scripts": {
+    "dev": "tsx watch src/main.ts",
+    "build": "tsc",
+    "start": "node dist/main.js",
+    "lint": "eslint . --ext .ts",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --check \"src/**/*.ts\"",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "clean": "rimraf node_modules .turbo dist"
+  },
+  "dependencies": {
+    "express": "^5.0.1",
+    "@kit/env-loader": "workspace:*",
+    "zod": "^3.24.1",
+    "cors": "^2.8.5",
+    "pino": "^9.6.0",
+    "pino-pretty": "^13.0.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.2",
+    "@kit/eslint-config": "workspace:*",
+    "@kit/prettier-config": "workspace:*",
+    "@kit/testing": "workspace:*",
+    "@kit/tsconfig": "workspace:*",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^3.2.4",
+    "@types/cors": "^2.8.17"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "@kit/eslint-config/services",
+      "@kit/eslint-config/apps"
+    ]
+  },
+  "prettier": "@kit/prettier-config"
+}
