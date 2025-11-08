@@ -1,0 +1,18 @@
+{
+  "todos": [
+    {
+      "id": "sess_1762554086599_1cf053d4",
+      "sessionId": "session_1762554081150_6f96ea07",
+      "content": "Test todo system functionality",
+      "activeForm": "Test todo system functionality",
+      "status": "pending",
+      "project": null,
+      "context": {},
+      "createdAt": "2025-11-07T22:21:26.600Z",
+      "startedAt": null,
+      "completedAt": null
+    }
+  ],
+  "sessionId": "session_1762554081150_6f96ea07",
+  "startedAt": "2025-11-07T22:21:21.150Z"
+}
