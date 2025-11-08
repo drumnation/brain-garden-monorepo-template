@@ -1,0 +1,9 @@
+{
+  "repositories": {
+    "thedotmack/claude-mem": {
+      "path": "/Users/dmieloch/Dev/.claude/plugins/repos/claude-mem/plugin",
+      "version": "5.1.4",
+      "enabled": true
+    }
+  }
+}
