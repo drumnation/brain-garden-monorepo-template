@@ -11,20 +11,20 @@ Welcome to the central documentation hub for the Content Manager Express monorep
 
 ## Overview
 
-Content Manager Express is a modern digital signage content management system built as a TypeScript monorepo. This documentation is organized into four main sections to help you navigate the codebase, understand the architecture, and contribute effectively.
+This is a **production-ready monorepo template** with comprehensive GROVE planning infrastructure from Brain Garden. It provides a complete foundation for building modern full-stack applications with built-in planning, documentation, and quality control systems.
 
 ## Quick Links
 
 | Section | Description | Path |
 |---------|-------------|------|
-| **Mega Setup Guide** | Complete guide to using the mega setup system | [/docs/guides/mega-setup-guide.md](/docs/guides/mega-setup-guide.md) |
-| **Architecture** | System design, PRDs, and technical architecture | [/docs/architecture/](/docs/architecture/) |
-| **Features** | Feature-specific documentation organized by domain | [/docs/features/](/docs/features/) |
-| **Guides** | How-to guides, tutorials, and operational procedures | [/docs/guides/](/docs/guides/) |
-| **Developer Tools** | Comprehensive guide to development tools and workflows | [/docs/guides/developer-tools/](/docs/guides/developer-tools/) |
-| **Maintenance** | Templates, standards, and agent instructions | [/docs/maintenance/](/docs/maintenance/) |
-| **Audit Report** | Documentation completeness audit and metrics | [/docs/DOCUMENTATION_AUDIT_REPORT.md](/docs/DOCUMENTATION_AUDIT_REPORT.md) |
-| **Post-Merge Tasks** | Tracking for remaining documentation work | [/docs/POST_MERGE_TASKS.md](/docs/POST_MERGE_TASKS.md) |
+| **🌳 GROVE Planning** | Brain Garden planning infrastructure setup guide | [/docs/GROVE_SETUP_GUIDE.md](/docs/GROVE_SETUP_GUIDE.md) |
+| **📋 Features** | Feature-specific documentation (10-phase lifecycle) | [/docs/features/](/docs/features/) |
+| **🐛 Bugs** | Bug tracking system (5-phase lifecycle) | [/docs/bugs/](/docs/bugs/) |
+| **🤖 Borg** | External code assimilation system | [/docs/borg/](/docs/borg/) |
+| **⚙️ Architecture** | System design, PRDs, and technical architecture | [/docs/architecture/](/docs/architecture/) |
+| **📖 Guides** | How-to guides, tutorials, and operational procedures | [/docs/guides/](/docs/guides/) |
+| **🛠️ Developer Tools** | Comprehensive guide to development tools and workflows | [/docs/guides/developer-tools/](/docs/guides/developer-tools/) |
+| **📝 Maintenance** | Templates, standards, and agent instructions | [/docs/maintenance/](/docs/maintenance/) |
 
 ## Architecture Documentation
 
