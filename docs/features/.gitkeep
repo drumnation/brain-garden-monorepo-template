@@ -1,0 +1,18 @@
+# Features Directory
+
+All features will be created here following the FEATURE_LIFECYCLE.md structure.
+
+Example:
+```
+/docs/features/user-authentication/
+├── 00-research/
+├── 01-planning/
+├── 02-architecture/
+├── 03-implementation-planning/
+├── 04-development/
+├── 05-testing/
+├── 06-documentation/
+├── 07-deployment/
+├── 08-post-launch/
+└── 09-enhancements/ (Maturity phase only)
+```

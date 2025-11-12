@@ -1,0 +1,48 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2025-11-12T00:00:00Z",
+  "project": {
+    "name": "brain-garden-monorepo-template",
+    "description": "Production-ready monorepo starter with GROVE planning infrastructure",
+    "type": "template"
+  },
+  "session": {
+    "lastActiveLane": null,
+    "previousLane": null
+  },
+  "lanes": {
+    "available": 4,
+    "active": []
+  },
+  "agentCoordination": {
+    "swarmMessaging": {
+      "enabled": true,
+      "registryPath": "/docs/project/config/.swarm/"
+    },
+    "conflictDetection": {
+      "enabled": true,
+      "registryPath": "/docs/project/config/.conflicts/"
+    }
+  },
+  "quality": {
+    "planningThresholds": {
+      "feature": 85,
+      "bug": 80,
+      "enhancement": 75,
+      "maintenance": {
+        "refactoring": 80,
+        "dependencies": 75,
+        "performance": 85,
+        "documentation": 75,
+        "security": 90,
+        "testing": 80
+      },
+      "borg": 80
+    }
+  },
+  "arborIntegration": {
+    "enabled": true,
+    "autoTrigger": true,
+    "mandatory": true
+  }
+}

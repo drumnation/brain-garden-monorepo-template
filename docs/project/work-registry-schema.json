@@ -1,0 +1,402 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Work Registry Schema",
+  "description": "Central registry of all work in Brain Garden monorepo",
+  "type": "object",
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Schema version",
+      "default": "1.0.0"
+    },
+    "lastUpdated": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last registry update timestamp"
+    },
+    "features": {
+      "type": "array",
+      "description": "All features in the monorepo",
+      "items": {
+        "$ref": "#/definitions/Feature"
+      }
+    },
+    "bugs": {
+      "type": "array",
+      "description": "All bugs in the monorepo",
+      "items": {
+        "$ref": "#/definitions/Bug"
+      }
+    },
+    "enhancements": {
+      "type": "array",
+      "description": "All enhancements in the monorepo",
+      "items": {
+        "$ref": "#/definitions/Enhancement"
+      }
+    },
+    "maintenance": {
+      "type": "array",
+      "description": "All maintenance work in the monorepo",
+      "items": {
+        "$ref": "#/definitions/Maintenance"
+      }
+    },
+    "borg": {
+      "type": "array",
+      "description": "All Borg assimilations in the monorepo",
+      "items": {
+        "$ref": "#/definitions/Borg"
+      }
+    }
+  },
+  "required": ["version", "lastUpdated"],
+  "definitions": {
+    "Feature": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Feature identifier (kebab-case)"
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable feature name"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["feature"],
+          "default": "feature"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["planning", "in-progress", "complete", "maturity"],
+          "description": "Current feature status"
+        },
+        "currentPhase": {
+          "type": "string",
+          "enum": [
+            "00-research",
+            "01-planning",
+            "02-architecture",
+            "03-implementation-planning",
+            "04-development",
+            "05-testing",
+            "06-documentation",
+            "07-deployment",
+            "08-post-launch",
+            "09-enhancements"
+          ],
+          "description": "Current phase in lifecycle"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "description": "Feature version (semantic versioning)"
+        },
+        "startDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Feature start date"
+        },
+        "targetDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Target completion date"
+        },
+        "actualCompletionDate": {
+          "type": ["string", "null"],
+          "format": "date",
+          "description": "Actual completion date (null if not complete)"
+        },
+        "assignedAgents": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Agents working on this feature"
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Other features this depends on"
+        },
+        "qualityScore": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Arbor verification quality score"
+        },
+        "path": {
+          "type": "string",
+          "description": "Path to feature directory"
+        }
+      },
+      "required": ["id", "name", "type", "status", "currentPhase", "version", "path"]
+    },
+    "Bug": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^BUG-[0-9]{3}$",
+          "description": "Bug identifier (BUG-{NNN})"
+        },
+        "title": {
+          "type": "string",
+          "description": "Bug title"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["bug"],
+          "default": "bug"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "resolved"],
+          "description": "Bug status"
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["critical", "high", "medium", "low", "trivial"],
+          "description": "Bug severity"
+        },
+        "currentPhase": {
+          "type": "string",
+          "enum": [
+            "00-investigation",
+            "01-planning",
+            "02-implementation",
+            "03-validation",
+            "04-post-mortem"
+          ],
+          "description": "Current phase in bug lifecycle"
+        },
+        "reportedDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Date bug was reported"
+        },
+        "reportedBy": {
+          "type": "string",
+          "description": "Who reported the bug"
+        },
+        "assignedTo": {
+          "type": ["string", "null"],
+          "description": "Agent assigned to fix (null if unassigned)"
+        },
+        "affectedFeatures": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Features affected by this bug"
+        },
+        "fixedVersion": {
+          "type": ["string", "null"],
+          "pattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "description": "Version where bug was fixed (null if not fixed)"
+        },
+        "path": {
+          "type": "string",
+          "description": "Path to bug directory"
+        }
+      },
+      "required": ["id", "title", "type", "status", "severity", "currentPhase", "reportedDate", "path"]
+    },
+    "Enhancement": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^ENH-[0-9]{3}$",
+          "description": "Enhancement identifier (ENH-{NNN})"
+        },
+        "title": {
+          "type": "string",
+          "description": "Enhancement title"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["enhancement"],
+          "default": "enhancement"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["requested", "in-progress", "complete"],
+          "description": "Enhancement status"
+        },
+        "parentFeature": {
+          "type": "string",
+          "description": "Parent feature ID"
+        },
+        "currentPhase": {
+          "type": "string",
+          "enum": [
+            "00-request",
+            "01-planning",
+            "02-implementation",
+            "03-validation"
+          ],
+          "description": "Current phase in enhancement lifecycle"
+        },
+        "requestedDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Date enhancement was requested"
+        },
+        "requestedBy": {
+          "type": "string",
+          "description": "Who requested the enhancement"
+        },
+        "assignedTo": {
+          "type": ["string", "null"],
+          "description": "Agent assigned (null if unassigned)"
+        },
+        "qualityScore": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Enhancement verification quality score"
+        },
+        "path": {
+          "type": "string",
+          "description": "Path to enhancement directory"
+        }
+      },
+      "required": ["id", "title", "type", "status", "parentFeature", "currentPhase", "requestedDate", "path"]
+    },
+    "Maintenance": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^MAINT-(REFACTOR|DEP|PERF|DOC|SEC|TEST)-[0-9]{3}$",
+          "description": "Maintenance identifier (MAINT-{TYPE}-{NNN})"
+        },
+        "title": {
+          "type": "string",
+          "description": "Maintenance title"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["maintenance"],
+          "default": "maintenance"
+        },
+        "maintenanceType": {
+          "type": "string",
+          "enum": ["refactoring", "dependencies", "performance", "documentation", "security", "testing"],
+          "description": "Type of maintenance work"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "completed"],
+          "description": "Maintenance status"
+        },
+        "scope": {
+          "type": "string",
+          "enum": ["project", "feature"],
+          "description": "Project-level or feature-scoped"
+        },
+        "parentFeature": {
+          "type": ["string", "null"],
+          "description": "Parent feature ID (if feature-scoped)"
+        },
+        "startDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Maintenance start date"
+        },
+        "assignedTo": {
+          "type": ["string", "null"],
+          "description": "Agent assigned (null if unassigned)"
+        },
+        "qualityScore": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Maintenance verification quality score"
+        },
+        "path": {
+          "type": "string",
+          "description": "Path to maintenance directory"
+        }
+      },
+      "required": ["id", "title", "type", "maintenanceType", "status", "scope", "startDate", "path"]
+    },
+    "Borg": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^BORG-[0-9]{3}$",
+          "description": "Borg identifier (BORG-{NNN})"
+        },
+        "repositoryName": {
+          "type": "string",
+          "description": "External repository name"
+        },
+        "repositoryUrl": {
+          "type": "string",
+          "format": "uri",
+          "description": "External repository URL"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["borg"],
+          "default": "borg"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "completed"],
+          "description": "Borg status"
+        },
+        "integrationStrategy": {
+          "type": "string",
+          "enum": ["library", "fork", "copy-adapt"],
+          "description": "Integration strategy chosen"
+        },
+        "currentPhase": {
+          "type": "string",
+          "enum": [
+            "00-assessment",
+            "01-planning",
+            "02-integration",
+            "03-validation",
+            "04-upstream-tracking"
+          ],
+          "description": "Current phase in Borg lifecycle"
+        },
+        "license": {
+          "type": "string",
+          "description": "Repository license"
+        },
+        "version": {
+          "type": "string",
+          "description": "Integrated version"
+        },
+        "assessmentDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Assessment date"
+        },
+        "integrationDate": {
+          "type": ["string", "null"],
+          "format": "date",
+          "description": "Integration date (null if not integrated)"
+        },
+        "assignedTo": {
+          "type": ["string", "null"],
+          "description": "Agent assigned (null if unassigned)"
+        },
+        "qualityScore": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Borg verification quality score"
+        },
+        "path": {
+          "type": "string",
+          "description": "Path to Borg directory"
+        }
+      },
+      "required": ["id", "repositoryName", "repositoryUrl", "type", "status", "currentPhase", "assessmentDate", "path"]
+    }
+  }
+}

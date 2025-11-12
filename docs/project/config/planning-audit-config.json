@@ -1,0 +1,61 @@
+{
+  "audit": {
+    "schedule": "weekly",
+    "autoFix": false,
+    "aggressive": false,
+    "scope": "full",
+    "compliance": {
+      "featureStructureThreshold": 90,
+      "projectPlanningThreshold": 85,
+      "bugDocumentationThreshold": 80,
+      "enhancementThreshold": 75,
+      "maintenanceThreshold": 75,
+      "borgThreshold": 80,
+      "architectureThreshold": 70,
+      "guideThreshold": 75,
+      "templateThreshold": 90
+    }
+  },
+  "canonicalSources": [
+    "/FEATURE_LIFECYCLE.md",
+    "/docs/bugs/README.md",
+    "/docs/WORK_LIFECYCLE.md",
+    "/ARBOR_WORKFLOWS.md",
+    "/docs/project/work-registry-schema.json"
+  ],
+  "orchestration": {
+    "enableAgentTeam": true,
+    "agents": {
+      "coordinator": "planning-orchestrator",
+      "featureStructure": "monorepo-structure-validator",
+      "projectPlanning": "planning-specialist-orchestrator",
+      "bugWorkflow": "debugging-orchestrator",
+      "enhancement": "enhancement-orchestrator",
+      "maintenance": "refactoring-orchestrator",
+      "borg": "borg-assimilation-orchestrator",
+      "architecture": "system-design-orchestrator",
+      "documentation": "documentation-orchestrator",
+      "template": "core-documentation-specialist",
+      "quality": "validation-orchestrator"
+    },
+    "coordination": "parallel",
+    "rollbackOnFailure": true,
+    "backupEnabled": true,
+    "backupRetention": 7
+  },
+  "transformation": {
+    "createMissingFolders": true,
+    "moveMisplacedFiles": true,
+    "fixNamingConventions": true,
+    "archiveDeprecated": true,
+    "updateReferences": true,
+    "validateMetadata": true
+  },
+  "safety": {
+    "dryRunFirst": true,
+    "requireApproval": false,
+    "createBackup": true,
+    "atomicOperations": true,
+    "rollbackCapability": true
+  }
+}

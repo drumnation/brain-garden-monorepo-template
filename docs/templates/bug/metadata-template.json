@@ -1,0 +1,17 @@
+{
+  "bugId": "BUG-{NNN}",
+  "title": "{Brief bug description}",
+  "severity": "critical|high|medium|low|trivial",
+  "status": "active|resolved",
+  "reportedDate": "YYYY-MM-DD",
+  "reportedBy": "{Reporter name or email}",
+  "assignedTo": "{Agent name or null}",
+  "affectedVersions": ["v1.2.0"],
+  "fixedVersion": null,
+  "relatedFeatures": ["{feature-name}"],
+  "rootCause": "{Root cause description}",
+  "fixStrategy": "{Fix strategy summary}",
+  "estimatedEffort": "{hours or days}",
+  "actualEffort": null,
+  "tags": ["{tag1}", "{tag2}"]
+}

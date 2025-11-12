@@ -1,0 +1,40 @@
+[2025-11-12T22:34:57Z] [INFO] ==========================================
+[2025-11-12T22:34:58Z] [INFO] TDD Enforcement Hook Starting
+[2025-11-12T22:34:58Z] [INFO] ==========================================
+[2025-11-12T22:35:01Z] [INFO] ==========================================
+[2025-11-12T22:35:01Z] [INFO] TDD Enforcement Hook Starting
+[2025-11-12T22:35:02Z] [INFO] ==========================================
+[2025-11-12T22:35:00Z] [INFO] Hook enabled: false
+[2025-11-12T22:35:03Z] [INFO] Hook enabled: false
+[2025-11-12T22:35:04Z] [INFO] Strict mode: false
+[2025-11-12T22:35:06Z] [INFO] Strict mode: false
+[2025-11-12T22:35:07Z] [INFO] Test timeout: 60s
+[2025-11-12T22:35:08Z] [INFO] Test timeout: 60s
+[2025-11-12T22:35:08Z] [INFO] Build timeout: 120s
+[2025-11-12T22:35:08Z] [INFO] Build timeout: 120s
+[2025-11-12T22:35:08Z] [WARN] Settings file not found: .claude/tdd-enforcement-settings.json (using defaults)
+[2025-11-12T22:35:08Z] [WARN] Settings file not found: .claude/tdd-enforcement-settings.json (using defaults)
+[2025-11-12T22:35:08Z] [WARN] Using default settings (file not found or jq missing)
+[2025-11-12T22:35:08Z] [WARN] Using default settings (file not found or jq missing)
+[2025-11-12T22:35:08Z] [INFO] Hook disabled - allowing handoff
+[2025-11-12T22:35:08Z] [INFO] Hook disabled - allowing handoff
+[2025-11-12T22:36:13Z] [INFO] ==========================================
+[2025-11-12T22:36:12Z] [INFO] ==========================================
+[2025-11-12T22:36:15Z] [INFO] TDD Enforcement Hook Starting
+[2025-11-12T22:36:15Z] [INFO] TDD Enforcement Hook Starting
+[2025-11-12T22:36:15Z] [INFO] ==========================================
+[2025-11-12T22:36:17Z] [INFO] Hook enabled: false
+[2025-11-12T22:36:18Z] [INFO] Strict mode: false
+[2025-11-12T22:36:16Z] [INFO] ==========================================
+[2025-11-12T22:36:20Z] [INFO] Hook enabled: false
+[2025-11-12T22:36:22Z] [INFO] Test timeout: 60s
+[2025-11-12T22:36:22Z] [INFO] Strict mode: false
+[2025-11-12T22:36:23Z] [INFO] Test timeout: 60s
+[2025-11-12T22:36:23Z] [INFO] Build timeout: 120s
+[2025-11-12T22:36:22Z] [INFO] Build timeout: 120s
+[2025-11-12T22:36:24Z] [WARN] Settings file not found: .claude/tdd-enforcement-settings.json (using defaults)
+[2025-11-12T22:36:25Z] [WARN] Settings file not found: .claude/tdd-enforcement-settings.json (using defaults)
+[2025-11-12T22:36:26Z] [WARN] Using default settings (file not found or jq missing)
+[2025-11-12T22:36:26Z] [WARN] Using default settings (file not found or jq missing)
+[2025-11-12T22:36:26Z] [INFO] Hook disabled - allowing handoff
+[2025-11-12T22:36:26Z] [INFO] Hook disabled - allowing handoff
