@@ -13,6 +13,9 @@ dist/
 # Brain Monitor outputs - tracked for multi-agent coordination
 # _errors/ and _logs/ directories and contents are tracked
 
+# Claude Code logs (operational, not tracked)
+.claude/logs/*.log
+
 # IDE
 .vscode/
 .idea/
